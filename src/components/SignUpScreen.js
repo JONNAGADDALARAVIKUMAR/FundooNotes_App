@@ -68,6 +68,7 @@ export default class LogInScreen extends Component {
         })
         this.checkPassword();
     }
+
     checkPassword = async () => {
         const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
         if(strongRegex.test(this.state.password)) {
@@ -89,6 +90,7 @@ export default class LogInScreen extends Component {
         })
         this.checkFields()
     }
+
     passwordSecurityHandler = async () => {
         //const {onPress} = this.props
         var passwordSecurity = this.state.passwordSecurity
@@ -104,6 +106,7 @@ export default class LogInScreen extends Component {
         }
         //onPress();
     }
+
     confirmPasswordSecurityHandler = async () => {
         //const {onPress} = this.props
         var confirmPasswordSecurity = this.state.confirmPasswordSecurity
@@ -119,6 +122,7 @@ export default class LogInScreen extends Component {
         }
         //onPress();
     }
+
     checkFields = () => {
         if(this.state.firstName != '' && 
             this.state.lastName != '' &&
@@ -140,6 +144,7 @@ export default class LogInScreen extends Component {
             })
         }
     }
+
     handleSignUpButton = async () => {
         if(this.state.allFieldsAreFilled) {
             var username = this.state.email
@@ -246,6 +251,7 @@ export default class LogInScreen extends Component {
                                 </TouchableOpacity>  
                             }
                         </View>
+
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
                                 {(this.state.fieldsMissing) ? 'Some Fields are missing' : null}
@@ -254,7 +260,9 @@ export default class LogInScreen extends Component {
                                 {(this.state.password.includes(this.state.confirmPassword)) ? null : 'Password MissMatch'}
                             </Text>
                         </View>
+
                     </View>
+
                     <View style = {{flexDirection: 'row'}}>
                         <Text style = {SignUpStyles.Have_Account_Style}>Already Have Account</Text>
                         <TouchableOpacity
@@ -263,6 +271,7 @@ export default class LogInScreen extends Component {
                             <Text style = {SignUpStyles.ClickHere_Style}>Click Here</Text>
                         </TouchableOpacity>
                     </View>
+                    
                     <View>
                         <TouchableOpacity style = {[SignUpStyles.SignUp_Button_Styles, SignUpStyles.Button_Styles]}
                         onPress = {() => this.handleSignUpButton()}>

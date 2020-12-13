@@ -120,8 +120,7 @@ export default class LogInScreen extends Component {
 
                     <View style = {{flexDirection: 'row'}}>
                         <TouchableOpacity style = {[LogInScreenStyles.LogIn_Button_Styles, LogInScreenStyles.Button_Styles]}
-                        onPress = {() => this.logInHandlar()}
-                        >
+                        onPress = {() => this.logInHandlar()}>
                             <Text style = {{color: '#dbced2'}}>LOG IN</Text>
                         </TouchableOpacity>
                         
