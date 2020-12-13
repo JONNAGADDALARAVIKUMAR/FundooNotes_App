@@ -55,17 +55,19 @@ export default class LogInScreen extends Component {
         }
     }
     passwordSecurityHandler = async () => {
-        const {onPress} = this.props
+        //const {onPress} = this.props
         var passwordSecurity = this.state.passwordSecurity
-        if(passwordSecurity == true)
-        this.setState({
-            passwordSecurity: false
-        })
-        else
-        this.setState({
-            passwordSecurity: true
-        })
-        onPress();
+        if(passwordSecurity == true) {
+            this.setState({
+                passwordSecurity: false
+            })
+        }
+        else {
+            this.setState({
+                passwordSecurity: true
+            })
+        }
+        //onPress();
     }
 
     render() {

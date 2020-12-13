@@ -1,5 +1,5 @@
 import React from 'react';
-import {shallow, mount, render} from 'enzyme';
+import {shallow} from 'enzyme';
 
 import LogInScreen from '../src/components/LogInScreen'
 
@@ -42,7 +42,7 @@ describe('test Login', () => {
         component.instance().checkPassword()
         expect(component.instance().state.passwordValidation).toBe(true)//Happy Test case 
     })
-    it('test the Password handler method should update passwordValidation state sad', async () => {
+    it('test the Password handler method should update passwordValidation state false', async () => {
         const component = shallow(<LogInScreen AppName = "Fundo Notes"/>)
         expect(component.instance().setState({password: 'Ravi@kumar'}))
         component.instance().checkPassword()
