@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1607832434472" clover="3.2.0">
+  <project timestamp="1607832434472" name="All files">
+    <metrics statements="41" coveredstatements="39" conditionals="110" coveredconditionals="80" methods="34" coveredmethods="27" elements="185" coveredelements="146" complexity="0" loc="41" ncloc="41" packages="3" files="5" classes="5"/>
+    <package name="assets">
+      <metrics statements="3" coveredstatements="3" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="FundoIcon.png" path="C:\Users\Admin\javaScript\FundooNotes\src\assets\FundoIcon.png">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="hidePasswordIcon.png" path="C:\Users\Admin\javaScript\FundooNotes\src\assets\hidePasswordIcon.png">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+      <file name="showPasswordIcon.png" path="C:\Users\Admin\javaScript\FundooNotes\src\assets\showPasswordIcon.png">
+        <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="components">
+      <metrics statements="34" coveredstatements="32" conditionals="106" coveredconditionals="77" methods="33" coveredmethods="26"/>
+      <file name="LogInScreen.js" path="C:\Users\Admin\javaScript\FundooNotes\src\components\LogInScreen.js">
+        <metrics statements="34" coveredstatements="32" conditionals="106" coveredconditionals="77" methods="33" coveredmethods="26"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="28" type="cond" truecount="44" falsecount="29"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="9" type="stmt"/>
+        <line num="7" count="9" type="stmt"/>
+        <line num="18" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="22" count="9" type="stmt"/>
+        <line num="24" count="3" type="cond" truecount="3" falsecount="0"/>
+        <line num="25" count="3" type="stmt"/>
+        <line num="26" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="27" count="2" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="35" count="9" type="stmt"/>
+        <line num="38" count="2" type="cond" truecount="4" falsecount="0"/>
+        <line num="42" count="9" type="stmt"/>
+        <line num="44" count="3" type="cond" truecount="3" falsecount="0"/>
+        <line num="45" count="3" type="stmt"/>
+        <line num="46" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="47" count="2" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="55" count="9" type="stmt"/>
+        <line num="57" count="2" type="cond" truecount="3" falsecount="0"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="60" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="68" count="9" type="stmt"/>
+        <line num="71" count="23" type="stmt"/>
+        <line num="72" count="23" type="stmt"/>
+        <line num="84" count="0" type="stmt"/>
+        <line num="96" count="0" type="stmt"/>
+        <line num="137" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="styles">
+      <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
+      <file name="LogInPageStyles.js" path="C:\Users\Admin\javaScript\FundooNotes\src\styles\LogInPageStyles.js">
+        <metrics statements="4" coveredstatements="4" conditionals="4" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="cond" truecount="3" falsecount="1"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="77" count="1" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
