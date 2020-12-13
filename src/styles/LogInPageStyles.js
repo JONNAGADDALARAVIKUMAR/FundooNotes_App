@@ -14,9 +14,9 @@ const LogInScreenStyles = StyleSheet.create ({
         height: '100%'
     },
     Input_TextBox_Style: {
-        marginTop: '10%',
+        marginTop: '5%',
         width: '80%',
-        height: '8%',
+        height: '9%',
         borderColor: '#b0466a',
         alignSelf: 'center' ,
         borderRadius: 10,

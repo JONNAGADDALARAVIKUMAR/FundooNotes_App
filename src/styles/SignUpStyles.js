@@ -76,6 +76,13 @@ const SignUpScreenStyles = StyleSheet.create ({
     Have_Account_Style: {
         color: '#42242c',
         marginLeft: '10%'
+    },
+    Fields_Missing: {
+        flex: 1,
+        marginLeft: '7%'
+    },
+    Password_MissMatch: {
+        flex: 0.9
     }
 })
 

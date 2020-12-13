@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
-import SignUpScreen from './src/components/SignUpScreen';
-import LogInScreen from './src/components/LogInScreen';
+import ApplicationStack from './src/route/ApplicationStack'
 
 class App extends Component{
 render(){
   return (
-    <SignUpScreen
-      AppName = {'Fundo Notes'}
-      ScreenType = {'Create Account'}/>
-    //<LogInScreen AppName = {'Fundo Notes'}/>
+    <ApplicationStack/>
   )};
 }
 export default App;

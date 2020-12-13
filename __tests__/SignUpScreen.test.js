@@ -8,25 +8,17 @@ describe('test SignUp', () => {
         const component = shallow(<SignUpScreen AppName = "Fundo Notes" ScreenType = {'Create Account'}/>)
         expect(component).toMatchSnapshot();
     })
-    it('test the State AppName should update to Fundo Notes', async () => {
-        const component = shallow(<SignUpScreen AppName = "Fundo Notes" ScreenType = {'Create Account'}/>)
-        expect(component.instance().state.AppName).toBe('Fundo Notes')
-    })
-    it('test the State AppName should update to Fundo Notes', async () => {
-        const component = shallow(<SignUpScreen AppName = "Fundo Notes" ScreenType = {'Create Account'}/>)
-        expect(component.instance().state.ScreenType).toBe('Create Account')
-    })
     it('test the firstName handler method should update firstName state', async () => {
         const component = shallow(<SignUpScreen AppName = "Fundo Notes" ScreenType = {'Create Account'}/>)
         expect(component.instance().state.firstName).toBe('')
         component.instance().firstNameHandler('Ravi')
-        expect(component.instance().state.firstName).toBe('Ravi')
+        expect(component.instance().state.firstName).toBe('RAVI')
     })
     it('test the lastName handler method should update lastName state', async () => {
         const component = shallow(<SignUpScreen AppName = "Fundo Notes" ScreenType = {'Create Account'}/>)
         expect(component.instance().state.lastName).toBe('')
         component.instance().lastNameHandler('Kumar')
-        expect(component.instance().state.lastName).toBe('Kumar')
+        expect(component.instance().state.lastName).toBe('KUMAR')
     })
     it('test the email handler method should update email state', async () => {
         const component = shallow(<SignUpScreen AppName = "Fundo Notes" ScreenType = {'Create Account'}/>)

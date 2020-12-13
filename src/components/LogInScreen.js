@@ -1,59 +1,37 @@
 import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import LogInScreenStyles from '../styles/LogInPageStyles';
+import KeyChain from 'react-native-keychain';
 
 export default class LogInScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            AppName : props.AppName,
             email : '',
             password : '',
-            passwordValidation: true,
-            emailValidation: true,
-            passwordSecurity: true
+            passwordSecurity: true,
+            invalidPassword: false,
+            invalidEmail: false
         }
     }
 
     emailHandler = async (enteredEmail) => {
         await this.setState({
-            email: enteredEmail
+            email: enteredEmail,
+            invalidPassword: false,
+            invalidEmail: false
         })
-        this.checkEmail()
-    }
-    checkEmail = async () => {
-        const emailRejex = new RegExp("^[0-9a-zA-Z]+([._+-][0-9A-Za-z]+)*@[0-9A-Za-z]+[.][a-zA-Z]{2,4}([.][a-zA-Z]{2,4})?$");       
-        if(emailRejex.test(this.state.email)) {
-            this.setState({
-                emailValidation: true
-            })
-        }
-        else {
-            this.setState({
-                emailValidation: false
-            })
-        }
     }
 
     passwordHandler = async (enteredPassword) => {
         await this.setState({
-            password: enteredPassword
+            password: enteredPassword,
+            invalidPassword: false,
+            invalidEmail: false
+
         })
-        this.checkPassword()
     }
-    checkPassword = async () => {
-        const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,28})");
-        if(strongRegex.test(this.state.password)) {
-            this.setState({
-                passwordValidation: true
-            })
-        }
-        else {
-            this.setState({
-                passwordValidation: false
-            })
-        }
-    }
+
     passwordSecurityHandler = async () => {
         //const {onPress} = this.props
         var passwordSecurity = this.state.passwordSecurity
@@ -69,6 +47,26 @@ export default class LogInScreen extends Component {
         }
         //onPress();
     }
+    logInHandlar = async () => {
+        try {
+            const credential = await KeyChain.getGenericPassword();
+            if(credential.username == this.state.email) {
+                if(credential.password == this.state.password) {
+                    this.props.navigation.navigate('AfterLoggingIn')
+                } else {
+                    this.setState({
+                        invalidPassword: true
+                    })
+                }
+            } else {
+                this.setState({
+                    invalidEmail: true
+                })
+            }
+        } catch(error) {
+            console.log(error);
+        }
+    }
 
     render() {
         return (
@@ -77,7 +75,7 @@ export default class LogInScreen extends Component {
                     <Image style = {LogInScreenStyles.Logo_Style}
                         source = {require('../assets/FundoIcon.png')}
                     />
-                    <Text style = {LogInScreenStyles.Fundo_Style}>{this.state.AppName}</Text>
+                    <Text style = {LogInScreenStyles.Fundo_Style}>Fundo Notes</Text>
 
                         <TextInput
                             style = {LogInScreenStyles.Input_TextBox_Style}
@@ -86,7 +84,7 @@ export default class LogInScreen extends Component {
                             onChangeText = {(email) => this.emailHandler(email)}
                         />
                         <Text style = {LogInScreenStyles.pop_up_Message}>
-                            {(this.state.emailValidation || this.state.email == '') ? null : 'Invalid Email..'}
+                            {(this.state.invalidEmail) ? 'Invalid Email..' : null}
                         </Text>
  
                     <View style = {[LogInScreenStyles.Input_TextBox_Style, LogInScreenStyles.set_icon]}>
@@ -113,7 +111,7 @@ export default class LogInScreen extends Component {
                     </View>  
 
                     <Text style = {LogInScreenStyles.pop_up_Message}>
-                        {(this.state.passwordValidation || this.state.password == '') ? null : 'Weak password..'}
+                        {(this.state.invalidPassword) ? 'Invalid password..' : null}
                     </Text>
                     
                     <TouchableOpacity>
@@ -122,13 +120,13 @@ export default class LogInScreen extends Component {
 
                     <View style = {{flexDirection: 'row'}}>
                         <TouchableOpacity style = {[LogInScreenStyles.LogIn_Button_Styles, LogInScreenStyles.Button_Styles]}
-                        // onPress = {() => this.props.navigation.navigate('Length')}
+                        onPress = {() => this.logInHandlar()}
                         >
                             <Text style = {{color: '#dbced2'}}>LOG IN</Text>
                         </TouchableOpacity>
                         
                         <TouchableOpacity style = {[LogInScreenStyles.SignUp_Button_Styles, LogInScreenStyles.Button_Styles]}
-                        //onPress = {() => this.props.navigation.navigate('SignUp')}
+                        onPress = {() => this.props.navigation.navigate('SignUp')}
                         >
                             <Text style = {{color: '#dbced2'}}>SIGN UP</Text>
                         </TouchableOpacity>

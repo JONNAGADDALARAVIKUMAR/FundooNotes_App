@@ -8,10 +8,6 @@ describe('test Login', () => {
         const component = shallow(<LogInScreen AppName = "Fundo Notes"/>)
         expect(component).toMatchSnapshot();
     })
-    it('test the State AppName should update to Fundo Notes', async () => {
-        const component = shallow(<LogInScreen AppName = "Fundo Notes"/>)
-        expect(component.instance().state.AppName).toBe('Fundo Notes')
-    })
     it('test the email handler method should update email state', async () => {
         const component = shallow(<LogInScreen AppName = "Fundo Notes"/>)
         expect(component.instance().state.email).toBe('')
