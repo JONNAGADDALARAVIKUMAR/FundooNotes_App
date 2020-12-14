@@ -79,9 +79,10 @@ const SignUpScreenStyles = StyleSheet.create ({
     },
     Fields_Missing: {
         flex: 1,
-        marginLeft: '7%'
+        marginLeft: '10%',
+        textAlign: 'left'
     },
-    Password_MissMatch: {
+    pop_up_Message_Flex: {
         flex: 0.9
     }
 })

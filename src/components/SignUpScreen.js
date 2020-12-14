@@ -16,44 +16,54 @@ export default class LogInScreen extends Component {
             firstNameValidation: true,
             lastNameValidation: true,
             passwordValidation: true,
+            firstNameField: false,
+            lastNameField: false,
+            emailField: false,
+            passwordField: false,
+            confirmPasswordField: false,
             passwordSecurity: true,
             confirmPasswordSecurity: true,
-            allFieldsAreFilled: true,
-            fieldsMissing: false
         }
     }
          
     firstNameHandler = async (enteredFirstName) => {  
         await this.setState ({
-            firstName: enteredFirstName.toUpperCase()
+            firstName: enteredFirstName.toUpperCase(),
+            firstNameField: false
         })
+
         const nameRejex = new RegExp("(^[A-Za-z]+$)");
-        (nameRejex.test(this.state.firstName)) ? this.setState({firstNameValidation: true}) : this.setState({firstNameValidation: false}) 
-        this.checkFields()
+        (nameRejex.test(this.state.firstName)) 
+            ? this.setState({firstNameValidation: true})
+            : this.setState({firstNameValidation: false}) 
     }
 
     lastNameHandler = async (enteredLastName) => {
         await this.setState({
-            lastName: enteredLastName.toUpperCase()
+            lastName: enteredLastName.toUpperCase(),
+            lastNameField: false
         })
+
         const nameRejex = new RegExp("(^[A-Za-z]+$)");
-        (nameRejex.test(this.state.lastName)) ? this.setState({lastNameValidation: true}) : this.setState({lastNameValidation: false})
-        this.checkFields()
+        (nameRejex.test(this.state.lastName)) 
+            ? this.setState({lastNameValidation: true}) 
+            : this.setState({lastNameValidation: false})
     }
 
     emailHandler = async (enteredEmail) => {
         await this.setState({
-            email: enteredEmail
+            email: enteredEmail,
+            emailField: false
         })
-        this.checkEmail();
+        this.checkEmail()
     }
+
     checkEmail = async () => {
         const emailRejex = new RegExp("^[0-9a-zA-Z]+([._+-][0-9A-Za-z]+)*@[0-9A-Za-z]+[.][a-zA-Z]{2,4}([.][a-zA-Z]{2,4})?$");       
         if(emailRejex.test(this.state.email)) {
             this.setState({
                 emailValidation: true
             })
-            this.checkFields()
         }
         else {
             this.setState({
@@ -64,9 +74,10 @@ export default class LogInScreen extends Component {
 
     passwordHandler = async (enteredPassword) => {
         await this.setState({
-            password: enteredPassword
+            password: enteredPassword,
+            passwordField: false
         })
-        this.checkPassword();
+        this.checkPassword()
     }
 
     checkPassword = async () => {
@@ -75,7 +86,6 @@ export default class LogInScreen extends Component {
             this.setState({
                 passwordValidation: true
             })
-            this.checkFields()
         }
         else {
             this.setState({
@@ -86,80 +96,97 @@ export default class LogInScreen extends Component {
 
     confirmPasswordHandler = async (enteredPassword) => {
         await this.setState({
-            confirmPassword: enteredPassword
+            confirmPassword: enteredPassword,
+            confirmPasswordField: false
         })
-        this.checkFields()
     }
 
     passwordSecurityHandler = async () => {
-        //const {onPress} = this.props
+        const {onPress} = this.props
         var passwordSecurity = this.state.passwordSecurity
+
         if(passwordSecurity == true) {
             this.setState({
                 passwordSecurity: false
             })
-        }
-        else {
+        } else {
             this.setState({
                 passwordSecurity: true
             })
         }
-        //onPress();
+        onPress();
     }
 
-    confirmPasswordSecurityHandler = async () => {
-        //const {onPress} = this.props
+    confirmPasswordSecurityHandler = async () => {//Conditional rendering
+        const {onPress} = this.props
         var confirmPasswordSecurity = this.state.confirmPasswordSecurity
+        
         if(confirmPasswordSecurity == true) {
             this.setState({
                 confirmPasswordSecurity: false
             })
-        }
-        else {
+        } else {
             this.setState({
                 confirmPasswordSecurity: true
             })
         }
-        //onPress();
-    }
-
-    checkFields = () => {
-        if(this.state.firstName != '' && 
-            this.state.lastName != '' &&
-            this.state.email != '' &&
-            this.state.password != '' &&
-            this.state.confirmPassword != '' &&
-            this.state.firstNameValidation == true &&
-            this.state.lastNameValidation == true &&
-            this.state.emailValidation == true &&
-            this.state.passwordValidation == true ) {
-                
-                this.setState({
-                    allFieldsAreFilled: true,
-                    fieldsMissing: false
-                })
-        } else {
-            this.setState({
-                allFieldsAreFilled: false,
-            })
-        }
+        onPress();
     }
 
     handleSignUpButton = async () => {
-        if(this.state.allFieldsAreFilled) {
-            var username = this.state.email
-            var password = this.state.password;
-            await KeyChain.setGenericPassword(username, password)
-            this.props.navigation.navigate("LogIn");
+        const {onPress} = this.props
+        if(this.state.emailValidation &&
+            this.state.firstNameValidation &&
+            this.state.lastNameValidation &&
+            this.state.passwordValidation &&
+            this.state.firstName != '' &&
+            this.state.lastName != '' &&
+            this.state.email != '' &&
+            this.state.password != '' &&
+            this.state.confirmPassword != '') {
+
+                this.props.navigation.navigate("LogIn");
+                this.setKeyChain();
         } else {
-            this.setState({
-                fieldsMissing: true,
-            })
+            if(this.state.firstName == '') {
+                this.setState({
+                    firstNameField: true
+                })
+            }
+            if(this.state.lastName == '') {
+                this.setState({
+                    lastNameField: true
+                })
+            } 
+            if(this.state.email == '') {
+                this.setState({
+                    emailField: true
+                })
+            }
+            if(this.state.password == '') {
+                this.setState({
+                    passwordField: true
+                })
+            }
+            if(this.state.confirmPassword == '') {
+                this.setState({
+                    confirmPasswordField: true
+                })
+            } 
         }
+        onPress();
     }
 
-    storeCredential = async () => {
-        
+    setKeyChain = async () => {
+        var username = this.state.email
+        var password = this.state.password;
+        await KeyChain.setGenericPassword(username, password)
+    }
+
+    navigateToLogScreenHandler = () => {
+        const {onPress} = this.props
+        this.props.navigation.navigate('LogIn')
+        onPress();
     }
 
     render() {
@@ -177,31 +204,49 @@ export default class LogInScreen extends Component {
                             style = {SignUpStyles.Input_TextBox_Style}
                             placeholder = "First Name"
                             placeholderTextColor = "#b0686d"
-                            onChangeText = {(firstName) => this.firstNameHandler(firstName)}
+                            onChangeText = {this.firstNameHandler}
                         />
-                        <Text style = {SignUpStyles.pop_up_Message}>
-                            {(this.state.firstNameValidation || this.state.firstName == '') ? null : 'Invalid First Name..'}
-                        </Text>
 
+                        <View style = {{flexDirection: 'row'}}>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
+                                {(this.state.firstNameField) ? 'First Name Required' : null}
+                            </Text>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
+                                {(this.state.firstNameValidation || this.state.firstName == '') ? null : 'Invalid First Name..'}
+                            </Text>
+                        </View>
+                        
                         <TextInput
                             style = {SignUpStyles.Input_TextBox_Style}
                             placeholder = "Last Name"
                             placeholderTextColor = "#b0686d"
-                            onChangeText = {(lastName) => this.lastNameHandler(lastName)}
+                            onChangeText = {this.lastNameHandler}
                         />
-                        <Text style = {SignUpStyles.pop_up_Message}>
-                            {(this.state.lastNameValidation || this.state.lastName == '') ? null : 'Invalid Last Name..'}
-                        </Text>
+
+                        <View style = {{flexDirection: 'row'}}>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
+                                {(this.state.lastNameField) ? 'Last Name Required' : null}
+                            </Text>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
+                                {(this.state.lastNameValidation || this.state.lastName == '') ? null : 'Invalid Last Name..'}
+                            </Text>
+                        </View>
 
                         <TextInput
                             style = {SignUpStyles.Input_TextBox_Style}
                             placeholder = "Email"
                             placeholderTextColor = "#b0686d"
-                            onChangeText = {(email) => this.emailHandler(email)}
+                            onChangeText = {this.emailHandler}
                         />
-                        <Text style = {SignUpStyles.pop_up_Message}>
-                            {(this.state.emailValidation || this.state.email == '') ? null : 'Invalid Email..'}
-                        </Text>
+
+                        <View style = {{flexDirection: 'row'}}>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
+                                {(this.state.emailField) ? 'Email Required' : null}
+                            </Text>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
+                                {(this.state.emailValidation || this.state.email == '') ? null : 'Invalid Email..'}
+                            </Text>
+                        </View>
 
                         <View style = {[SignUpStyles.Input_TextBox_Style, SignUpStyles.set_icon]}>
                             <TextInput style = {{width: '88%'}}
@@ -209,25 +254,31 @@ export default class LogInScreen extends Component {
                                 maxLength = {25}
                                 placeholderTextColor = "#b0686d"
                                 secureTextEntry = {this.state.passwordSecurity}
-                                onChangeText = {(password) => this.passwordHandler(password)}
+                                onChangeText = {this.passwordHandler}
                             />
-                            {(this.state.passwordSecurity) ?
-                                <TouchableOpacity 
+
+                            {(this.state.passwordSecurity) 
+                                ? <TouchableOpacity 
                                     style= {{alignSelf: 'center'}}
                                     onPress = {this.passwordSecurityHandler}>
                                         <Image style = {SignUpStyles.icon} source = {require('../assets/showPasswordIcon.png')}/>
                                 </TouchableOpacity> 
-                                : 
-                                <TouchableOpacity 
+                                : <TouchableOpacity 
                                     style = {{alignSelf: 'center'}}
                                     onPress = {this.passwordSecurityHandler}>
                                         <Image style = {SignUpStyles.icon} source = {require('../assets/hidePasswordIcon.png')}/>
                                 </TouchableOpacity>  
                             }
                         </View>
-                        <Text style = {SignUpStyles.pop_up_Message}>
-                            {(this.state.passwordValidation || this.state.password == '') ? null : 'Weak password..'}
-                        </Text>
+
+                        <View style = {{flexDirection: 'row'}}>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
+                                {(this.state.passwordField) ? 'Password Required' : null}
+                            </Text>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
+                                {(this.state.passwordValidation || this.state.password == '') ? null : 'Weak password..'}
+                            </Text>
+                        </View>
 
                         <View style = {[SignUpStyles.Input_TextBox_Style, SignUpStyles.set_icon]}>
                             <TextInput style = {{width: '88%'}}
@@ -235,16 +286,16 @@ export default class LogInScreen extends Component {
                                 maxLength = {25}
                                 placeholderTextColor = "#b0686d"
                                 secureTextEntry = {this.state.confirmPasswordSecurity}
-                                onChangeText = {(confirmPassword) => this.confirmPasswordHandler(confirmPassword)}
+                                onChangeText = {this.confirmPasswordHandler}
                             />
-                            {(this.state.confirmPasswordSecurity) ?
-                                <TouchableOpacity 
+
+                            {(this.state.confirmPasswordSecurity) 
+                                ? <TouchableOpacity 
                                     style= {{alignSelf: 'center'}}
                                     onPress = {this.confirmPasswordSecurityHandler}>
                                         <Image style = {SignUpStyles.icon} source = {require('../assets/showPasswordIcon.png')}/>
                                 </TouchableOpacity> 
-                                : 
-                                <TouchableOpacity 
+                                : <TouchableOpacity 
                                     style = {{alignSelf: 'center'}}
                                     onPress = {this.confirmPasswordSecurityHandler}>
                                         <Image style = {SignUpStyles.icon} source = {require('../assets/hidePasswordIcon.png')}/>
@@ -254,9 +305,9 @@ export default class LogInScreen extends Component {
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.fieldsMissing) ? 'Some Fields are missing' : null}
+                                {(this.state.confirmPasswordField) ? 'Required Field' : null}
                             </Text>
-                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Password_MissMatch]}>
+                            <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
                                 {(this.state.password.includes(this.state.confirmPassword)) ? null : 'Password MissMatch'}
                             </Text>
                         </View>
@@ -266,15 +317,14 @@ export default class LogInScreen extends Component {
                     <View style = {{flexDirection: 'row'}}>
                         <Text style = {SignUpStyles.Have_Account_Style}>Already Have Account</Text>
                         <TouchableOpacity
-                            onPress = {() => this.props.navigation.navigate('LogIn')}
-                        >
+                            onPress = {this.navigateToLogScreenHandler}>
                             <Text style = {SignUpStyles.ClickHere_Style}>Click Here</Text>
                         </TouchableOpacity>
                     </View>
                     
                     <View>
                         <TouchableOpacity style = {[SignUpStyles.SignUp_Button_Styles, SignUpStyles.Button_Styles]}
-                        onPress = {() => this.handleSignUpButton()}>
+                            onPress = {this.handleSignUpButton}>
                             <Text style = {{color: '#dbced2'}}>CREATE ACCOUNT</Text>
                         </TouchableOpacity>
                     </View>

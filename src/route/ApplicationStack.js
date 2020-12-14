@@ -3,17 +3,19 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from '../components/LogInScreen';
 import SignUpScreen from '../components/SignUpScreen';
-import ScreenAfterLogIn from '../components/ScreenAfterLogIn'
+import DashBoardScreen from '../components/DashBoardScreen'
+import ForgotPasswordScreen from '../components/ForgotPasswordScreen'
 
 const Stack = createStackNavigator();
 
 const ApplicationStack = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator initialRouteName = "LogIn" LoginScreen = {{headerShown : false}}>
-                <Stack.Screen name = "LogIn" component = {LoginScreen}/>
+            <Stack.Navigator initialRouteName = "LogIn" screenOptions = {{headerShown : false}}>
+                <Stack.Screen name = "LogIn" component = {LoginScreen} Action = {'Reset'}/>
                 <Stack.Screen name = "SignUp" component = {SignUpScreen}/>
-                <Stack.Screen name = 'AfterLoggingIn' component = {ScreenAfterLogIn}/>
+                <Stack.Screen name = 'DashBoard' component = {DashBoardScreen}/>
+                <Stack.Screen name = 'ForgotPassword' component = {ForgotPasswordScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     )

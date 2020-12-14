@@ -40,13 +40,9 @@ const LogInScreenStyles = StyleSheet.create ({
         justifyContent: 'space-around'
     },
     forgot_Password_Style: {
+        marginTop: '3%',
         marginLeft: '10%',
         color: '#de12c1',
-    },
-    pop_up_Message: {
-        textAlign: 'right',
-        color: '#f70a1a',
-        marginRight: '10%'
     },
     Fundo_Style: {
         fontSize: 25,
@@ -71,6 +67,20 @@ const LogInScreenStyles = StyleSheet.create ({
         alignSelf: 'center' ,
         borderRadius: 10,
         backgroundColor: 'white',
+    },
+    pop_up_Message: {
+        fontSize: 12,
+        textAlign: 'right',
+        color: '#f70a1a',
+        marginRight: '10%'
+    },
+    pop_up_Message_Flex: {
+        flex: 0.9
+    },
+    Fields_Missing: {
+        flex: 1,
+        marginLeft: '10%',
+        textAlign: 'left'
     },
 })
 
