@@ -1,156 +1,56 @@
 import React, { Component } from 'react';
 import {View, Text, ScrollView, Image, TextInput, TouchableOpacity} from 'react-native';
 import ForgotPasswordScreenStyles from '../styles/ForgotPasswordScreenStyles';
-import KeyChain from 'react-native-keychain';
+import UserServices from '../../services/userServeces'
 
 export default class ForgotPasswordScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
             email: '',
-            password: '',
-            confirmPassword: '',
-            emailValidation: true,
-            passwordValidation: true,
-            passwordSecurity: true,
-            confirmPasswordSecurity: true,
-            emailField: false,
-            passwordField: false,
-            confirmPasswordField: false,
+            isEmailFieldEmpty: false,
+            emailError: '',
+            emailSentNotification: false
         }
     }
 
     emailHandler = async (enteredEmail) => {
         await this.setState({
             email: enteredEmail,
-            emailField: false
+            emailError: '',
+            emailSentNotification: false,
+            isEmailFieldEmpty: false
         })
-        this.checkEmail()
     }
-    checkEmail = async () => {
-        try {
-            const credential = await KeyChain.getGenericPassword();
-            if(credential.username == this.state.email) {
+
+    resetPassword = () => {
+        if(!this.state.isEmailFieldEmpty && this.state.email != '') {
+        UserServices.resetPassword(this.state.email)
+        .then((result) => {
+            this.setState({
+                emailSentNotification: true
+            })
+            setTimeout(() => {
+                this.props.navigation.navigate('LogIn')
+            },3500)
+        })
+        .catch(error => {
+            if(error === 'invalid email') {
                 this.setState({
-                    validateEmail: true
+                    emailError: 'invalid email'
                 })
-            } else {
+                console.log(this.state.emailError);
+            } else if(error === 'User not found') {
                 this.setState({
-                    validateEmail: false
+                    emailError: 'User not found'
                 })
             }
-        } catch(error) {
-            //console.log(error);
-        }
-    }
-
-    passwordHandler = async (enteredPassword) => {
-        await this.setState({
-            password: enteredPassword,
-            passwordField: false
         })
-        this.checkPassword()
-    }
-
-    checkPassword = async () => {
-        const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-        if(strongRegex.test(this.state.password)) {
-            this.setState({
-                passwordValidation: true
-            })
-        }
-        else {
-            this.setState({
-                passwordValidation: false
-            })
-        }
-    }
-
-    confirmPasswordHandler = async (enteredPassword) => {
-        await this.setState({
-            confirmPassword: enteredPassword
+    } else {
+        this.setState({
+            isEmailFieldEmpty: true
         })
     }
-
-    passwordSecurityHandler = async () => {
-        const {onPress} = this.props
-        var passwordSecurity = this.state.passwordSecurity
-        if(passwordSecurity == true) {
-            this.setState({
-                passwordSecurity: false
-            })
-        }
-        else {
-            this.setState({
-                passwordSecurity: true
-            })
-        }
-        onPress();
-    }
-
-    confirmPasswordSecurityHandler = async () => {
-        const {onPress} = this.props
-        var passwordSecurity = this.state.confirmPasswordSecurity
-        if(passwordSecurity == true) {
-            this.setState({
-                confirmPasswordSecurity: false
-            })
-        }
-        else {
-            this.setState({
-                confirmPasswordSecurity: true
-            })
-        }
-        onPress();
-    }
-
-    confirmPasswordHandler = async (enteredPassword) => {
-        await this.setState({
-            confirmPassword: enteredPassword,
-            confirmPasswordField: false
-        })
-    }
-
-    handleChangePasswordButton = async () => {
-        const {onPress} = this.props
-        if(this.state.emailValidation &&
-            this.state.passwordValidation &&
-            this.state.email != '' &&
-            this.state.password != '' &&
-            this.state.confirmPassword != '') {
-
-                this.props.navigation.navigate("LogIn");
-                this.setKeyChain();
-        } else {
-            if(this.state.email == '') {
-                this.setState({
-                    emailField: true
-                })
-            }
-            if(this.state.password == '') {
-                this.setState({
-                    passwordField: true
-                })
-            }
-            if(this.state.confirmPassword == '') {
-                this.setState({
-                    confirmPasswordField: true
-                })
-            } 
-        }
-        onPress();
-    }
-
-    setKeyChain = async () => {
-        var username = this.state.email
-        var password = this.state.password;
-        await KeyChain.setGenericPassword(username, password)
-    }
-
-    handleCreateAccountButton = () => {
-        const {onPress} = this.props
-        this.props.navigation.navigate('SignUp')
-        onPress();
     }
 
     render() {
@@ -172,87 +72,19 @@ export default class ForgotPasswordScreen extends Component {
                         />
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[ForgotPasswordScreenStyles.pop_up_Message, ForgotPasswordScreenStyles.Fields_Missing]}>
-                                {(this.state.emailField) ? 'Email Required' : null}
+                                {(this.state.isEmailFieldEmpty) ? 'Email Required' : null}
                             </Text>
                             <Text style = {[ForgotPasswordScreenStyles.pop_up_Message, ForgotPasswordScreenStyles.pop_up_Message_Flex]}>
-                                {(this.state.validateEmail || this.state.email == '') ? null : 'Invalid Email..'}
+                                {(this.state.emailError != '') ? this.state.emailError : null }
                             </Text>
                         </View>
-            
-                        <View style = {[ForgotPasswordScreenStyles.TextInput_Style, ForgotPasswordScreenStyles.set_icon]}>
-                            <TextInput
-                                style = {{width: '88%'}}
-                                placeholder = "Password"
-                                maxLength = {25}
-                                placeholderTextColor = "#b0686d"
-                                secureTextEntry = {this.state.passwordSecurity}
-                                onChangeText = {this.passwordHandler}
-                            />
-                            {(this.state.passwordSecurity) 
-                                ? <TouchableOpacity 
-                                    style= {{alignSelf: 'center'}}
-                                    onPress = {this.passwordSecurityHandler}>
-                                        <Image style = {ForgotPasswordScreenStyles.icon} source = {require('../assets/showPasswordIcon.png')}/>
-                                </TouchableOpacity> 
-                                : <TouchableOpacity 
-                                    style = {{alignSelf: 'center'}}
-                                    onPress = {this.passwordSecurityHandler}>
-                                        <Image style = {ForgotPasswordScreenStyles.icon} source = {require('../assets/hidePasswordIcon.png')}/>
-                                </TouchableOpacity>  
-                            }
-                        </View>
-
-                        <View style = {{flexDirection: 'row'}}>
-                            <Text style = {[ForgotPasswordScreenStyles.pop_up_Message, ForgotPasswordScreenStyles.Fields_Missing]}>
-                                {(this.state.passwordField) ? 'Password Required' : null}
-                            </Text>
-                            <Text style = {[ForgotPasswordScreenStyles.pop_up_Message, ForgotPasswordScreenStyles.pop_up_Message_Flex]}>
-                                {(this.state.passwordValidation || this.state.password == '') ? null : 'Weak password..'}
-                            </Text>
-                        </View>
-
-                        <View style = {[ForgotPasswordScreenStyles.TextInput_Style, ForgotPasswordScreenStyles.set_icon]}>
-                            <TextInput
-                                style = {{width: '88%'}}
-                                placeholder = "Confirm Password"
-                                maxLength = {25}
-                                placeholderTextColor = "#b0686d"
-                                secureTextEntry = {this.state.confirmPasswordSecurity}
-                                onChangeText = {this.confirmPasswordHandler}
-                            />
-                            {(this.state.confirmPasswordSecurity) 
-                                ? <TouchableOpacity 
-                                    style= {{alignSelf: 'center'}}
-                                    onPress = {this.confirmPasswordSecurityHandler}>
-                                        <Image style = {ForgotPasswordScreenStyles.icon} source = {require('../assets/showPasswordIcon.png')}/>
-                                </TouchableOpacity> 
-                                : <TouchableOpacity 
-                                    style = {{alignSelf: 'center'}}
-                                    onPress = {this.confirmPasswordSecurityHandler}>
-                                        <Image style = {ForgotPasswordScreenStyles.icon} source = {require('../assets/hidePasswordIcon.png')}/>
-                                </TouchableOpacity>  
-                            }
-                        </View>
-
-                        <View style = {{flexDirection: 'row'}}>
-                            <Text style = {[ForgotPasswordScreenStyles.pop_up_Message, ForgotPasswordScreenStyles.Fields_Missing]}>
-                                {(this.state.confirmPasswordField) ? 'Required Field' : null}
-                            </Text>
-                            <Text style = {[ForgotPasswordScreenStyles.pop_up_Message, ForgotPasswordScreenStyles.pop_up_Message_Flex]}>
-                                {(this.state.password.includes(this.state.confirmPassword)) ? null : 'Password MissMatch'}
-                            </Text>
-                        </View>
-
                         <View>
+                            <Text style = {[ForgotPasswordScreenStyles.Email_Sent_Notification]}>
+                                {(this.state.emailSentNotification) ? 'Password Reset Link has been sent to your Registred Email' : null}
+                            </Text>
                             <TouchableOpacity style = {[ForgotPasswordScreenStyles.SignUp_Button_Styles, ForgotPasswordScreenStyles.Button_Styles]}
-                                onPress = {this.handleChangePasswordButton}>
-                                <Text style = {{color: '#dbced2'}}>CHANGE PASSWORD</Text>
-                            </TouchableOpacity>
-                        </View>
-                        <View>
-                            <TouchableOpacity style = {ForgotPasswordScreenStyles.Create_Account}
-                                onPress = {this.handleCreateAccountButton}>
-                                <Text style = {{color: '#912c4c'}}>Create Account</Text>
+                                onPress = {this.resetPassword}>
+                                <Text style = {{color: '#dbced2'}}>Send Link to Mail</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

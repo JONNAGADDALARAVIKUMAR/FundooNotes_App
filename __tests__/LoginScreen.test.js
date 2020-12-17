@@ -7,12 +7,21 @@ describe('test Login Screen', () => {
         const component = shallow(<LogInScreen/>)
         expect(component).toMatchSnapshot();
     })
-    it('test the email handler method should update email state', async () => {
+    it('While passing email to the emailhandler method should update email state', async () => {
         const component = shallow(<LogInScreen/>)
         expect(component.instance().state.email).toBe('')
         expect(component.instance().state.emailField).toBe(false)
+        expect(component.instance().state.emailError).toBe('')
         component.instance().emailHandler('ravi@gmail.com')
         expect(component.instance().state.email).toBe('ravi@gmail.com')
+    })
+    it('While passing password to the  passwordhandler method should update password state', async () => {
+        const component = shallow(<LogInScreen/>)
+        expect(component.instance().state.password).toBe('')
+        expect(component.instance().state.passwordField).toBe(false)
+        expect(component.instance().state.passwordError).toBe('')
+        component.instance().passwordHandler('Ravi@322')
+        expect(component.instance().state.password).toBe('Ravi@322')
     })
     it('test the navigateToSignUpScreen method should Navigate to SignUp Screen', async () => {
         const navigation = { navigate : jest.fn() }
@@ -34,43 +43,40 @@ describe('test Login Screen', () => {
         expect(onPressEvent).toHaveBeenCalled();
         expect(navigation.navigate).toBeCalledWith("ForgotPassword");
     })
-
-    it('test the handleLogInButton method should Navigate to DashBoard', async () => {
-        const navigation = { navigate : jest.fn() }
-        const onPressEvent = jest.fn();
-        const component = shallow(<LogInScreen onPress = {onPressEvent} navigation = {navigation}/>)
+    // it('test the navigateToSignUpScreen method should Navigate to SignUp Screen', async () => {
+    //     const navigation = { navigate : jest.fn() }
+    //     const onPressEvent = jest.fn();
+    //     const component = shallow(<LogInScreen onPress = {onPressEvent} navigation = {navigation}/>)
+    //     const instance = component.instance();
+    //     instance.setState({
+    //         email: 'ravikumarj4444@gmail.com',
+    //         password: 'Ravi@322',
+    //     })
+    //     await instance.logIn()
+    //     expect(onPressEvent).toHaveBeenCalled();
+    //     expect(navigation.navigate).toBeCalledWith("DashBoard");
+    // })
+    it('While passing email and password to the handleLogInButton method should call LogIn method', async () => {
+        renderer.render(<LogInScreen/>);
         const instance = component.instance();
         instance.setState({
             email: 'ravi@gmail.com',
-            password: 'Ravi@2211',
-            validateEmail: true,
-            validatePassword: true
+            password: 'Ravi@322',
         })
-        instance.handleLogInButton();
-        expect(onPressEvent).toHaveBeenCalled();
-        expect(navigation.navigate).toBeCalledWith("DashBoard");
+        const logIn = jest.fn();
+        //instance.handleLogInButton();
+        expect(handleLogInButton).toBeCalled();
     })
-
-    it('test the handleLogInButton method should Update validateEmail and validatePassword when email and password are empty', async () => {
-        const navigation = { navigate : jest.fn() }
-        const onPressEvent = jest.fn();
-        const component = shallow(<LogInScreen onPress = {onPressEvent} navigation = {navigation}/>)
+    it('While passing email and password empty to the handleLogInButton method should update states emailField and password Field to true', async () => {
+        const component = shallow(<LogInScreen/>)
         const instance = component.instance();
         instance.setState({
             email: '',
             password: '',
-            validateEmail: true,
-            validatePassword: true
         })
         instance.handleLogInButton();
         expect(component.instance().state.emailField).toBe(true)
         expect(component.instance().state.passwordField).toBe(true)
-    })
-    it('test the password handler method should update password state', async () => {
-        const component = shallow(<LogInScreen/>)
-        expect(component.instance().state.password).toBe('')
-        component.instance().passwordHandler('Ravi@765')
-        expect(component.instance().state.password).toBe('Ravi@765')
     })
     it('test onPress event of eye icon of password textinput called it will change the passwordSecurity State', async () => {
         const onPressEvent = jest.fn();

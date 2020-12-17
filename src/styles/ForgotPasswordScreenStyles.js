@@ -67,10 +67,6 @@ const ForgotPasswordScreenStyles = StyleSheet.create({
     Password_MissMatch: {
         flex: 0.9
     },
-    Create_Account: {
-        marginTop: '5%',
-        alignSelf: 'center'
-    },
     pop_up_Message_Flex: {
         flex: 0.9
     },
@@ -79,6 +75,10 @@ const ForgotPasswordScreenStyles = StyleSheet.create({
         marginLeft: '10%',
         textAlign: 'left'
     },
+    Email_Sent_Notification: {
+        textAlign: 'center',
+        color: '#e329da'
+    }
 })
 
 export default ForgotPasswordScreenStyles;

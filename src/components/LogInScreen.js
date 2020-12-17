@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import LogInScreenStyles from '../styles/LogInPageStyles';
-import KeyChain from 'react-native-keychain';
+import UserServices from '../../services/userServeces';
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -10,8 +10,8 @@ export default class LogInScreen extends Component {
             email : '',
             password : '',
             passwordSecurity: true,
-            validatePassword: false,
-            validateEmail: false,
+            emailError: '',
+            passwordError: '',
             emailField: false,
             passwordField: false,
         }
@@ -20,45 +20,17 @@ export default class LogInScreen extends Component {
     emailHandler = async (enteredEmail) => {
         await this.setState({
             email: enteredEmail,
-            emailField: false
+            emailField: false,
+            emailError: ''
         })
-
-        try {
-            const credential = await KeyChain.getGenericPassword();
-            if(credential.username == this.state.email) {
-                this.setState({
-                    validateEmail: true
-                })
-            } else {
-                this.setState({
-                    validateEmail: false
-                })
-            }
-        } catch(error) {
-            //console.error(error.message);
-        }
     }
 
     passwordHandler = async (enteredPassword) => {
         await this.setState({
             password: enteredPassword,
-            passwordField: false
+            passwordField: false,
+            passwordError: ''
         })
-
-        try {
-            const credential = await KeyChain.getGenericPassword();
-            if(credential.password == this.state.password) {
-                this.setState({
-                    validatePassword: true
-                })
-            } else {
-                this.setState({
-                    validatePassword: false
-                })
-            }
-        } catch(error) {
-            //console.error(error.message);
-        }
     }
 
     passwordSecurityHandler = async () => {
@@ -74,16 +46,14 @@ export default class LogInScreen extends Component {
                 passwordSecurity: true
             })
         }
-        onPress();
+        (this.props == undefined ) ? null : onPress();
     }
 
     handleLogInButton = async () => {
         const {onPress} = this.props
         if(this.state.email != '' &&
-            this.state.password != '' &&
-            this.state.validateEmail &&
-            this.state.validatePassword) {
-                this.props.navigation.navigate("DashBoard");
+            this.state.password != '') {
+                this.logIn()
         } else {
             if(this.state.email == '') {
                 this.setState({
@@ -96,7 +66,30 @@ export default class LogInScreen extends Component {
                 })
             }
         }
-        onPress();
+        (this.props == undefined ) ? null : onPress();
+    }
+
+    logIn = () => {
+        const {onPress} = this.props
+        UserServices.logIn(this.state.email, this.state.password)
+            .then(() => this.props.navigation.navigate('DashBoard'))
+            .catch(error => {
+                if(error === 'User not Found') {
+                    this.setState({
+                        emailError: 'User not Found'
+                    })
+                } else if(error === 'Invalid Email') {
+                    this.setState({
+                        emailError: 'Invalid Email'
+                    })
+                }
+                else if(error === 'Invalid Password') {
+                    this.setState({
+                        passwordError: 'Invalid Password'
+                    })
+                }
+            })
+            onPress();
     }
 
     navigateToSignUpScreen = () => {
@@ -129,7 +122,7 @@ export default class LogInScreen extends Component {
                             {(this.state.emailField) ? 'Email Required' : null}
                         </Text>
                         <Text style = {[LogInScreenStyles.pop_up_Message, LogInScreenStyles.pop_up_Message_Flex]}>
-                            {(this.state.validateEmail || this.state.email == '') ? null : 'Invalid Email..'}
+                            {(this.state.emailError == '' || this.state.email == '') ? null : this.state.emailError}
                         </Text>
                     </View>
  
@@ -160,7 +153,7 @@ export default class LogInScreen extends Component {
                             {(this.state.passwordField) ? 'Password Required' : null}
                         </Text>
                         <Text style = {[LogInScreenStyles.pop_up_Message, LogInScreenStyles.pop_up_Message_Flex]}>
-                            {(this.state.validatePassword || this.state.password == '') ? null : 'Invalid password..'}
+                            {(this.state.passwordError == '' || this.state.password == '') ? null : this.state.passwordError}
                         </Text>
                     </View>
                     

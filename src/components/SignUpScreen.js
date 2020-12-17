@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import SignUpStyles from '../styles/SignUpStyles';
-import KeyChain from 'react-native-keychain';
+import UserServices from '../../services/userServeces';
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -12,15 +12,18 @@ export default class LogInScreen extends Component {
             firstName: '',
             lastName: '',
             confirmPassword: '',
-            emailValidation: true,
             firstNameValidation: true,
+            isFirstNameFieldEmpty: false,
             lastNameValidation: true,
+            isLastNameFieldEmpty: false,
+            isEmailFieldEmpty: false,
+            emailError: '',
+            emailValidation: true,
+            isPasswordFieldEmpty: false,
+            passwordError: '',
             passwordValidation: true,
-            firstNameField: false,
-            lastNameField: false,
-            emailField: false,
-            passwordField: false,
-            confirmPasswordField: false,
+            isPasswordFieldEmpty: false,
+            isConfirmPasswordFieldEmpty: false,
             passwordSecurity: true,
             confirmPasswordSecurity: true,
         }
@@ -29,7 +32,7 @@ export default class LogInScreen extends Component {
     firstNameHandler = async (enteredFirstName) => {  
         await this.setState ({
             firstName: enteredFirstName.toUpperCase(),
-            firstNameField: false
+            isFirstNameFieldEmpty: false
         })
 
         const nameRejex = new RegExp("(^[A-Za-z]+$)");
@@ -41,7 +44,7 @@ export default class LogInScreen extends Component {
     lastNameHandler = async (enteredLastName) => {
         await this.setState({
             lastName: enteredLastName.toUpperCase(),
-            lastNameField: false
+            isLastNameFieldEmpty: false
         })
 
         const nameRejex = new RegExp("(^[A-Za-z]+$)");
@@ -53,7 +56,8 @@ export default class LogInScreen extends Component {
     emailHandler = async (enteredEmail) => {
         await this.setState({
             email: enteredEmail,
-            emailField: false
+            isEmailFieldEmpty: false,
+            emailError: ''
         })
         this.checkEmail()
     }
@@ -64,10 +68,10 @@ export default class LogInScreen extends Component {
             this.setState({
                 emailValidation: true
             })
-        }
-        else {
+        } else {
             this.setState({
-                emailValidation: false
+                emailValidation: false,
+                emailError: 'Pattern not matching'
             })
         }
     }
@@ -75,7 +79,8 @@ export default class LogInScreen extends Component {
     passwordHandler = async (enteredPassword) => {
         await this.setState({
             password: enteredPassword,
-            passwordField: false
+            isPasswordFieldEmpty: false,
+            passwordError: ''
         })
         this.checkPassword()
     }
@@ -89,7 +94,8 @@ export default class LogInScreen extends Component {
         }
         else {
             this.setState({
-                passwordValidation: false
+                passwordValidation: false,
+                passwordError: 'Weak Password'
             })
         }
     }
@@ -97,7 +103,7 @@ export default class LogInScreen extends Component {
     confirmPasswordHandler = async (enteredPassword) => {
         await this.setState({
             confirmPassword: enteredPassword,
-            confirmPasswordField: false
+            isConfirmPasswordFieldEmpty: false
         })
     }
 
@@ -114,7 +120,7 @@ export default class LogInScreen extends Component {
                 passwordSecurity: true
             })
         }
-        onPress();
+        (this.props == undefined ) ? null : onPress();
     }
 
     confirmPasswordSecurityHandler = async () => {//Conditional rendering
@@ -130,7 +136,7 @@ export default class LogInScreen extends Component {
                 confirmPasswordSecurity: true
             })
         }
-        onPress();
+        (this.props == undefined ) ? null : onPress();
     }
 
     handleSignUpButton = async () => {
@@ -144,43 +150,54 @@ export default class LogInScreen extends Component {
             this.state.email != '' &&
             this.state.password != '' &&
             this.state.confirmPassword != '') {
-
-                this.props.navigation.navigate("LogIn");
-                this.setKeyChain();
+                this.createAccount(this.state.email, this.state.password)
         } else {
             if(this.state.firstName == '') {
                 this.setState({
-                    firstNameField: true
+                    isFirstNameFieldEmpty: true
                 })
             }
             if(this.state.lastName == '') {
                 this.setState({
-                    lastNameField: true
+                    isLastNameFieldEmpty: true
                 })
             } 
             if(this.state.email == '') {
                 this.setState({
-                    emailField: true
+                    isEmailFieldEmpty: true
                 })
             }
             if(this.state.password == '') {
                 this.setState({
-                    passwordField: true
+                    isPasswordFieldEmpty: true
                 })
             }
             if(this.state.confirmPassword == '') {
                 this.setState({
-                    confirmPasswordField: true
+                    isConfirmPasswordFieldEmpty: true
                 })
             } 
         }
-        onPress();
+        (this.props == undefined ) ? null : onPress();
     }
 
-    setKeyChain = async () => {
-        var username = this.state.email
-        var password = this.state.password;
-        await KeyChain.setGenericPassword(username, password)
+    createAccount = () => {
+        UserServices.createAccount(this.state.email, this.state.password)
+        .then((message) => {
+            this.props.navigation.navigate("DashBoard");
+        })
+        .catch(error => {
+            if (error === 'email in use!') {
+                this.setState({
+                    emailError: 'email in use!'
+                })
+            }
+            if (error === 'invalid email!') {
+                this.setState({
+                    emailError: 'invalid email!'
+                })
+            }
+        });
     }
 
     navigateToLogScreenHandler = () => {
@@ -209,7 +226,7 @@ export default class LogInScreen extends Component {
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.firstNameField) ? 'First Name Required' : null}
+                                {(this.state.isFirstNameFieldEmpty) ? 'First Name Required' : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
                                 {(this.state.firstNameValidation || this.state.firstName == '') ? null : 'Invalid First Name..'}
@@ -225,7 +242,7 @@ export default class LogInScreen extends Component {
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.lastNameField) ? 'Last Name Required' : null}
+                                {(this.state.isLastNameFieldEmpty) ? 'Last Name Required' : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
                                 {(this.state.lastNameValidation || this.state.lastName == '') ? null : 'Invalid Last Name..'}
@@ -241,10 +258,10 @@ export default class LogInScreen extends Component {
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.emailField) ? 'Email Required' : null}
+                                {(this.state.isEmailFieldEmpty) ? 'Email Required' : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
-                                {(this.state.emailValidation || this.state.email == '') ? null : 'Invalid Email..'}
+                                {(this.state.emailError == '') ? null : this.state.emailError}
                             </Text>
                         </View>
 
@@ -273,10 +290,10 @@ export default class LogInScreen extends Component {
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.passwordField) ? 'Password Required' : null}
+                                {(this.state.isPasswordFieldEmpty) ? 'Password Required' : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
-                                {(this.state.passwordValidation || this.state.password == '') ? null : 'Weak password..'}
+                                {(this.state.passwordValidation || this.state.passwordError == '' || this.state.password == '') ? null : this.state.passwordError}
                             </Text>
                         </View>
 
@@ -305,7 +322,7 @@ export default class LogInScreen extends Component {
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.confirmPasswordField) ? 'Required Field' : null}
+                                {(this.state.isConfirmPasswordFieldEmpty) ? 'Required Field' : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
                                 {(this.state.password.includes(this.state.confirmPassword)) ? null : 'Password MissMatch'}
