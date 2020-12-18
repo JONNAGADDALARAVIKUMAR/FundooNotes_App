@@ -14,6 +14,7 @@ class UserServices {
                 if (error.code === 'auth/invalid-email') {
                         reject('invalid email!')
                 }
+                console.log(error);
             })
         })
     }
@@ -21,9 +22,7 @@ class UserServices {
     logIn = (email, password) => {
         return new Promise((resolve, reject) => {
             Firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(() => {
-                resolve(true)
-            })
+            .then(user => resolve(user))
             .catch((error) => {
                 if(error.code === 'auth/user-not-found') {
                     reject('User not Found')
@@ -52,7 +51,7 @@ class UserServices {
                 } else if(error.code === 'auth/user-not-found') {
                     reject('User not found')
                 }
-                console.log(error)
+                //console.log(error)
             })
         })
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import LogInScreenStyles from '../styles/LogInPageStyles';
-import UserServices from '../../services/userServeces';
+import UserServices from '../../services/UserServices';
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -51,9 +51,25 @@ export default class LogInScreen extends Component {
 
     handleLogInButton = async () => {
         const {onPress} = this.props
-        if(this.state.email != '' &&
-            this.state.password != '') {
-                this.logIn()
+        if(this.state.email != '' && this.state.password != '') {
+            await UserServices.logIn(this.state.email, this.state.password)
+            .then((user) => this.props.navigation.navigate('DashBoard'))
+            .catch(error => {
+                if(error === 'User not Found') {
+                    this.setState({
+                        emailError: 'User not Found'
+                    })
+                } else if(error === 'Invalid Email') {
+                    this.setState({
+                        emailError: 'Invalid Email'
+                    })
+                }   
+                else if(error === 'Invalid Password') {
+                    this.setState({
+                        passwordError: 'Invalid Password'
+                    })
+                }
+            })
         } else {
             if(this.state.email == '') {
                 this.setState({
@@ -66,30 +82,7 @@ export default class LogInScreen extends Component {
                 })
             }
         }
-        (this.props == undefined ) ? null : onPress();
-    }
-
-    logIn = () => {
-        const {onPress} = this.props
-        UserServices.logIn(this.state.email, this.state.password)
-            .then(() => this.props.navigation.navigate('DashBoard'))
-            .catch(error => {
-                if(error === 'User not Found') {
-                    this.setState({
-                        emailError: 'User not Found'
-                    })
-                } else if(error === 'Invalid Email') {
-                    this.setState({
-                        emailError: 'Invalid Email'
-                    })
-                }
-                else if(error === 'Invalid Password') {
-                    this.setState({
-                        passwordError: 'Invalid Password'
-                    })
-                }
-            })
-            onPress();
+        onPress();
     }
 
     navigateToSignUpScreen = () => {

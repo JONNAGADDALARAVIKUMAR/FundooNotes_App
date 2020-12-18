@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import SignUpStyles from '../styles/SignUpStyles';
-import UserServices from '../../services/userServeces';
+import UserServices from '../../services/UserServices';
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -150,56 +150,51 @@ export default class LogInScreen extends Component {
             this.state.email != '' &&
             this.state.password != '' &&
             this.state.confirmPassword != '') {
-                this.createAccount(this.state.email, this.state.password)
-        } else {
-            if(this.state.firstName == '') {
-                this.setState({
-                    isFirstNameFieldEmpty: true
+                UserServices.createAccount(this.state.email, this.state.password)
+                .then((message) => {
+                    this.props.navigation.navigate("DashBoard");
                 })
+                .catch(error => {
+                    if (error === 'email in use!') {
+                        this.setState({
+                            emailError: 'email in use!'
+                        })
+                    }
+                    if (error === 'invalid email!') {
+                        this.setState({
+                            emailError: 'invalid email!'
+                        })
+                    }
+                });
+            } else {
+                if(this.state.firstName == '') {
+                    this.setState({
+                        isFirstNameFieldEmpty: true
+                    })
+                }
+                if(this.state.lastName == '') {
+                    this.setState({
+                        isLastNameFieldEmpty: true
+                    })
+                } 
+                if(this.state.email == '') {
+                    this.setState({
+                        isEmailFieldEmpty: true
+                    })
+                }
+                if(this.state.password == '') {
+                    this.setState({
+                        isPasswordFieldEmpty: true
+                    })
+                }
+                if(this.state.confirmPassword == '') {
+                    this.setState({
+                        isConfirmPasswordFieldEmpty: true
+                    })
+                } 
             }
-            if(this.state.lastName == '') {
-                this.setState({
-                    isLastNameFieldEmpty: true
-                })
-            } 
-            if(this.state.email == '') {
-                this.setState({
-                    isEmailFieldEmpty: true
-                })
-            }
-            if(this.state.password == '') {
-                this.setState({
-                    isPasswordFieldEmpty: true
-                })
-            }
-            if(this.state.confirmPassword == '') {
-                this.setState({
-                    isConfirmPasswordFieldEmpty: true
-                })
-            } 
+            (this.props == undefined ) ? null : onPress();
         }
-        (this.props == undefined ) ? null : onPress();
-    }
-
-    createAccount = () => {
-        UserServices.createAccount(this.state.email, this.state.password)
-        .then((message) => {
-            this.props.navigation.navigate("DashBoard");
-        })
-        .catch(error => {
-            if (error === 'email in use!') {
-                this.setState({
-                    emailError: 'email in use!'
-                })
-            }
-            if (error === 'invalid email!') {
-                this.setState({
-                    emailError: 'invalid email!'
-                })
-            }
-        });
-    }
-
     navigateToLogScreenHandler = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('LogIn')

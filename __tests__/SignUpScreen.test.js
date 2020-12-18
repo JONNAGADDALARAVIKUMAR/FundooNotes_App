@@ -1,6 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
-import SignUpScreen from '../src/components/SignUpScreen'
+import SignUpScreen from '../src/components/SignUpScreen';
+import UserServices from '../services/UserServices'
 
 describe('test SignUp Screen', () => {
      it('test when render should match to snapshot', async () => {
@@ -107,27 +108,69 @@ describe('test SignUp Screen', () => {
         expect(onPressEvent).toHaveBeenCalledTimes(2);
         expect(instance.state.confirmPasswordSecurity).toBe(true);
     })
-    // it('test the handleSignUpButton method should Navigate to LogIn Screen', async () => {
-    //     const navigation = { navigate : jest.fn() }
-    //     const onPressEvent = jest.fn();
-    //     const component = shallow(<SignUpScreen onPress = {onPressEvent} navigation = {navigation}/>)
-    //     const instance = component.instance();
-    //     instance.setState({
-    //         emailValidation: true,
-    //         firstNameValidation: true,
-    //         lastNameValidation: true,
-    //         passwordValidation: true,
-    //         firstName: 'Ravi',
-    //         lastName: 'Kumar',
-    //         email: 'ravi@gmail.com',
-    //         password: 'Ravi@2211',
-    //         confirmPassword: 'Ravi@2211',
-    //     })
-    //     await instance.handleSignUpButton();
-    //     expect(onPressEvent).toHaveBeenCalled();
-    //     expect(navigation.navigate).toBeCalledWith("LogIn");
-    // })
-    it('test the handleSignUpButton method should Should Update the Fields when Required Fields are Empty', async () => {
+    it('test onPress event of SignUp button when email and password is valid it will Create Account', async() => {
+        const navigation = { navigate : jest.fn() }
+        const onPressEvent = jest.fn();
+        const component = shallow(<SignUpScreen onPress = {onPressEvent} navigation = {navigation} />)
+        const instance = component.instance();
+        instance.setState({
+            emailValidation: true,
+            firstNameValidation: true,
+            lastNameValidation: true,
+            passwordValidation: true,
+            firstName: 'Ravi',
+            lastName: 'Kumar',
+            email: 'ravikumarjit583@gmail.com',
+            password: 'Ravi@322',
+            confirmPassword: 'Ravi@322',
+        })
+        await instance.handleSignUpButton();
+        expect(onPressEvent).toHaveBeenCalled();
+        UserServices.createAccount(instance.state.email, instance.state.password).then((message) => {
+            expect(message).toBe('User account created & signed in!')
+            //expect(navigation.navigate).toBeCalledWith('DashBoard')
+        })
+        instance.setState({
+            emailValidation: true,
+            firstNameValidation: true,
+            lastNameValidation: true,
+            passwordValidation: true,
+            firstName: 'Ravi',
+            lastName: 'Kumar',
+            email: 'ravikumarjit583@gmail.com',
+            password: 'Ravi@322',
+            confirmPassword: 'Ravi@322',
+        })
+        await instance.handleSignUpButton();
+        expect(onPressEvent).toHaveBeenCalled();
+        return UserServices.createAccount(instance.state.email, instance.state.password).catch((message) => {
+            expect(message).toBe('email in use!')
+            expect(instance.state.emailError).toBe('email in use!');
+        })
+    }, 10000)
+    it('test onPress event of SignUp button when Invalid email and password passed it will return Invalid Email error', async() => {
+        const navigation = { navigate : jest.fn() }
+        const onPressEvent = jest.fn();
+        const component = shallow(<SignUpScreen onPress = {onPressEvent} navigation = {navigation} />)
+        const instance = component.instance();
+        instance.setState({
+            emailValidation: true,
+            firstNameValidation: true,
+            lastNameValidation: true,
+            passwordValidation: true,
+            firstName: 'Ravi',
+            lastName: 'Kumar',
+            email: 'ravikumarjit583gmail.com',
+            password: 'Ravi@322',
+            confirmPassword: 'Ravi@322',
+        })
+        await instance.handleSignUpButton();
+        expect(onPressEvent).toHaveBeenCalled();
+        UserServices.createAccount(instance.state.email, instance.state.password).catch((message) => {
+            expect(instance.state.emailError).toBe('invalid email!');
+        })
+    }, 10000)
+    it('test the handleSignUpButton method Should Update the Fields when Required  are Empty', async () => {
         const navigation = { navigate : jest.fn() }
         const onPressEvent = jest.fn();
         const component = shallow(<SignUpScreen onPress = {onPressEvent} navigation = {navigation}/>)

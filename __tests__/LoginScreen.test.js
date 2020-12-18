@@ -1,6 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import LogInScreen from '../src/components/LogInScreen';
+import UserServices from '../services/UserServices'
 
 describe('test Login Screen', () => {
     it('test when render should match to snapshot', async () => {
@@ -43,30 +44,6 @@ describe('test Login Screen', () => {
         expect(onPressEvent).toHaveBeenCalled();
         expect(navigation.navigate).toBeCalledWith("ForgotPassword");
     })
-    // it('test the navigateToSignUpScreen method should Navigate to SignUp Screen', async () => {
-    //     const navigation = { navigate : jest.fn() }
-    //     const onPressEvent = jest.fn();
-    //     const component = shallow(<LogInScreen onPress = {onPressEvent} navigation = {navigation}/>)
-    //     const instance = component.instance();
-    //     instance.setState({
-    //         email: 'ravikumarj4444@gmail.com',
-    //         password: 'Ravi@322',
-    //     })
-    //     await instance.logIn()
-    //     expect(onPressEvent).toHaveBeenCalled();
-    //     expect(navigation.navigate).toBeCalledWith("DashBoard");
-    // })
-    it('While passing email and password to the handleLogInButton method should call LogIn method', async () => {
-        renderer.render(<LogInScreen/>);
-        const instance = component.instance();
-        instance.setState({
-            email: 'ravi@gmail.com',
-            password: 'Ravi@322',
-        })
-        const logIn = jest.fn();
-        //instance.handleLogInButton();
-        expect(handleLogInButton).toBeCalled();
-    })
     it('While passing email and password empty to the handleLogInButton method should update states emailField and password Field to true', async () => {
         const component = shallow(<LogInScreen/>)
         const instance = component.instance();
@@ -94,4 +71,49 @@ describe('test Login Screen', () => {
         expect(onPressEvent).toHaveBeenCalledTimes(2);
         expect(instance.state.passwordSecurity).toBe(true);
     })
+    
+    it('test onPress event of LogIn button when passing wrong email and correct password it will return User not Found Error', async() => {
+        const navigation = { navigate : jest.fn() }
+        const onPressEvent = jest.fn();
+        const component = shallow(<LogInScreen onPress = {onPressEvent}/>)
+        const instance = component.instance();
+        instance.emailHandler('ravikumarj@gmail.com')
+        instance.passwordHandler('Ravi@322')
+        await instance.handleLogInButton();
+        expect(onPressEvent).toHaveBeenCalled();
+        return UserServices.logIn(instance.state.email, instance.state.password).catch((error) => expect(instance.state.emailError).toBe('User not Found'))
+    }, 10000)
+    it('test onPress event of LogIn button when passing wrong email and correct password it will return Invalid Email Error', async() => {
+        const navigation = { navigate : jest.fn() }
+        const onPressEvent = jest.fn();
+        const component = shallow(<LogInScreen onPress = {onPressEvent}/>)
+        const instance = component.instance();
+        instance.emailHandler('ravikumarjgmail.com')
+        instance.passwordHandler('Ravi@322')
+        await instance.handleLogInButton();
+        expect(onPressEvent).toHaveBeenCalled();
+        return UserServices.logIn(instance.state.email, instance.state.password).catch((error) => expect(instance.state.emailError).toBe('Invalid Email'))
+    }, 10000)
+    it('test onPress event of LogIn button when passing email and wrong password it will return Invalid Passwoard Error', async() => {
+        const navigation = { navigate : jest.fn() }
+        const onPressEvent = jest.fn();
+        const component = shallow(<LogInScreen onPress = {onPressEvent} navigation = {navigation} />)
+        const instance = component.instance();
+        instance.emailHandler('ravikumarj4444@gmail.com')
+        instance.passwordHandler('Ravi322')
+        await instance.handleLogInButton();
+        expect(onPressEvent).toHaveBeenCalled();
+        return UserServices.logIn(instance.state.email, instance.state.password).catch((error) => expect(instance.state.passwordError).toBe('Invalid Password'))
+    }, 10000)
+    it('test onPress event of LogIn button when email and password is valid it will navigate to Dashboard Screen', async() => {
+        const navigation = { navigate : jest.fn() }
+        const onPressEvent = jest.fn();
+        const component = shallow(<LogInScreen onPress = {onPressEvent} navigation = {navigation} />)
+        const instance = component.instance();
+        instance.emailHandler('ravikumarj4444@gmail.com')
+        instance.passwordHandler('Ravi@322')
+        await instance.handleLogInButton();
+        expect(onPressEvent).toHaveBeenCalled();
+        return UserServices.logIn(instance.state.email, instance.state.password).then((user) => expect(navigation.navigate).toBeCalledWith('DashBoard'))
+    }, 10000)
  })

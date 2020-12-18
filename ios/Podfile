@@ -10,6 +10,8 @@ target 'FundooNotes' do
 
   pod 'RNKeychain', :path => '../node_modules/react-native-keychain'
 
+  pod 'react-native-fbsdk', :path => '../node_modules/react-native-fbsdk'
+
   target 'FundooNotesTests' do
     inherit! :complete
     # Pods for testing

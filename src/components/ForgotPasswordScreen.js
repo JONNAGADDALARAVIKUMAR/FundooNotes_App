@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {View, Text, ScrollView, Image, TextInput, TouchableOpacity} from 'react-native';
 import ForgotPasswordScreenStyles from '../styles/ForgotPasswordScreenStyles';
-import UserServices from '../../services/userServeces'
+import UserServices from '../../services/UserServices'
 
 export default class ForgotPasswordScreen extends Component {
     constructor(props) {
@@ -23,34 +23,35 @@ export default class ForgotPasswordScreen extends Component {
         })
     }
 
-    resetPassword = () => {
+    resetPassword = async () => {
+        const {onPress} = this.props
         if(!this.state.isEmailFieldEmpty && this.state.email != '') {
-        UserServices.resetPassword(this.state.email)
-        .then((result) => {
-            this.setState({
-                emailSentNotification: true
+            await UserServices.resetPassword(this.state.email)
+            .then(async (result) => {
+                await this.setState({
+                    emailSentNotification: true
+                })
+                //await setTimeout(() => {
+                    this.props.navigation.navigate('LogIn')
+                //},3500)
             })
-            setTimeout(() => {
-                this.props.navigation.navigate('LogIn')
-            },3500)
-        })
-        .catch(error => {
-            if(error === 'invalid email') {
-                this.setState({
-                    emailError: 'invalid email'
-                })
-                console.log(this.state.emailError);
-            } else if(error === 'User not found') {
-                this.setState({
-                    emailError: 'User not found'
-                })
-            }
-        })
-    } else {
-        this.setState({
-            isEmailFieldEmpty: true
-        })
-    }
+            .catch(error => {
+                if(error === 'invalid email') {
+                    this.setState({
+                        emailError: 'invalid email'
+                    })
+                } else if(error === 'User not found') {
+                    this.setState({
+                        emailError: 'User not found'
+                    })
+                }
+            })
+        } else {
+            this.setState({
+                isEmailFieldEmpty: true
+            })
+        }
+        (this.props == undefined ) ? null : onPress();
     }
 
     render() {
