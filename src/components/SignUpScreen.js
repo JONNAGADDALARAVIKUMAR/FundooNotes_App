@@ -193,12 +193,12 @@ export default class LogInScreen extends Component {
                     })
                 } 
             }
-            (this.props == undefined ) ? null : onPress();
+            //(this.props == undefined ) ? null : onPress();
         }
     navigateToLogScreenHandler = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('LogIn')
-        onPress();
+        //onPress();
     }
 
     render() {

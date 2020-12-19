@@ -11,7 +11,7 @@ const LogInScreenStyles = StyleSheet.create ({
     },
     background_Styles: {
         backgroundColor: '#dbb6c3',
-        height: '100%'
+        height: '120%'
     },
     Input_TextBox_Style: {
         marginTop: '5%',
@@ -31,11 +31,11 @@ const LogInScreenStyles = StyleSheet.create ({
         marginLeft: '3%',
     },
     Button_Styles: {
-        marginTop: '10%',
+        marginTop: '8%',
         backgroundColor: '#912c4c',
         flex: 1,
         alignItems: 'center',
-        height: 50,
+        height: 45,
         borderRadius: 10,
         justifyContent: 'space-around'
     },
@@ -82,6 +82,32 @@ const LogInScreenStyles = StyleSheet.create ({
         marginLeft: '10%',
         textAlign: 'left'
     },
+    Login_with_FaceBook: {
+        marginRight: '20%',
+        marginLeft: '20%',
+        marginTop: '7%',
+        backgroundColor: '#5081f2',
+        alignItems: 'center',
+        height: 35,
+        borderRadius: 10,
+        justifyContent: 'space-around'
+    },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 20,
+        color: '#000',
+        textAlign: 'center',
+        padding: 20
+    },
+    imageStyle: {
+        width: 200,
+        height: 300,
+        resizeMode: 'contain' 
+      }
 })
 
 export default LogInScreenStyles;

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
+import {Image, ScrollView, TextInput, View, Text, TouchableOpacity, Alert, StyleSheet} from 'react-native';
 import LogInScreenStyles from '../styles/LogInPageStyles';
 import UserServices from '../../services/UserServices';
+import {Button} from 'react-native-paper'
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -14,8 +15,26 @@ export default class LogInScreen extends Component {
             passwordError: '',
             emailField: false,
             passwordField: false,
+            user_name: '',
+            avatar_url: '',
+            avatar_show: false
         }
     }
+
+    // get_Response_Info = (error, result) => {
+    //     if (error) {
+    //         Alert.alert('Error fetching data: ' + error.toString());
+    //     } else {
+    //         this.setState({ user_name: 'Welcome' + ' ' + result.name });
+    //         this.setState({ avatar_url: result.picture.data.url });
+    //         this.setState({ avatar_show: true }) 
+    //         console.log(result); 
+    //     }
+    // }
+
+    // onLogout = () => {
+    //     this.setState({ user_name: null, avatar_url: null, avatar_show: false });
+    // }
 
     emailHandler = async (enteredEmail) => {
         await this.setState({
@@ -82,24 +101,40 @@ export default class LogInScreen extends Component {
                 })
             }
         }
-        onPress();
+        //onPress();
     }
 
     navigateToSignUpScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('SignUp')
-        onPress();
+        //onPress();
     }
+
     navigateToForgotPasswordScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('ForgotPassword')
-        onPress();
+        //onPress();
+    }
+
+    loginWithFacebook = async () => {
+        UserServices.logInWithFacebook()
+        .then((user) => {
+            console.log(user.user.email, 
+                        user.additionalUserInfo.profile.first_name, 
+                        user.additionalUserInfo.profile.last_name,
+                        user.user.displayName, 
+                        user.user.phoneNumber);
+            this.props.navigation.navigate('DashBoard')
+        })
+        .catch((error) => {
+            console.log(error);
+        })
     }
 
     render() {
         return (
             <View style = {LogInScreenStyles.background_Styles}>
-                <ScrollView>
+                <ScrollView ScrollView style = {{marginBottom: '20%', marginTop: '1%'}}>
                     <Image style = {LogInScreenStyles.Logo_Style}
                         source = {require('../assets/FundoIcon.png')}
                     />
@@ -164,7 +199,50 @@ export default class LogInScreen extends Component {
                             onPress = {this.navigateToSignUpScreen}>
                             <Text style = {{color: '#dbced2'}}>SIGN UP</Text>
                         </TouchableOpacity>
-                    </View>
+                        </View>
+                        <Button style = {LogInScreenStyles.Login_with_FaceBook}
+                            icon = 'facebook'
+                            color = 'white'
+                            onPress = {this.loginWithFacebook}
+                            
+                        >
+                            <Text style = {{color: '#dbced2'}}>LOGIN WITH FACEBOOK</Text>
+                        </Button>
+                    {/* <View style={LogInScreenStyles.container}>
+                        {this.state.avatar_url ?
+                            <Image
+                            source={{ uri: this.state.avatar_url }}
+                            style={LogInScreenStyles.imageStyle} /> 
+                        : null}
+ 
+                        <Text style={LogInScreenStyles.text}> {this.state.user_name} </Text>
+ 
+                        <LoginButton
+                            readPermissions={['public_profile']}
+                            onLoginFinished={(error, result) => {
+                            if (error) {
+                                console.log(error.message);
+                                console.log('login has error: ' + result.error);
+                            } else if (result.isCancelled) {
+                            console.log('login is cancelled.');
+                            } else {
+                                AccessToken.getCurrentAccessToken().then(data => {
+                                console.log(data.accessToken.toString());
+ 
+                                const processRequest = new GraphRequest(
+                                    '/me?fields=name,picture.type(large)',
+                                    null,
+                                    this.get_Response_Info
+                                );
+                                // Start the graph request.
+                                new GraphRequestManager().addRequest(processRequest).start();
+ 
+                                });
+                            }
+                        }}
+                        onLogoutFinished={this.onLogout}
+                        />
+                    </View> */}
                 </ScrollView>
             </View>
         )
