@@ -21,21 +21,6 @@ export default class LogInScreen extends Component {
         }
     }
 
-    // get_Response_Info = (error, result) => {
-    //     if (error) {
-    //         Alert.alert('Error fetching data: ' + error.toString());
-    //     } else {
-    //         this.setState({ user_name: 'Welcome' + ' ' + result.name });
-    //         this.setState({ avatar_url: result.picture.data.url });
-    //         this.setState({ avatar_show: true }) 
-    //         console.log(result); 
-    //     }
-    // }
-
-    // onLogout = () => {
-    //     this.setState({ user_name: null, avatar_url: null, avatar_show: false });
-    // }
-
     emailHandler = async (enteredEmail) => {
         await this.setState({
             email: enteredEmail,
@@ -89,7 +74,8 @@ export default class LogInScreen extends Component {
                     })
                 }
             })
-        } else {
+        } 
+        else {
             if(this.state.email == '') {
                 this.setState({
                     emailField: true
@@ -203,46 +189,9 @@ export default class LogInScreen extends Component {
                         <Button style = {LogInScreenStyles.Login_with_FaceBook}
                             icon = 'facebook'
                             color = 'white'
-                            onPress = {this.loginWithFacebook}
-                            
-                        >
+                            onPress = {this.loginWithFacebook}>
                             <Text style = {{color: '#dbced2'}}>LOGIN WITH FACEBOOK</Text>
                         </Button>
-                    {/* <View style={LogInScreenStyles.container}>
-                        {this.state.avatar_url ?
-                            <Image
-                            source={{ uri: this.state.avatar_url }}
-                            style={LogInScreenStyles.imageStyle} /> 
-                        : null}
- 
-                        <Text style={LogInScreenStyles.text}> {this.state.user_name} </Text>
- 
-                        <LoginButton
-                            readPermissions={['public_profile']}
-                            onLoginFinished={(error, result) => {
-                            if (error) {
-                                console.log(error.message);
-                                console.log('login has error: ' + result.error);
-                            } else if (result.isCancelled) {
-                            console.log('login is cancelled.');
-                            } else {
-                                AccessToken.getCurrentAccessToken().then(data => {
-                                console.log(data.accessToken.toString());
- 
-                                const processRequest = new GraphRequest(
-                                    '/me?fields=name,picture.type(large)',
-                                    null,
-                                    this.get_Response_Info
-                                );
-                                // Start the graph request.
-                                new GraphRequestManager().addRequest(processRequest).start();
- 
-                                });
-                            }
-                        }}
-                        onLogoutFinished={this.onLogout}
-                        />
-                    </View> */}
                 </ScrollView>
             </View>
         )

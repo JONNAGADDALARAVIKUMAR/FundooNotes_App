@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import SignUpStyles from '../styles/SignUpStyles';
 import UserServices from '../../services/UserServices';
+import Firebase from '../../config/Firebase';
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -151,8 +152,9 @@ export default class LogInScreen extends Component {
             this.state.password != '' &&
             this.state.confirmPassword != '') {
                 UserServices.createAccount(this.state.email, this.state.password)
-                .then((message) => {
+                .then((user) => {
                     this.props.navigation.navigate("DashBoard");
+                    UserServices.writeUserDataToRealTimedataBase(user, this.state.firstName, this.state.lastName)
                 })
                 .catch(error => {
                     if (error === 'email in use!') {
@@ -194,7 +196,8 @@ export default class LogInScreen extends Component {
                 } 
             }
             //(this.props == undefined ) ? null : onPress();
-        }
+    }
+
     navigateToLogScreenHandler = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('LogIn')

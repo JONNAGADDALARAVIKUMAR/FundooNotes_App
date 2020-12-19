@@ -7,12 +7,12 @@ import firebase from 'firebase';
 //     MESSAGE_SENDER_ID,
 //     STORAGE_BUCKET,
 //     APP_ID
-// } from '.env';
+// } from '@env';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyBdBv3YH4TKPUUtvG3T3VD_tz4igYHBk4s',
     authDomain: 'fundonotes-d4273.firebaseapp.com',
-    databaseURL: 'https://fundonotes-d4273.firebaseapp.com',
+    databaseURL: 'https://fundonotes-d4273-default-rtdb.firebaseio.com/',
     projectId: 'fundonotes-d4273',
     storageBucket: 'fundonotes-d4273.appspot.com',
     messagingSenderId: '383232665932',
