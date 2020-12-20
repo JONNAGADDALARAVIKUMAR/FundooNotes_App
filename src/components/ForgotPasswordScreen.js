@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import {View, Text, ScrollView, Image, TextInput, TouchableOpacity} from 'react-native';
 import ForgotPasswordScreenStyles from '../styles/ForgotPasswordScreenStyles';
-import UserServices from '../../services/UserServices'
+import UserServices from '../../services/UserServices';
+import strings from '../languages/Languages'
 
 export default class ForgotPasswordScreen extends Component {
     constructor(props) {
@@ -38,11 +39,11 @@ export default class ForgotPasswordScreen extends Component {
             .catch(error => {
                 if(error === 'invalid email') {
                     this.setState({
-                        emailError: 'invalid email'
+                        emailError: (strings.InvalidEmail)
                     })
                 } else if(error === 'User not found') {
                     this.setState({
-                        emailError: 'User not found'
+                        emailError: (strings.UserNotFound)
                     })
                 }
             })
@@ -57,23 +58,23 @@ export default class ForgotPasswordScreen extends Component {
     render() {
         return(
             <View style = {ForgotPasswordScreenStyles.background_Style}>
-                <Text style = {ForgotPasswordScreenStyles.App_Name}>Fundo Notes</Text>
+                <Text style = {ForgotPasswordScreenStyles.App_Name}>{strings.AppName}</Text>
                 <ScrollView>
                     <Image style = {ForgotPasswordScreenStyles.Logo_Style}
                         source = {require('../assets/FundoIcon.png')}
                     />
-                    <Text style = {ForgotPasswordScreenStyles.Reset_Password_Style}>Reset Password</Text>
+                    <Text style = {ForgotPasswordScreenStyles.Reset_Password_Style}>{strings.ResetPassword}</Text>
                     
                     <View>
                         <TextInput
                             style = {ForgotPasswordScreenStyles.TextInput_Style}
-                            placeholder = "Enter Email"
+                            placeholder = {strings.EnterEmail}
                             placeholderTextColor = "#b0686d"
                             onChangeText = {this.emailHandler}
                         />
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[ForgotPasswordScreenStyles.pop_up_Message, ForgotPasswordScreenStyles.Fields_Missing]}>
-                                {(this.state.isEmailFieldEmpty) ? 'Email Required' : null}
+                                {(this.state.isEmailFieldEmpty) ? (strings.EmailRequired) : null}
                             </Text>
                             <Text style = {[ForgotPasswordScreenStyles.pop_up_Message, ForgotPasswordScreenStyles.pop_up_Message_Flex]}>
                                 {(this.state.emailError != '') ? this.state.emailError : null }
@@ -81,11 +82,11 @@ export default class ForgotPasswordScreen extends Component {
                         </View>
                         <View>
                             <Text style = {[ForgotPasswordScreenStyles.Email_Sent_Notification]}>
-                                {(this.state.emailSentNotification) ? 'Password Reset Link has been sent to your Registred Email' : null}
+                                {(this.state.emailSentNotification) ? (strings.PasswordResetMessage) : null}
                             </Text>
                             <TouchableOpacity style = {[ForgotPasswordScreenStyles.SignUp_Button_Styles, ForgotPasswordScreenStyles.Button_Styles]}
                                 onPress = {this.resetPassword}>
-                                <Text style = {{color: '#dbced2'}}>Send Link to Mail</Text>
+                                <Text style = {{color: '#dbced2'}}>{strings.SendLinktoMail}</Text>
                             </TouchableOpacity>
                         </View>
                     </View>

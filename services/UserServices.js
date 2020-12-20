@@ -16,7 +16,7 @@ class UserServices {
                 if (error.code === 'auth/invalid-email') {
                         reject('invalid email!')
                 }
-                console.log(error);
+                console.log(error.code);
             })
         })
     }
@@ -76,7 +76,6 @@ class UserServices {
     }
 
     writeUserDataToRealTimedataBase = (email, firstName, lastName, uid) => {
-        console.log(email, firstName, lastName);
         try {
             Firebase.database().ref('users/' + uid).set({
                 firstName : firstName,

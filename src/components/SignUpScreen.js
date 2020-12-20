@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import SignUpStyles from '../styles/SignUpStyles';
 import UserServices from '../../services/UserServices';
-import Firebase from '../../config/Firebase';
+import strings from '../languages/Languages'
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -58,7 +58,7 @@ export default class LogInScreen extends Component {
         await this.setState({
             email: enteredEmail,
             isEmailFieldEmpty: false,
-            emailError: ''
+            emailError: '',
         })
         this.checkEmail()
     }
@@ -72,7 +72,7 @@ export default class LogInScreen extends Component {
         } else {
             this.setState({
                 emailValidation: false,
-                emailError: 'Pattern not matching'
+                emailError: strings.PatternNotMatching
             })
         }
     }
@@ -96,7 +96,7 @@ export default class LogInScreen extends Component {
         else {
             this.setState({
                 passwordValidation: false,
-                passwordError: 'Weak Password'
+                passwordError: strings.WeakPassword
             })
         }
     }
@@ -159,12 +159,12 @@ export default class LogInScreen extends Component {
                 .catch(error => {
                     if (error === 'email in use!') {
                         this.setState({
-                            emailError: 'email in use!'
+                            emailError: strings.EmailInUse
                         })
                     }
                     if (error === 'invalid email!') {
                         this.setState({
-                            emailError: 'invalid email!'
+                            emailError: strings.InvalidEmail
                         })
                     }
                 });
@@ -207,65 +207,65 @@ export default class LogInScreen extends Component {
     render() {
         return (
             <View style = {SignUpStyles.background_Styles}>
-                <Text style = {SignUpStyles.heading_Style}>Create Account</Text>
+                <Text style = {SignUpStyles.heading_Style}>{strings.CreateAccount}</Text>
                 <ScrollView>
                     <Image style = {SignUpStyles.Logo_Style}
                         source = {require('../assets/FundoIcon.png')}
                     />
-                    <Text style = {SignUpStyles.Fundo_Style}>Fundo Notes</Text>
+                    <Text style = {SignUpStyles.Fundo_Style}>{strings.AppName}</Text>
 
                     <View>
                         <TextInput
                             style = {SignUpStyles.Input_TextBox_Style}
-                            placeholder = "First Name"
+                            placeholder = {strings.FirstName}
                             placeholderTextColor = "#b0686d"
                             onChangeText = {this.firstNameHandler}
                         />
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.isFirstNameFieldEmpty) ? 'First Name Required' : null}
+                                {(this.state.isFirstNameFieldEmpty) ? (strings.FirstNameRequired) : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
-                                {(this.state.firstNameValidation || this.state.firstName == '') ? null : 'Invalid First Name..'}
+                                {(this.state.firstNameValidation || this.state.firstName == '') ? null : (strings.InvalidFirstName)}
                             </Text>
                         </View>
                         
                         <TextInput
                             style = {SignUpStyles.Input_TextBox_Style}
-                            placeholder = "Last Name"
+                            placeholder = {strings.LastName}
                             placeholderTextColor = "#b0686d"
                             onChangeText = {this.lastNameHandler}
                         />
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.isLastNameFieldEmpty) ? 'Last Name Required' : null}
+                                {(this.state.isLastNameFieldEmpty) ? (strings.LastNameRequired) : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
-                                {(this.state.lastNameValidation || this.state.lastName == '') ? null : 'Invalid Last Name..'}
+                                {(this.state.lastNameValidation || this.state.lastName == '') ? null : (strings.InvalidLastName)}
                             </Text>
                         </View>
 
                         <TextInput
                             style = {SignUpStyles.Input_TextBox_Style}
-                            placeholder = "Email"
+                            placeholder = {strings.Email}
                             placeholderTextColor = "#b0686d"
                             onChangeText = {this.emailHandler}
                         />
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.isEmailFieldEmpty) ? 'Email Required' : null}
+                                {(this.state.isEmailFieldEmpty) ? (strings.EmailRequired) : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
-                                {(this.state.emailError == '') ? null : this.state.emailError}
+                                {this.state.emailError}
                             </Text>
                         </View>
 
                         <View style = {[SignUpStyles.Input_TextBox_Style, SignUpStyles.set_icon]}>
                             <TextInput style = {{width: '88%'}}
-                                placeholder =   "Password"
+                                placeholder = {strings.Password}
                                 maxLength = {25}
                                 placeholderTextColor = "#b0686d"
                                 secureTextEntry = {this.state.passwordSecurity}
@@ -288,16 +288,16 @@ export default class LogInScreen extends Component {
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.isPasswordFieldEmpty) ? 'Password Required' : null}
+                                {(this.state.isPasswordFieldEmpty) ? (strings.PasswordRequired) : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
-                                {(this.state.passwordValidation || this.state.passwordError == '' || this.state.password == '') ? null : this.state.passwordError}
+                                {( this.state.passwordError == '' || this.state.passwordValidation || this.state.password == '') ? null : this.state.passwordError}
                             </Text>
                         </View>
 
                         <View style = {[SignUpStyles.Input_TextBox_Style, SignUpStyles.set_icon]}>
                             <TextInput style = {{width: '88%'}}
-                                placeholder =   "Confirm Password"
+                                placeholder = {strings.ConfirmPassword}
                                 maxLength = {25}
                                 placeholderTextColor = "#b0686d"
                                 secureTextEntry = {this.state.confirmPasswordSecurity}
@@ -320,27 +320,27 @@ export default class LogInScreen extends Component {
 
                         <View style = {{flexDirection: 'row'}}>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.Fields_Missing]}>
-                                {(this.state.isConfirmPasswordFieldEmpty) ? 'Required Field' : null}
+                                {(this.state.isConfirmPasswordFieldEmpty) ? (strings.RequiredField) : null}
                             </Text>
                             <Text style = {[SignUpStyles.pop_up_Message, SignUpStyles.pop_up_Message_Flex]}>
-                                {(this.state.password.includes(this.state.confirmPassword)) ? null : 'Password MissMatch'}
+                                {(this.state.password.includes(this.state.confirmPassword)) ? null : (strings.PasswordMissMatch)}
                             </Text>
                         </View>
 
                     </View>
 
                     <View style = {{flexDirection: 'row'}}>
-                        <Text style = {SignUpStyles.Have_Account_Style}>Already Have Account</Text>
+                        <Text style = {SignUpStyles.Have_Account_Style}>{strings.AlreadyHaveAccount}</Text>
                         <TouchableOpacity
                             onPress = {this.navigateToLogScreenHandler}>
-                            <Text style = {SignUpStyles.ClickHere_Style}>Click Here</Text>
+                            <Text style = {SignUpStyles.ClickHere_Style}>{strings.ClickHere}</Text>
                         </TouchableOpacity>
                     </View>
                     
                     <View>
                         <TouchableOpacity style = {[SignUpStyles.SignUp_Button_Styles, SignUpStyles.Button_Styles]}
                             onPress = {this.handleSignUpButton}>
-                            <Text style = {{color: '#dbced2'}}>CREATE ACCOUNT</Text>
+                            <Text style = {{color: '#dbced2'}}>{strings.CreateAccount}</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>

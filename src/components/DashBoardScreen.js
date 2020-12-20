@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {View, Text, TouchableOpacity} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import strings from '../languages/Languages'
 
 export default class extends Component {
     
@@ -16,7 +17,7 @@ export default class extends Component {
         return (
             <View style = {{backgroundColor: '#dbb6c3', height: '100%'}}>
                 <Text style = {{textAlignVertical: 'center', textAlign: 'center', marginTop: '50%'}}>
-                    Page Under Development
+                    {strings.ScreenUnderDevelopment}
                 </Text>
                 <TouchableOpacity
                     style = {{marginRight: '20%',
@@ -29,7 +30,7 @@ export default class extends Component {
                                 justifyContent: 'space-around'
                     }}
                         onPress = {this.navigateToLogInScreen}>
-                        <Text style = {{color: '#dbced2'}}>Log Out</Text>
+                        <Text style = {{color: '#dbced2'}}>{strings.LogOut}</Text>
                 </TouchableOpacity>
             </View>
         )

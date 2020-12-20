@@ -4,6 +4,7 @@ import LogInScreenStyles from '../styles/LogInPageStyles';
 import UserServices from '../../services/UserServices';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import strings from '../languages/Languages'
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -76,16 +77,16 @@ export default class LogInScreen extends Component {
             .catch(error => {
                 if(error === 'User not Found') {
                     this.setState({
-                        emailError: 'User not Found'
+                        emailError: (strings.UserNotFound)
                     })
                 } else if(error === 'Invalid Email') {
                     this.setState({
-                        emailError: 'Invalid Email'
+                        emailError: (strings.InvalidEmail)
                     })
                 }   
                 else if(error === 'Invalid Password') {
                     this.setState({
-                        passwordError: 'Invalid Password'
+                        passwordError: (strings.InvalidPassword)
                     })
                 }
             })
@@ -131,12 +132,10 @@ export default class LogInScreen extends Component {
     loginWithFacebook = async () => {
         UserServices.logInWithFacebook()
         .then((user) => {
-            console.log(user.additionalUserInfo.profile.email, 
-                        user.additionalUserInfo.profile.first_name, 
-                        user.additionalUserInfo.profile.last_name,
-                        user.user.displayName, 
-                        user.user.phoneNumber);
-            UserServices.writeUserDataToRealTimedataBase(user.additionalUserInfo.profile.email, user.additionalUserInfo.profile.first_name, user.additionalUserInfo.profile.last_name, user.user.uid)            
+            UserServices.writeUserDataToRealTimedataBase(user.additionalUserInfo.profile.email, 
+                                                        user.additionalUserInfo.profile.first_name, 
+                                                        user.additionalUserInfo.profile.last_name, 
+                                                        user.user.uid)            
             this.storeIteminAsyncStorage(user)
             this.props.navigation.navigate('DashBoard')
         })
@@ -152,16 +151,16 @@ export default class LogInScreen extends Component {
                     <Image style = {LogInScreenStyles.Logo_Style}
                         source = {require('../assets/FundoIcon.png')}
                     />
-                    <Text style = {LogInScreenStyles.Fundo_Style}>Fundo Notes</Text>
+                    <Text style = {LogInScreenStyles.Fundo_Style}>{strings.AppName}</Text>
                     <TextInput
                         style = {LogInScreenStyles.Input_TextBox_Style}
-                        placeholder = "Email"
+                        placeholder = {strings.Email}
                         placeholderTextColor = "#b0686d"
                         onChangeText = {this.emailHandler}
                     />
                     <View style = {{flexDirection: 'row'}}>
                         <Text style = {[LogInScreenStyles.pop_up_Message, LogInScreenStyles.Fields_Missing]}>
-                            {(this.state.emailField) ? 'Email Required' : null}
+                            {(this.state.emailField) ? (strings.EmailRequired) : null}
                         </Text>
                         <Text style = {[LogInScreenStyles.pop_up_Message, LogInScreenStyles.pop_up_Message_Flex]}>
                             {(this.state.emailError == '' || this.state.email == '') ? null : this.state.emailError}
@@ -170,7 +169,7 @@ export default class LogInScreen extends Component {
  
                     <View style = {[LogInScreenStyles.Input_TextBox_Style, LogInScreenStyles.set_icon]}>
                         <TextInput style = {{width: '88%'}}
-                            placeholder =   "Password"
+                            placeholder = {strings.Password}
                             maxLength = {25}
                             placeholderTextColor = "#b0686d"
                             secureTextEntry = {this.state.passwordSecurity}
@@ -192,7 +191,7 @@ export default class LogInScreen extends Component {
 
                     <View style = {{flexDirection: 'row'}}>
                         <Text style = {[LogInScreenStyles.pop_up_Message, LogInScreenStyles.Fields_Missing]}>
-                            {(this.state.passwordField) ? 'Password Required' : null}
+                            {(this.state.passwordField) ? (strings.PasswordRequired) : null}
                         </Text>
                         <Text style = {[LogInScreenStyles.pop_up_Message, LogInScreenStyles.pop_up_Message_Flex]}>
                             {(this.state.passwordError == '' || this.state.password == '') ? null : this.state.passwordError}
@@ -200,25 +199,25 @@ export default class LogInScreen extends Component {
                     </View>
                     
                     <TouchableOpacity onPress = {this.navigateToForgotPasswordScreen}>
-                        <Text style = {LogInScreenStyles.forgot_Password_Style}>Forgot Password ?</Text>
+                        <Text style = {LogInScreenStyles.forgot_Password_Style}>{strings.ForgotPassword}</Text>
                     </TouchableOpacity>
 
                     <View style = {{flexDirection: 'row'}}>
                         <TouchableOpacity style = {[LogInScreenStyles.LogIn_Button_Styles, LogInScreenStyles.Button_Styles]}
                             onPress = {this.handleLogInButton}>
-                            <Text style = {{color: '#dbced2'}}>LOG IN</Text>
+                            <Text style = {{color: '#dbced2'}}>{strings.LogIn}</Text>
                         </TouchableOpacity>
                         
                         <TouchableOpacity style = {[LogInScreenStyles.SignUp_Button_Styles, LogInScreenStyles.Button_Styles]}
                             onPress = {this.navigateToSignUpScreen}>
-                            <Text style = {{color: '#dbced2'}}>SIGN UP</Text>
+                            <Text style = {{color: '#dbced2'}}>{strings.SignUp}</Text>
                         </TouchableOpacity>
                         </View>
                         <Button style = {LogInScreenStyles.Login_with_FaceBook}
                             icon = 'facebook'
                             color = 'white'
                             onPress = {this.loginWithFacebook}>
-                            <Text style = {{color: '#dbced2'}}>LOGIN WITH FACEBOOK</Text>
+                            <Text style = {{color: '#dbced2'}}>{strings.LogInWithFacebook}</Text>
                         </Button>
                 </ScrollView>
             </View>
