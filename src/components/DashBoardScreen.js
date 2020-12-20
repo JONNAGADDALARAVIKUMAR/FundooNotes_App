@@ -1,8 +1,15 @@
 import React, { Component } from 'react'
 import {View, Text, TouchableOpacity} from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default class extends Component {
-    navigateToLogInScreen = () => {
+    
+    navigateToLogInScreen = async () => {
+        try {
+            await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
+        } catch (e) {
+            console.log(e);
+        }
         this.props.navigation.navigate('LogIn')
     }
     render() {

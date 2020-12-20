@@ -75,13 +75,13 @@ class UserServices {
         })
     }
 
-    writeUserDataToRealTimedataBase = (userCredential, firstName, lastName) => {
-        console.log(userCredential);
+    writeUserDataToRealTimedataBase = (email, firstName, lastName, uid) => {
+        console.log(email, firstName, lastName);
         try {
-            Firebase.database().ref('users/' + userCredential.user.uid).set({
+            Firebase.database().ref('users/' + uid).set({
                 firstName : firstName,
                 lastName : lastName,
-                email : userCredential.user.email,
+                email : email,
             })
         }
         catch(error) {

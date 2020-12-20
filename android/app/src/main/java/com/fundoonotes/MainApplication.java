@@ -1,6 +1,7 @@
 package com.fundoonotes;
 
 import com.facebook.FacebookSdk;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.CallbackManager;
 import com.facebook.appevents.AppEventsLogger;
 import android.app.Application;

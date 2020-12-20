@@ -154,7 +154,7 @@ export default class LogInScreen extends Component {
                 UserServices.createAccount(this.state.email, this.state.password)
                 .then((user) => {
                     this.props.navigation.navigate("DashBoard");
-                    UserServices.writeUserDataToRealTimedataBase(user, this.state.firstName, this.state.lastName)
+                    UserServices.writeUserDataToRealTimedataBase(user.user.email, this.state.firstName, this.state.lastName, user.user.uid)
                 })
                 .catch(error => {
                     if (error === 'email in use!') {
