@@ -8,13 +8,13 @@ const ForgotPasswordScreenStyles = StyleSheet.create({
     },
     App_Name: {
         textAlign: 'center',
-        fontSize: 23,
+        fontSize: 30,
         marginTop: '10%',
         color: '#803439'
     },
     Logo_Style: {
-        height: 100,
-        width: 100,
+        height: 150,
+        width: 150,
         alignSelf: 'center',
         marginTop: '5%',
         marginBottom: '5%'

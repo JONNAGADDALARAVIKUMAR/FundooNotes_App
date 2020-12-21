@@ -26,7 +26,7 @@ const SignUpScreenStyles = StyleSheet.create ({
         marginLeft: '20%',
     },
     Button_Styles: {
-        marginTop: '5%',
+        marginTop: '3%',
         backgroundColor: '#912c4c',
         alignItems: 'center',
         height: 50,

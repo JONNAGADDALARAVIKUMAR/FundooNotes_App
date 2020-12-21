@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
+import {Image, ScrollView, TextInput, View, Text, TouchableOpacity, Dimensions} from 'react-native';
 import LogInScreenStyles from '../styles/LogInPageStyles';
 import UserServices from '../../services/UserServices';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import strings from '../languages/Languages'
+import strings from '../languages/Languages';
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -20,7 +20,7 @@ export default class LogInScreen extends Component {
             isLoggedIn: false   
         }
     }
-
+    
     async componentDidMount(){
         try {
             const isLoggedIn = JSON.parse(await AsyncStorage.getItem('isLoggedIn'))

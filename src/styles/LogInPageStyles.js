@@ -6,7 +6,7 @@ const LogInScreenStyles = StyleSheet.create ({
         height: 100,
         width: 100,
         alignSelf: 'center',
-        marginTop: '15%',
+        marginTop: '10%',
         marginBottom: '5%'
     },
     background_Styles: {
