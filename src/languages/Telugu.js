@@ -32,5 +32,6 @@ Telugu = {
     PasswordMissMatch: "పాస్వర్డ్ మిస్ మ్యాచ్",
     LogOut: "లాగ్ అవుట్",
     ScreenUnderDevelopment: "స్క్రీన్ అభివృద్ధిలో ఉంది",
+    Search: "వెతకండి"
 }
 export default Telugu;

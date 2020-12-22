@@ -32,6 +32,7 @@ French = {
     PasswordMissMatch: "Mot de passe Miss Match",
     LogOut: "Se déconnecter",
     ScreenUnderDevelopment: "Écran en cours de développement",
+    Search: "Chercher"
 }
 
 export default French;

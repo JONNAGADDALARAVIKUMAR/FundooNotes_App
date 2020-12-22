@@ -32,5 +32,6 @@ Hindi = {
     PasswordMissMatch: "पासवर्ड मिस मैच",
     LogOut: "लॉग आउट",
     ScreenUnderDevelopment: "विकास के तहत स्क्रीन",
+    Search: "खोज"
 }
 export default Hindi;

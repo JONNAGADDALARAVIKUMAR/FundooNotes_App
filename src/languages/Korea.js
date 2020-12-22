@@ -32,6 +32,7 @@ Korea = {
     PasswordMissMatch: "비밀번호 미스 매치",
     LogOut: "로그 아웃",
     ScreenUnderDevelopment: "개발중인 화면",
+    Search: "검색"
 }
 
 export default Korea;

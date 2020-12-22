@@ -32,6 +32,7 @@ English = {
     PasswordMissMatch: "Password Miss Match",
     LogOut: "Log Out",
     ScreenUnderDevelopment: "Screen Under Development",
+    Search: "Search"
 }
 
 export default English;
