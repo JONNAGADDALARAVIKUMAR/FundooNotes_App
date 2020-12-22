@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ApplicationStack from './src/route/ApplicationStack'
+import ApplicationStack from './src/route/ApplicationStack';
 
 class App extends Component{
 render(){

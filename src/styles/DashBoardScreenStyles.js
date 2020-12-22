@@ -1,32 +1,28 @@
-import React from 'react';
 import {StyleSheet} from 'react-native'
 
 const DashBoardScreenStyles = StyleSheet.create({
     App_Bar_Style: {
         backgroundColor: '#f0cee6',
-        margin: 5,
+        margin: 10,
         shadowColor: "black",
+        justifyContent: 'space-around',
         borderWidth: 1,
         borderRadius: 5,
-        borderColor: '#912c4c',
-        height: '7%',
+        borderColor: 'gray',
+        shadowColor: "#ccc6c9",
+        shadowOffset: {
+	        width: 5,
+	        height: 5,
+        },
+        shadowOpacity: 0.36,
+        shadowRadius: 6.68,
+        elevation: 11,
     },
     App_Bar_Style_Bottom: {
-            backgroundColor: '#f0cee6',
-            margin: 5,
-            shadowColor: "black",
-            borderWidth: 1,
-            borderRadius: 5,
-            borderColor: '#912c4c',
-            height: '35%',
-            marginBottom: 30
-    },
-    Text_Style: {
-        textAlignVertical: 'center', 
-        textAlign: 'center', 
-        marginTop: '80%', 
-        color: '#912c4c', 
-        fontSize: 30,
+        justifyContent: 'space-around',
+        backgroundColor: '#f0cee6',
+        borderWidth: 1,
+        borderColor: 'gray',
     },
     Search_Bar_Style: {
         width: '60%', 
@@ -36,7 +32,7 @@ const DashBoardScreenStyles = StyleSheet.create({
     LogOut_Button_Style: {
         marginRight: '20%',
         marginLeft: '20%',
-        marginTop: '20%',
+        marginTop: '125%',
         backgroundColor: '#912c4c',
         alignItems: 'center',
         height: 50,
@@ -49,11 +45,14 @@ const DashBoardScreenStyles = StyleSheet.create({
         height: '90%'
     },
     Add_Notes_Icon_Style: {
-        marginLeft: '20%', 
-        height: 45,width: 45, 
+        height: 45,
+        width: 45, 
         borderWidth: 1, 
-        marginBottom: 30, 
-        backgroundColor: '#f542b3'
-    }
+        borderColor: 'gray',
+        marginBottom: 60, 
+        backgroundColor: '#f5b5ed',
+        marginRight: '10%'
+    }, 
 })
+
 export default DashBoardScreenStyles;

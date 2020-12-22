@@ -4,7 +4,7 @@ import LogInScreenStyles from '../styles/LogInPageStyles';
 import UserServices from '../../services/UserServices';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import strings from '../languages/Languages';
+import strings from '../language/Languages';
 
 export default class LogInScreen extends Component {
     constructor(props) {

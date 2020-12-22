@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import SignUpStyles from '../styles/SignUpStyles';
 import UserServices from '../../services/UserServices';
-import strings from '../languages/Languages'
+import strings from '../language/Languages'
 
 export default class LogInScreen extends Component {
     constructor(props) {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {View, Text, ScrollView, Image, TextInput, TouchableOpacity} from 'react-native';
 import ForgotPasswordScreenStyles from '../styles/ForgotPasswordScreenStyles';
 import UserServices from '../../services/UserServices';
-import strings from '../languages/Languages'
+import strings from '../language/Languages'
 
 export default class ForgotPasswordScreen extends Component {
     constructor(props) {

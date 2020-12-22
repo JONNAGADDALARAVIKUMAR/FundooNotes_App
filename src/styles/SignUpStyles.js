@@ -10,7 +10,7 @@ const SignUpScreenStyles = StyleSheet.create ({
         marginBottom: '5%'
     },
     background_Styles: {
-        backgroundColor: '#dbb6c3',
+        backgroundColor: '#f2d5e5',
         height: '100%'
     },
     Input_TextBox_Style: {
