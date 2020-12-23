@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import SignUpScreen from '../src/components/SignUpScreen';
-import UserServices from '../services/UserServices'
+import UserServices from '../services/UserServices';
 
 describe('test SignUp Screen', () => {
      it('test when render should match to snapshot', async () => {
@@ -145,7 +145,7 @@ describe('test SignUp Screen', () => {
         expect(onPressEvent).toHaveBeenCalled();
         return UserServices.createAccount(instance.state.email, instance.state.password).catch((message) => {
             expect(message).toBe('email in use!')
-            expect(instance.state.emailError).toBe('email in use!');
+            expect(instance.state.emailError).toBe('Email in Use');
         })
     }, 10000)
     it('test onPress event of SignUp button when Invalid email and password passed it will return Invalid Email error', async() => {

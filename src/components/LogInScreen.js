@@ -4,7 +4,7 @@ import LogInScreenStyles from '../styles/LogInPageStyles';
 import UserServices from '../../services/UserServices';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import strings from '../language/Languages';
+import {strings} from '../Languages/strings';
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -24,13 +24,13 @@ export default class LogInScreen extends Component {
     async componentDidMount(){
         try {
             const isLoggedIn = JSON.parse(await AsyncStorage.getItem('isLoggedIn'))
-            console.log(isLoggedIn);
+            //console.log(isLoggedIn);
             if(isLoggedIn) {
               this.props.navigation.navigate("DashBoard")
             }
           }
           catch(e) {
-            console.log(e)
+            //console.log(e)
           }
     }
 
@@ -103,7 +103,7 @@ export default class LogInScreen extends Component {
                 })
             }
         }
-        //onPress();
+        onPress();
     }
 
     storeIteminAsyncStorage = async (User) => {
@@ -113,20 +113,20 @@ export default class LogInScreen extends Component {
             })
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(this.state.isLoggedIn));
         } catch (e) {
-            console.log(e);
+            //console.log(e);
         }
     }
 
     navigateToSignUpScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('SignUp')
-        //onPress();
+        onPress();
     }
 
     navigateToForgotPasswordScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('ForgotPassword')
-        //onPress();
+        onPress();
     }
 
     loginWithFacebook = async () => {
@@ -136,11 +136,11 @@ export default class LogInScreen extends Component {
                                                         user.additionalUserInfo.profile.first_name, 
                                                         user.additionalUserInfo.profile.last_name, 
                                                         user.user.uid)            
-            this.storeIteminAsyncStorage(user)
+            //this.storeIteminAsyncStorage(user)
             this.props.navigation.navigate('DashBoard')
         })
         .catch((error) => {
-            console.log(error);
+            //console.log(error);
         })
     }
 

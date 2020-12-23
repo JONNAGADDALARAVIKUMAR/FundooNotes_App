@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {View, Text, ScrollView, Image, TextInput, TouchableOpacity} from 'react-native';
 import ForgotPasswordScreenStyles from '../styles/ForgotPasswordScreenStyles';
 import UserServices from '../../services/UserServices';
-import strings from '../language/Languages'
+import {strings} from '../Languages/strings'
 
 export default class ForgotPasswordScreen extends Component {
     constructor(props) {
@@ -32,9 +32,9 @@ export default class ForgotPasswordScreen extends Component {
                 await this.setState({
                     emailSentNotification: true
                 })
-                await setTimeout(() => {
+                //await setTimeout(() => {
                     this.props.navigation.navigate('LogIn')
-                },3500)
+                //},3500)
             })
             .catch(error => {
                 if(error === 'invalid email') {
@@ -52,7 +52,7 @@ export default class ForgotPasswordScreen extends Component {
                 isEmailFieldEmpty: true
             })
         }
-        //(this.props == undefined ) ? null : onPress();
+        (this.props == undefined ) ? null : onPress();
     }
 
     render() {

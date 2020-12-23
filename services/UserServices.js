@@ -16,7 +16,7 @@ class UserServices {
                 if (error.code === 'auth/invalid-email') {
                         reject('invalid email!')
                 }
-                console.log(error.code);
+                //console.log(error.code);
             })
         })
     }
@@ -35,7 +35,7 @@ class UserServices {
                 else if(error.code === 'auth/invalid-email') {
                     reject('Invalid Email')
                 }
-                console.log(error.code);
+                //console.log(error.code);
             })
         })
     }
@@ -84,7 +84,7 @@ class UserServices {
             })
         }
         catch(error) {
-            console.log(error);
+            //console.log(error);
         }
     }
 }

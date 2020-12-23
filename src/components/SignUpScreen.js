@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import SignUpStyles from '../styles/SignUpStyles';
 import UserServices from '../../services/UserServices';
-import strings from '../language/Languages'
+import {strings} from '../Languages/strings'
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -124,7 +124,7 @@ export default class LogInScreen extends Component {
         (this.props == undefined ) ? null : onPress();
     }
 
-    confirmPasswordSecurityHandler = async () => {//Conditional rendering
+    confirmPasswordSecurityHandler = async () => {
         const {onPress} = this.props
         var confirmPasswordSecurity = this.state.confirmPasswordSecurity
         
@@ -195,13 +195,13 @@ export default class LogInScreen extends Component {
                     })
                 } 
             }
-            //(this.props == undefined ) ? null : onPress();
+            (this.props == undefined ) ? null : onPress();
     }
 
     navigateToLogScreenHandler = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('LogIn')
-        //onPress();
+        onPress();
     }
 
     render() {

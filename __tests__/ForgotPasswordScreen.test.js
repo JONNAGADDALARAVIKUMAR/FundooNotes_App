@@ -1,7 +1,7 @@
 import React from 'react';
 import {shallow} from 'enzyme';
 import ForgotPasswordScreen from '../src/components/ForgotPasswordScreen';
-import UserServices from '../services/UserServices'
+import UserServices from '../services/UserServices';
 
 describe('test Forgot Password Screen', () => {
     it('test when render should match to snapshot', async () => {
@@ -23,7 +23,7 @@ describe('test Forgot Password Screen', () => {
         await instance.resetPassword();
         expect(onPressEvent).toHaveBeenCalled();
         return UserServices.resetPassword(instance.state.email).catch((error) => {
-            expect(instance.state.emailError).toBe('invalid email')
+            expect(instance.state.emailError).toBe('Invalid Email')
         })
     }, 10000)
     it('test onPress event of Send Link to Mail button when email is not Registerd it will Update emailError state as User not Found', async() => {
@@ -34,7 +34,7 @@ describe('test Forgot Password Screen', () => {
         await instance.resetPassword();
         expect(onPressEvent).toHaveBeenCalled();
         return UserServices.resetPassword(instance.state.email).catch((error) => {
-            expect(instance.state.emailError).toBe('User not found')
+            expect(instance.state.emailError).toBe('User Not Found')
         })
     }, 10000)
 
@@ -46,12 +46,12 @@ describe('test Forgot Password Screen', () => {
         instance.emailHandler('ravikumarj4444@gmail.com')
         await instance.resetPassword();
         expect(onPressEvent).toHaveBeenCalled();
-        return UserServices.resetPassword(instance.state.email).then(async (result) => {
+        return await UserServices.resetPassword(instance.state.email).then(async (result) => {
             expect(result).toBe(true)
             expect(instance.state.emailSentNotification).toBe(true)
             expect(navigation.navigate).toBeCalledWith('LogIn')
         })
-    }, 10000)
+    }, 15000)
 
     it('test the resetPassword method should Should Update Fields State when email is Empty', async () => {
         const onPressEvent = jest.fn();
