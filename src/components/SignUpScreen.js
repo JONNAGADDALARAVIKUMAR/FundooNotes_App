@@ -121,7 +121,7 @@ export default class LogInScreen extends Component {
                 passwordSecurity: true
             })
         }
-        (this.props == undefined ) ? null : onPress();
+        //(this.props == undefined ) ? null : onPress();
     }
 
     confirmPasswordSecurityHandler = async () => {
@@ -137,7 +137,7 @@ export default class LogInScreen extends Component {
                 confirmPasswordSecurity: true
             })
         }
-        (this.props == undefined ) ? null : onPress();
+        //(this.props == undefined ) ? null : onPress();
     }
 
     handleSignUpButton = async () => {
@@ -153,7 +153,7 @@ export default class LogInScreen extends Component {
             this.state.confirmPassword != '') {
                 UserServices.createAccount(this.state.email, this.state.password)
                 .then((user) => {
-                    this.props.navigation.navigate("DashBoard");
+                    this.props.navigation.navigate("Home");
                     UserServices.writeUserDataToRealTimedataBase(user.user.email, this.state.firstName, this.state.lastName, user.user.uid)
                 })
                 .catch(error => {
@@ -195,13 +195,13 @@ export default class LogInScreen extends Component {
                     })
                 } 
             }
-            (this.props == undefined ) ? null : onPress();
+            //(this.props == undefined ) ? null : onPress();
     }
 
     navigateToLogScreenHandler = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('LogIn')
-        onPress();
+        //onPress();
     }
 
     render() {

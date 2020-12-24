@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.45% </span>
+                <span class="strong">74.29% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>79/102</span>
+                <span class='fraction'>78/105</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.34% </span>
+                <span class="strong">61.04% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>48/77</span>
+                <span class='fraction'>47/77</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.27% </span>
+                <span class="strong">68% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>17/22</span>
+                <span class='fraction'>17/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">78.95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/16</span>
+                <span class='fraction'>15/19</span>
             </div>
         
             
@@ -130,21 +130,31 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -153,17 +163,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -190,8 +190,8 @@ export default class ToolBar extends Component {
     }
     changeLayout = () =&gt; {
         const {onPress} = this.props
-        if(this.state.changeLayout) {
-            this.setState({
+      <span class="missing-if-branch" title="if path not taken" >I</span>  if(this.state.changeLayout) {
+<span class="cstat-no" title="statement not covered" >            this.setState({</span>
                 changeLayout: false
             })
         } else {
@@ -199,8 +199,8 @@ export default class ToolBar extends Component {
                 changeLayout: true
             })
         }
-        //console.log('Layout Changed')
-        onPress()
+        console.log('Layout Changed')
+        //onPress()
     }
     render() {
         return(
@@ -208,12 +208,12 @@ export default class ToolBar extends Component {
                 &lt;Appbar style = {DashBoardScreenStyles.App_Bar_Style}&gt;
                         &lt;Appbar.Action
                             icon="menu"
-                            //onPress={() =&gt; console.log('Pressed Menu')}
+<span class="fstat-no" title="function not covered" >                            onPress=</span>{()<span class="cstat-no" title="statement not covered" > =&gt; console.log('Pressed Menu')}</span>
                         /&gt;
                         &lt;Searchbar
                             style ={DashBoardScreenStyles.Search_Bar_Style}
                             placeholder = {strings.Search}
-                            //onChangeText = {data =&gt; console.log(data)}
+                            onCha<span class="fstat-no" title="function not covered" >ngeText = {da</span>ta =&gt; c<span class="cstat-no" title="statement not covered" >onsole.log(data)}</span>
                         /&gt;
                         &lt;Appbar.Action 
                             icon = {(this.state.changeLayout ) 
@@ -222,7 +222,7 @@ export default class ToolBar extends Component {
                             onPress  = {this.changeLayout}
                         /&gt;
                         &lt;TouchableOpacity 
-                            //onPress = {() =&gt; console.log('Pressed Profile')}
+<span class="fstat-no" title="function not covered" >                            onPress </span>= {<span class="cstat-no" title="statement not covered" >() =&gt; console.log('Pressed Profile')}</span>
                             &gt;
                             &lt;Avatar.Image
                                 size = {35}
@@ -241,7 +241,7 @@ export default class ToolBar extends Component {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Dec 23 2020 18:44:59 GMT+0530 (India Standard Time)
+                at Thu Dec 24 2020 10:54:22 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

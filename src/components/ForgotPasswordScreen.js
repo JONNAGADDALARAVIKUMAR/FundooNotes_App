@@ -32,9 +32,9 @@ export default class ForgotPasswordScreen extends Component {
                 await this.setState({
                     emailSentNotification: true
                 })
-                //await setTimeout(() => {
+                await setTimeout(() => {
                     this.props.navigation.navigate('LogIn')
-                //},3500)
+                },3500)
             })
             .catch(error => {
                 if(error === 'invalid email') {

@@ -34,16 +34,16 @@ export default class extends Component {
         try {
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
         } catch (e) {
-           // console.log(e);
+            console.log(e);
         }
         this.props.navigation.navigate('LogIn')
-        onPress()
+        //onPress()
     }
 
     render() {
         return (
             <View style = {{backgroundColor: '#f2d5e5', height: '100%'}}>
-                <ToolBar/>
+                <ToolBar navigation = {this.props.navigation}/>
                 <ScrollView style = {{marginTop: 1}}>  
                     <ImageBackground source = {require('../../assets/backgroundIcon.png')}
                         style = {(this.state.orientation == 'portrait') 
@@ -57,7 +57,7 @@ export default class extends Component {
                         </TouchableOpacity>
                     </ImageBackground>
                 </ScrollView>
-                <BottomBar/>
+                <BottomBar navigation = {this.props.navigation}/>
             </View>
         )
     }

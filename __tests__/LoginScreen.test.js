@@ -72,7 +72,7 @@ describe('test Login Screen', async () => {
         expect(instance.state.passwordSecurity).toBe(true);
     })
     
-    it('test onPress event of LogIn button when passing wrong email and correct password it will return User not Found Error', async() => {
+    it('test onPress event of LogIn button when passing not Registered email and correct password it will return User not Found Error', async() => {
         const navigation = { navigate : jest.fn() }
         const onPressEvent = jest.fn();
         const component = shallow(<LogInScreen onPress = {onPressEvent}/>)
@@ -83,7 +83,7 @@ describe('test Login Screen', async () => {
         expect(onPressEvent).toHaveBeenCalled();
         UserServices.logIn(instance.state.email, instance.state.password).catch((error) => expect(instance.state.emailError).toBe('User Not Found'))
     }, 10000)
-    it('test onPress event of LogIn button when passing wrong email and correct password it will return Invalid Email Error', async() => {
+    it('test onPress event of LogIn button when passing Invalid email and correct password it will return Invalid Email Error', async() => {
         const navigation = { navigate : jest.fn() }
         const onPressEvent = jest.fn();
         const component = shallow(<LogInScreen onPress = {onPressEvent}/>)

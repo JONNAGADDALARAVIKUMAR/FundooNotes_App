@@ -5,6 +5,7 @@ import UserServices from '../../services/UserServices';
 import {Button} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {strings} from '../Languages/strings';
+import KeyChain from 'react-native-keychain';
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -24,13 +25,13 @@ export default class LogInScreen extends Component {
     async componentDidMount(){
         try {
             const isLoggedIn = JSON.parse(await AsyncStorage.getItem('isLoggedIn'))
-            //console.log(isLoggedIn);
+            console.log(isLoggedIn);
             if(isLoggedIn) {
-              this.props.navigation.navigate("DashBoard")
+              this.props.navigation.navigate("Home")
             }
           }
           catch(e) {
-            //console.log(e)
+            console.log(e)
           }
     }
 
@@ -63,7 +64,7 @@ export default class LogInScreen extends Component {
                 passwordSecurity: true
             })
         }
-        (this.props == undefined ) ? null : onPress();
+        //(this.props == undefined ) ? null : onPress();
     }
 
     handleLogInButton = async () => {
@@ -72,7 +73,8 @@ export default class LogInScreen extends Component {
             await UserServices.logIn(this.state.email, this.state.password)
             .then( async (user) => {
                 this.storeIteminAsyncStorage(user)
-                this.props.navigation.navigate('DashBoard')
+                await KeyChain.setGenericPassword('UserDetails', JSON.stringify(user))
+                this.props.navigation.navigate('Home')
             })
             .catch(error => {
                 if(error === 'User not Found') {
@@ -103,7 +105,7 @@ export default class LogInScreen extends Component {
                 })
             }
         }
-        onPress();
+        //onPress();
     }
 
     storeIteminAsyncStorage = async (User) => {
@@ -113,34 +115,35 @@ export default class LogInScreen extends Component {
             })
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(this.state.isLoggedIn));
         } catch (e) {
-            //console.log(e);
+            console.log(e);
         }
     }
 
     navigateToSignUpScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('SignUp')
-        onPress();
+        //onPress();
     }
 
     navigateToForgotPasswordScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('ForgotPassword')
-        onPress();
+        //onPress();
     }
 
     loginWithFacebook = async () => {
         UserServices.logInWithFacebook()
-        .then((user) => {
+        .then(async (user) => {
+            await KeyChain.setGenericPassword('UserDetails', JSON.stringify(user))
             UserServices.writeUserDataToRealTimedataBase(user.additionalUserInfo.profile.email, 
                                                         user.additionalUserInfo.profile.first_name, 
                                                         user.additionalUserInfo.profile.last_name, 
                                                         user.user.uid)            
             //this.storeIteminAsyncStorage(user)
-            this.props.navigation.navigate('DashBoard')
+            this.props.navigation.navigate('Home')
         })
         .catch((error) => {
-            //console.log(error);
+            console.log(error);
         })
     }
 
