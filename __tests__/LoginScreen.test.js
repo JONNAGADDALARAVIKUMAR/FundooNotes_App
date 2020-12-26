@@ -3,7 +3,6 @@ import {shallow} from 'enzyme';
 import LogInScreen from '../src/components/LogInScreen';
 import UserServices from '../services/UserServices';
 
-describe('test Login Screen', async () => {
     it('test when render should match to snapshot', async () => {
         const component = shallow(<LogInScreen/>)
         expect(component).toMatchSnapshot();
@@ -116,4 +115,4 @@ describe('test Login Screen', async () => {
         expect(onPressEvent).toHaveBeenCalled();
         UserServices.logIn(instance.state.email, instance.state.password).then((user) => expect(navigation.navigate).toBeCalledWith('DashBoard'))
     }, 10000)
- })
+ 

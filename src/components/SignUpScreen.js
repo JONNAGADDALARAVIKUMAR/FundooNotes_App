@@ -153,7 +153,7 @@ export default class LogInScreen extends Component {
             this.state.confirmPassword != '') {
                 UserServices.createAccount(this.state.email, this.state.password)
                 .then((user) => {
-                    this.props.navigation.navigate("Home");
+                    this.props.navigation.push("LogIn");
                     UserServices.writeUserDataToRealTimedataBase(user.user.email, this.state.firstName, this.state.lastName, user.user.uid)
                 })
                 .catch(error => {
@@ -200,7 +200,7 @@ export default class LogInScreen extends Component {
 
     navigateToLogScreenHandler = () => {
         const {onPress} = this.props
-        this.props.navigation.navigate('LogIn')
+        this.props.navigation.push('LogIn')
         //onPress();
     }
 

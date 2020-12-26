@@ -32,7 +32,7 @@ const DashBoardScreenStyles = StyleSheet.create({
     LogOut_Button_Style: {
         marginRight: '20%',
         marginLeft: '20%',
-        marginTop: '125%',
+        marginTop: '5%',
         backgroundColor: '#912c4c',
         alignItems: 'center',
         height: 50,

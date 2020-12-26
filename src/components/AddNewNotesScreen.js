@@ -1,44 +1,47 @@
 import React, { Component } from 'react';
-import {ScrollView, TextInput, View} from 'react-native';
+import { ScrollView, TextInput, View } from 'react-native';
 import {Appbar} from 'react-native-paper';
 import KeyChain from 'react-native-keychain';
 import Firebase from '../../config/Firebase';
+import { strings } from '../Languages/strings';
 
 export default class AddNewNotes extends Component {
     constructor(props) {
         super(props);
         this.state = {
             title: '',
-            notes: ''
+            note: ''
         }
     }
 
     handleTitle = async (enteredtitle) => {
-       this.setState({
+       await this.setState({
            title: enteredtitle
        })
-       console.log(this.state.title);
+       //console.log(this.state.title);
     }
 
 
     handleNote = async (enteredNotes) => {
-        this.setState({
-            notes: enteredNotes
+        await this.setState({
+            note: enteredNotes
         })
-        console.log(this.state.notes);
+        //console.log(this.state.note);
     }
 
     addNotesToFirebase = async () => {
-        if(this.state.title != '' || this.state.notes != '') {
+        const {onPress} = this.props
+        if(this.state.title != '' || this.state.note != '') {
             const user = await KeyChain.getGenericPassword()
             const userDetails = JSON.parse(user.password)
             Firebase.database().ref('notes/' + userDetails.user.uid).push({
                 Title: this.state.title,
-                Notes: this.state.notes
+                Notes: this.state.note
             })
-            console.log(userDetails);
+            //console.log(userDetails);
         }
-        this.props.navigation.navigate('Notes')
+        this.props.navigation.push('Home', { screen: 'Notes' })
+        //onPress();
     }
 
     render() {
@@ -65,12 +68,12 @@ export default class AddNewNotes extends Component {
                 <ScrollView>
                     <TextInput 
                         style = {{fontSize: 20, paddingLeft: 30}}
-                        placeholder = {'Title'}
+                        placeholder = {strings.Title}
                         multiline = {true}
                         onChangeText = {this.handleTitle}
                     />
                     <TextInput 
-                        placeholder = {'Note'}
+                        placeholder = {strings.Notes}
                         style = {{fontSize: 17, paddingLeft: 30}}
                         multiline = {true}
                         onChangeText = {this.handleNote}

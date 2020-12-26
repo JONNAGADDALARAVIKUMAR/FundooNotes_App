@@ -32,7 +32,15 @@ const French = {
     PasswordMissMatch: "Mot de passe Miss Match",
     LogOut: "Se déconnecter",
     ScreenUnderDevelopment: "Écran en cours de développement",
-    Search: "Chercher"
+    Search: "Chercher",
+    Title: "Titre",
+    Notes: "Remarques",
+    Reminders: "Rappels",
+    Createnewlabel: "Créer une nouvelle étiquette",
+    Archive: "Archiver",
+    Settings: "Réglages",
+    HelpfeedBack: "Aide et feedBack",
+    Deleted: "Supprimé",
 }
 
 export default French;

@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">71.13% </span>
+                <span class="strong">71.43% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>69/97</span>
+                <span class='fraction'>70/98</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.55% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/11</span>
+                <span class='fraction'>7/12</span>
             </div>
         
             
@@ -99,7 +99,7 @@
 <span class="cline-any cline-yes">56x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -139,32 +139,32 @@ export default class ToolBar extends Component {
     render() {
         return(
             &lt;Appbar style = {DashBoardScreenStyles.App_Bar_Style_Bottom}&gt;
-                    &lt;Appbar.Action
-                        icon="check-box-outline"
-                        style = {{margin: '5%'}}
-                        onPr<span class="fstat-no" title="function not covered" >ess = {(</span>) =<span class="cstat-no" title="statement not covered" >&gt; console.log('Clicked Square checkBox')}</span>
-                    /&gt;
-                    &lt;Appbar.Action
-                        style = {{margin: '5%'}}
-                        icon="brush"
-                        onPr<span class="fstat-no" title="function not covered" >ess = {(</span>) =<span class="cstat-no" title="statement not covered" >&gt; console.log('Clicked Brush')}</span>
-                    /&gt;
-                    &lt;Appbar.Action
-                        style = {{margin: '5%'}}
-                        icon="microphone-outline"
-                        onPr<span class="fstat-no" title="function not covered" >ess = {(</span>) =<span class="cstat-no" title="statement not covered" >&gt; console.log('Clicked Micro phone')}</span>
-                    /&gt;
-                    &lt;Appbar.Action
-                        style = {{margin: '5%'}}
-                        icon = "panorama"
-                        onPr<span class="fstat-no" title="function not covered" >ess={() </span>=&gt; <span class="cstat-no" title="statement not covered" >console.log('Clicked panorama')}</span>
-                    /&gt;
-                    &lt;Appbar.Content/&gt;
-                    &lt;Appbar.Action
-                        style = {DashBoardScreenStyles.Add_Notes_Icon_Style}
-                        icon = "plus"
-                        onPr<span class="fstat-no" title="function not covered" >ess={() </span>=&gt; <span class="cstat-no" title="statement not covered" >console.log('Clicked Plus')}</span>
-                    /&gt;
+                &lt;Appbar.Action
+                    icon="check-box-outline"
+                    style = {{margin: '5%'}}
+                    onPress <span class="fstat-no" title="function not covered" >= {() =&gt;</span> co<span class="cstat-no" title="statement not covered" >nsole.log('Clicked Square checkBox')}</span>
+                /&gt;
+                &lt;Appbar.Action
+                    style = {{margin: '5%'}}
+                    icon="brush"
+                    onPress <span class="fstat-no" title="function not covered" >= {() =&gt;</span> co<span class="cstat-no" title="statement not covered" >nsole.log('Clicked Brush')}</span>
+                /&gt;
+                &lt;Appbar.Action
+                    style = {{margin: '5%'}}
+                    icon="microphone-outline"
+                    onPress <span class="fstat-no" title="function not covered" >= {() =&gt;</span> co<span class="cstat-no" title="statement not covered" >nsole.log('Clicked Micro phone')}</span>
+                /&gt;
+                &lt;Appbar.Action
+                    style = {{margin: '5%'}}
+                    icon = "panorama"
+                    onPress=<span class="fstat-no" title="function not covered" >{() =&gt; c</span>ons<span class="cstat-no" title="statement not covered" >ole.log('Clicked panorama')}</span>
+                /&gt;
+                &lt;Appbar.Content/&gt;
+                &lt;Appbar.Action
+                    style = {DashBoardScreenStyles.Add_Notes_Icon_Style}
+                    icon = "plus"
+                    onPress=<span class="fstat-no" title="function not covered" >{() =&gt; t</span>his<span class="cstat-no" title="statement not covered" >.props.navigation.navigate('AddNewNotes')}</span>
+                /&gt;
             &lt;/Appbar&gt;
         )
     }
@@ -175,7 +175,7 @@ export default class ToolBar extends Component {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Dec 24 2020 10:54:22 GMT+0530 (India Standard Time)
+                at Fri Dec 25 2020 16:01:43 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

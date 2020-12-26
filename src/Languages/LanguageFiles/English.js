@@ -32,7 +32,15 @@ const English = {
     PasswordMissMatch: "Password Miss Match",
     LogOut: "Log Out",
     ScreenUnderDevelopment: "Screen Under Development",
-    Search: "Search"
+    Search: "Search",
+    Title: "Title",
+    Notes: "Notes",
+    Reminders: "Reminders",
+    Createnewlabel: "Create new label",
+    Archive: "Archive",
+    Settings: "Settings",
+    HelpfeedBack: "Help & feedBack",
+    Deleted: "Deleted",
 }
 
 export default English;

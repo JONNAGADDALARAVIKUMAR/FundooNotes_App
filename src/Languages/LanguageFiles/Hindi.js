@@ -32,6 +32,14 @@ const Hindi = {
     PasswordMissMatch: "पासवर्ड मिस मैच",
     LogOut: "लॉग आउट",
     ScreenUnderDevelopment: "विकास के तहत स्क्रीन",
-    Search: "खोज"
+    Search: "खोज",
+    Title: "शीर्षक",
+    Notes: "टिप्पणियाँ",
+    Reminders: "अनुस्मारक",
+    Createnewlabel: "नया लेबल बनाएं",
+    Archive: "पुरालेख",
+    Settings: "समायोजन",
+    HelpfeedBack: "मदद और फ़ीडबैक",
+    Deleted: "हटाए गए",
 }
 export default Hindi;

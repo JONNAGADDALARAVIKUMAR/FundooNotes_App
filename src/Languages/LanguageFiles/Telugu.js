@@ -32,6 +32,14 @@ const Telugu = {
     PasswordMissMatch: "పాస్వర్డ్ మిస్ మ్యాచ్",
     LogOut: "లాగ్ అవుట్",
     ScreenUnderDevelopment: "స్క్రీన్ అభివృద్ధిలో ఉంది",
-    Search: "వెతకండి"
+    Search: "వెతకండి",
+    Title: "శీర్షిక",
+    Notes: "గమనిక",
+    Reminders: "రిమైండర్‌లు",
+    Createnewlabel: "క్రొత్త లేబుల్‌ని సృష్టించండి",
+    Archive: "ఆర్కైవ్",
+    Settings: "సెట్టింగులు",
+    HelpfeedBack: "సహాయం & ఫీడ్‌బ్యాక్",
+    Deleted: "తొలగించబడింది",
 }
 export default Telugu;

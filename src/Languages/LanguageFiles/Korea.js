@@ -32,7 +32,15 @@ const Korea = {
     PasswordMissMatch: "비밀번호 미스 매치",
     LogOut: "로그 아웃",
     ScreenUnderDevelopment: "개발중인 화면",
-    Search: "검색"
+    Search: "검색",
+    Title: "표제",
+    Notes: "메모",
+    Reminders: "미리 알림",
+    Createnewlabel: "새 라벨 만들기",
+    Archive: "아카이브",
+    Settings: "설정",
+    HelpfeedBack: "도움말 및 피드백",
+    Deleted: "삭제",
 }
 
 export default Korea;
