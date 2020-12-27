@@ -41,5 +41,6 @@ const Hindi = {
     Settings: "समायोजन",
     HelpfeedBack: "मदद और फ़ीडबैक",
     Deleted: "हटाए गए",
+    YourNoteswillApperHere: "Your Notes will Apper Here",
 }
 export default Hindi;

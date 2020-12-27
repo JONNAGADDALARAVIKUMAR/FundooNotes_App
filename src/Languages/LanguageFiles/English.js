@@ -41,6 +41,7 @@ const English = {
     Settings: "Settings",
     HelpfeedBack: "Help & feedBack",
     Deleted: "Deleted",
+    YourNoteswillApperHere: "Your Notes will Apper Here",
 }
 
 export default English;

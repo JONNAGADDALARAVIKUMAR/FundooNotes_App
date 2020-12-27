@@ -4,6 +4,7 @@ import {Appbar} from 'react-native-paper';
 import KeyChain from 'react-native-keychain';
 import Firebase from '../../config/Firebase';
 import { strings } from '../Languages/strings';
+import UserNoteServices from '../../services/UserNoteServices'
 
 export default class AddNewNotes extends Component {
     constructor(props) {
@@ -32,15 +33,17 @@ export default class AddNewNotes extends Component {
     addNotesToFirebase = async () => {
         const {onPress} = this.props
         if(this.state.title != '' || this.state.note != '') {
-            const user = await KeyChain.getGenericPassword()
-            const userDetails = JSON.parse(user.password)
-            Firebase.database().ref('notes/' + userDetails.user.uid).push({
-                Title: this.state.title,
-                Notes: this.state.note
-            })
+            // const user = await KeyChain.getGenericPassword()
+            // const userDetails = JSON.parse(user.password)
+            // Firebase.database().ref('notes/' + userDetails.user.uid).push({
+            //     Title: this.state.title,
+            //     Notes: this.state.note
+            // })
             //console.log(userDetails);
+            UserNoteServices.addNoteToFirebase(this.state.title, this.state.note)
+            .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
         }
-        this.props.navigation.push('Home', { screen: 'Notes' })
+        //this.props.navigation.push('Home', { screen: 'Notes' })
         //onPress();
     }
 

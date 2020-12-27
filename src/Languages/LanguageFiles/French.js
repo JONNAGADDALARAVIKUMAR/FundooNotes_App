@@ -41,6 +41,7 @@ const French = {
     Settings: "Réglages",
     HelpfeedBack: "Aide et feedBack",
     Deleted: "Supprimé",
+    YourNoteswillApperHere: "Your Notes will Apper Here",
 }
 
 export default French;

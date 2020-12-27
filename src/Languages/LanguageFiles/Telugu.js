@@ -41,5 +41,6 @@ const Telugu = {
     Settings: "సెట్టింగులు",
     HelpfeedBack: "సహాయం & ఫీడ్‌బ్యాక్",
     Deleted: "తొలగించబడింది",
+    YourNoteswillApperHere: "Your Notes will Apper Here",
 }
 export default Telugu;

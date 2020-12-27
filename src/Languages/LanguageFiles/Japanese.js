@@ -41,6 +41,7 @@ const Japanese = {
     Settings: "設定",
     HelpfeedBack: "ヘルプとフィードバック",
     Deleted: "削除",
+    YourNoteswillApperHere: "Your Notes will Apper Here",
 }
 
 export default Japanese;

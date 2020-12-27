@@ -60,6 +60,14 @@ const DashBoardScreenStyles = StyleSheet.create({
         shadowRadius: 6.98,
         elevation: 9,
     }, 
+    bulb_Style: {
+        alignSelf: 'center',
+        marginTop: '20%',
+        marginBottom: '5%'
+    },
+    Appear_Text_Style: {
+        textAlign: 'center',
+    }
 })
 
 export default DashBoardScreenStyles;

@@ -41,6 +41,7 @@ const Korea = {
     Settings: "설정",
     HelpfeedBack: "도움말 및 피드백",
     Deleted: "삭제",
+    YourNoteswillApperHere: "Your Notes will Apper Here",
 }
 
 export default Korea;
