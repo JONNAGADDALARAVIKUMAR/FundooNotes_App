@@ -7,5 +7,9 @@ const DrawContentStyles = StyleSheet.create({
         margin: 30,
         color: '#912c4c',
     },
+    drawer_Section_style: {
+        borderBottomWidth: 1, 
+        borderBottomColor: 'lightgray'
+    }
 })
 export default DrawContentStyles;

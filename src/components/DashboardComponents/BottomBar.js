@@ -30,7 +30,7 @@ export default class ToolBar extends Component {
                 <Appbar.Action
                     style = {DashBoardScreenStyles.Add_Notes_Icon_Style}
                     icon = "plus"
-                    onPress={() => this.props.navigation.push('AddNewNotes')}
+                    onPress={() => this.props.navigation.push('AddNewNotes', {title: '', note: '', noteKey: undefined})}
                 />
             </Appbar>
         )

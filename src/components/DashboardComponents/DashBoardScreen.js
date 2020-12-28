@@ -10,7 +10,18 @@ export default class Dashboard extends Component {
         super(props)
         this.state = {
             listView: false,
-            showEmptyNoteSnackbar : true,
+            showEmptyNoteSnackbar : false
+        }
+        console.log(this.state.showEmptyNoteSnackbar);
+    }
+
+    async componentDidMount() {
+        if(this.props.route.params != undefined) {
+            if(this.props.route.params.isEmptyNote != undefined) {
+                await this.setState({
+                    showEmptyNoteSnackbar : true
+                })
+            }
         }
     }
 
@@ -39,10 +50,10 @@ export default class Dashboard extends Component {
                 </ScrollView>
                 <BottomBar navigation = {this.props.navigation}/>
                 <Snackbar
-                    style = {{marginBottom : 100}}
-                    visible = {this.state.showEmptyNoteSnackbar}
-                    onDismiss = {this.emptyNoteSnackbarHandler}
-                    duration = {5000}>
+                    style = {{marginBottom : 80}}
+                    visible={this.state.showEmptyNoteSnackbar}
+                    onDismiss={this.emptyNoteSnackbarHandler}
+                    duration = {3000}>
                     Empty Note Discarded
                 </Snackbar>
             </View>

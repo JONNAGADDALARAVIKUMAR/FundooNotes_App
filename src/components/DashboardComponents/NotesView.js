@@ -3,8 +3,6 @@ import {View, Text, TouchableOpacity, ImageBackground, Dimensions, ScrollView, I
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {strings} from '../../Languages/strings';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
-import Firebase from '../../../config/Firebase';
-import Keychain from 'react-native-keychain';
 import { Card, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import UserNoteServices from '../../../services/UserNoteServices';
@@ -55,6 +53,13 @@ export default class extends Component {
         //onPress()
     }
 
+    handleDetailsToUpdate = (noteKey) => {
+        console.log(noteKey, this.state.notes[noteKey].notes.title, this.state.notes[noteKey].notes.note);
+        this.props.navigation.push('AddNewNotes', { noteKey : noteKey, 
+                                                    title : this.state.notes[noteKey].notes.title, 
+                                                    note : this.state.notes[noteKey].notes.note})
+    }
+
     render() {
         let NoteKey = Object.keys(this.state.notes);
         return (
@@ -64,31 +69,21 @@ export default class extends Component {
                     : {height: 750, width: 530, alignSelf: 'center'}}>
                 <ScrollView>
                     <View style = {NoteViewStyles.list_Style}>
-                    {NoteKey.length > 0 ? NoteKey.reverse().map(key => ( 
-                        (this.props.changeLayout) ?
-                    <Card
-                        key = {key}
-                        style = {NoteViewStyles.list_grid_Container}>
-                            <Card.Content>
-                                <Title>
-                                    {this.state.notes[key].notes.title}
-                                </Title>
-                                <Paragraph>
-                                    {this.state.notes[key].notes.note}
-                                </Paragraph>
-                            </Card.Content>
-                        </Card> : <Card
+                    {NoteKey.length > 0 
+                    ? NoteKey.reverse().map(key => ( 
+                        <Card
                             key = {key}
-                            style = {NoteViewStyles.list_Container}>
-                            <Card.Content>
-                                <Title>
-                                    {this.state.notes[key].notes.title}
-                                </Title>
-                                <Paragraph>
-                                    {this.state.notes[key].notes.note}
-                                </Paragraph>
-                            </Card.Content>
-                        </Card>))  
+                            style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
+                            onPress={() => this.handleDetailsToUpdate(key)}>
+                                <Card.Content>
+                                    <Title>
+                                        {this.state.notes[key].notes.title}
+                                    </Title>
+                                    <Paragraph>
+                                        {this.state.notes[key].notes.note}
+                                    </Paragraph>
+                                </Card.Content>
+                        </Card>))
                     : (<View>
                         <Image style = {DashBoardScreenStyles.bulb_Style} source = {require('../../assets/bulb.png')}/>
                         <Text style = {DashBoardScreenStyles.Appear_Text_Style}>{strings.YourNoteswillApperHere}</Text>

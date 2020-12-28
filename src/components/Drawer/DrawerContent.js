@@ -10,21 +10,13 @@ function DrawerContent({props}) {
         <View style = {{flex: 1}}>
             <Text style = {DrawContentStyles.AppName_Style}>{strings.AppName}</Text>
             <DrawerContentScrollView>
-                <Drawer.Section>
                     <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {() => props.navigation.push('Home', { screen: 'Notes' })}/>
-                    <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}/>
-                </Drawer.Section>
-                <Drawer.Section>
-                    <Drawer.Item icon = 'plus' label = {strings.Createnewlabel}/>
-                </Drawer.Section>
-                <Drawer.Section>
+                    <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style}/>
+                    <Drawer.Item icon = 'plus' label = {strings.Createnewlabel} style = {DrawContentStyles.drawer_Section_style}/>
                     <Drawer.Item icon = 'archive-arrow-down-outline' label = {strings.Archive}/>
-                    <Drawer.Item icon = 'delete' label = {strings.Deleted}/>
-                </Drawer.Section>
-                <Drawer.Section>
+                    <Drawer.Item icon = 'delete' label = {strings.Deleted} style = {DrawContentStyles.drawer_Section_style}/>
                     <Drawer.Item icon = 'cog-outline' label = {strings.Settings}/>
                     <Drawer.Item icon = 'help' label = {strings.HelpfeedBack}/>
-                </Drawer.Section>
             </DrawerContentScrollView>
         </View>
     )

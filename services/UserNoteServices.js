@@ -31,6 +31,23 @@ class UserNoteServices {
             .catch(error => reject(error))
         })
     }
-}
+    
+    updateNoteInFirebase = async (title, note, noteKey) => {
+        return new Promise(async (resolve, reject) => {
+            const user = await KeyChain.getGenericPassword();
+            const userDetails = JSON.parse(user.password);
+            const notes = {
+                title : title,
+                note : note,
+            }
+            console.log(notes);
+            Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + noteKey).set({
+                notes : notes
+            })
+            .then(() => resolve('success'))
+            .catch(error => reject(error))
+            })
+        }
+    }
 
 export default new UserNoteServices();

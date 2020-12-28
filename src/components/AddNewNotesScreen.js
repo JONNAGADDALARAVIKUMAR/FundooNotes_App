@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
 import {Appbar} from 'react-native-paper';
-import KeyChain from 'react-native-keychain';
-import Firebase from '../../config/Firebase';
 import { strings } from '../Languages/strings';
 import UserNoteServices from '../../services/UserNoteServices'
 
 export default class AddNewNotes extends Component {
     constructor(props) {
         super(props);
+        
         this.state = {
-            title: '',
-            note: ''
+            title: this.props.route.params.title,
+            note: this.props.route.params.note,
+            noteKey: this.props.route.params.noteKey
         }
+        console.log(this.state.title, this.state.note);
     }
 
     handleTitle = async (enteredtitle) => {
@@ -33,14 +34,24 @@ export default class AddNewNotes extends Component {
     addNotesToFirebase = async () => {
         const {onPress} = this.props
         if(this.state.title != '' || this.state.note != '') {
-            UserNoteServices.addNoteToFirebase(this.state.title, this.state.note)
-            .then(() => {
-                this.props.navigation.push('Home', {screen: 'Notes', 
-                params : {isEmptyNote : false}})
-            })
-            .catch(error => console.log(error))
+            if(this.state.noteKey == undefined) {
+                UserNoteServices.addNoteToFirebase(this.state.title, this.state.note)
+                .then(() => {
+                    this.props.navigation.push('Home', {screen: 'Notes'})
+                })
+                .catch(error => console.log(error))
+            } 
+
+            else if(this.state.noteKey != undefined) {
+                UserNoteServices.updateNoteInFirebase(this.state.title, this.state.note, this.state.noteKey)
+                .then(() => {
+                    this.props.navigation.push('Home', {screen: 'Notes', })
+                })
+                .catch(error => console.log(error))
+            }
+            
         } else {
-            this.props.navigation.push('Home', { screen: 'Notes',  params : {isEmptyNote : true}})
+            this.props.navigation.push('Home', { screen: 'Notes',   params : {isEmptyNote : true}})
         }
         //onPress();
     }
@@ -71,12 +82,14 @@ export default class AddNewNotes extends Component {
                         style = {{fontSize: 20, paddingLeft: 30}}
                         placeholder = {strings.Title}
                         multiline = {true}
+                        value = {this.state.title}
                         onChangeText = {this.handleTitle}
                     />
                     <TextInput 
                         placeholder = {strings.Notes}
                         style = {{fontSize: 17, paddingLeft: 30}}
                         multiline = {true}
+                        value = {this.state.note}
                         onChangeText = {this.handleNote}
                     />
                 </ScrollView>
