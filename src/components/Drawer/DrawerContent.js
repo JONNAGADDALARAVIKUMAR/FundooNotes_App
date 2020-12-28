@@ -14,7 +14,7 @@ function DrawerContent({props}) {
                     <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style}/>
                     <Drawer.Item icon = 'plus' label = {strings.Createnewlabel} style = {DrawContentStyles.drawer_Section_style}/>
                     <Drawer.Item icon = 'archive-arrow-down-outline' label = {strings.Archive}/>
-                    <Drawer.Item icon = 'delete' label = {strings.Deleted} style = {DrawContentStyles.drawer_Section_style}/>
+                    <Drawer.Item icon = 'delete' label = {strings.Deleted} style = {DrawContentStyles.drawer_Section_style} onPress = {() => props.navigation.push('Home', { screen: 'Deleted' })}/>
                     <Drawer.Item icon = 'cog-outline' label = {strings.Settings}/>
                     <Drawer.Item icon = 'help' label = {strings.HelpfeedBack}/>
             </DrawerContentScrollView>

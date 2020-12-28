@@ -3,16 +3,15 @@ import KeyChain from 'react-native-keychain';
 
 class UserNoteServices {
 
-    addNoteToFirebase = (title, note) => {
+    addNoteToFirebase = (title, note, status) => {
         return new Promise(async (resolve, reject) => {
             const user = await KeyChain.getGenericPassword()
             const userDetails = JSON.parse(user.password)
             const notes = {
                 title : title,
                 note : note,
+                isDeleted: status
             }
-            console.log(notes);
-            console.log(userDetails.user.uid);
             Firebase.database().ref('notes/' + userDetails.user.uid).push({
                 notes : notes
             })
@@ -32,20 +31,37 @@ class UserNoteServices {
         })
     }
     
-    updateNoteInFirebase = async (title, note, noteKey) => {
+    updateNoteInFirebase = async (title, note, noteKey, status) => {
         return new Promise(async (resolve, reject) => {
             const user = await KeyChain.getGenericPassword();
             const userDetails = JSON.parse(user.password);
             const notes = {
                 title : title,
                 note : note,
+                isDeleted: status
             }
-            console.log(notes);
             Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + noteKey).set({
                 notes : notes
             })
             .then(() => resolve('success'))
             .catch(error => reject(error))
+            })
+        }
+
+        restoreNoteInFirebase = async (title, note, notekey) => {
+            return new Promise(async (resolve, reject) => {
+                const user = await KeyChain.getGenericPassword();
+                const userDetails = JSON.parse(user.password);
+                const notes = {
+                    title : title,
+                    note : note,
+                    isDeleted : false
+                }
+                Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + notekey).set({
+                    notes : notes
+                })
+                .then(() => resolve('success'))
+                .catch(error => reject(error))
             })
         }
     }

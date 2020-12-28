@@ -22,6 +22,7 @@ export default class extends Component {
             width: Dimensions.get('window').width,
             orientation: isPortrait() ? 'portrait' : 'landscape',
             notes: '',
+            isEmpty: true
         };
     
         Dimensions.addEventListener('change', () => {
@@ -33,14 +34,21 @@ export default class extends Component {
 
     componentDidMount = async () => {
         UserNoteServices.getDetailsFromFirebase()
-            .then(async data => {
-                let notes = data ? data : {}
-                await this.setState({
-                    notes : notes
-                })
-          //console.log(this.state.notes);
+        .then(async data => {
+            let notes = data ? data : {}
+            await this.setState({
+                notes : notes
+            })
+            let NoteKey = Object.keys(this.state.notes);
+            NoteKey.reverse().map(key => ( 
+                (NoteKey.length > 0 && this.state.notes[key].notes.isDeleted == this.props.status) 
+                ? this.setState({
+                    isEmpty: false
+                }) : null
+            ))
         })
-      }
+        .catch((error) => console.log(error))
+    }
 
     navigateToLogInScreen = async () => {
         const {onPress} = this.props
@@ -54,7 +62,6 @@ export default class extends Component {
     }
 
     handleDetailsToUpdate = (noteKey) => {
-        console.log(noteKey, this.state.notes[noteKey].notes.title, this.state.notes[noteKey].notes.note);
         this.props.navigation.push('AddNewNotes', { noteKey : noteKey, 
                                                     title : this.state.notes[noteKey].notes.title, 
                                                     note : this.state.notes[noteKey].notes.note})
@@ -67,14 +74,15 @@ export default class extends Component {
                 style = {(this.state.orientation == 'portrait') 
                     ? {height: 510, width: 350, alignSelf: 'center'} 
                     : {height: 750, width: 530, alignSelf: 'center'}}>
+
                 <ScrollView>
                     <View style = {NoteViewStyles.list_Style}>
-                    {NoteKey.length > 0 
-                    ? NoteKey.reverse().map(key => ( 
-                        <Card
-                            key = {key}
-                            style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
-                            onPress={() => this.handleDetailsToUpdate(key)}>
+                        {NoteKey.reverse().map(key => ( 
+                            NoteKey.length > 0 && this.state.notes[key].notes.isDeleted == this.props.status                    
+                            ? <Card
+                                key = {key}
+                                style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
+                                onPress={() => this.handleDetailsToUpdate(key)}>
                                 <Card.Content>
                                     <Title>
                                         {this.state.notes[key].notes.title}
@@ -83,18 +91,20 @@ export default class extends Component {
                                         {this.state.notes[key].notes.note}
                                     </Paragraph>
                                 </Card.Content>
-                        </Card>))
-                    : (<View>
-                        <Image style = {DashBoardScreenStyles.bulb_Style} source = {require('../../assets/bulb.png')}/>
-                        <Text style = {DashBoardScreenStyles.Appear_Text_Style}>{strings.YourNoteswillApperHere}</Text>
-                    </View>) }
-                </View>
+                            </Card>
+                            : null))}
+                        </View>
 
-                <TouchableOpacity
-                    style = {DashBoardScreenStyles.LogOut_Button_Style}
-                    onPress = {this.navigateToLogInScreen}>
-                    <Text style = {{color: '#dbced2'}}>{strings.LogOut}</Text>
-                </TouchableOpacity>
+                        {(this.state.isEmpty) ? (<View>
+                            <Image style = {DashBoardScreenStyles.bulb_Style} source = {require('../../assets/bulb.png')}/>
+                            <Text style = {DashBoardScreenStyles.Appear_Text_Style}>{strings.YourNoteswillApperHere}</Text>
+                    </View>) : null }
+
+                    <TouchableOpacity
+                        style = {DashBoardScreenStyles.LogOut_Button_Style}
+                        onPress = {this.navigateToLogInScreen}>
+                        <Text style = {{color: '#dbced2'}}>{strings.LogOut}</Text>
+                    </TouchableOpacity>
                 </ScrollView>
             </ImageBackground>
         )
