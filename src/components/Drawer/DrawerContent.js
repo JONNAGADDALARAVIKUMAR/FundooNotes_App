@@ -11,7 +11,7 @@ function DrawerContent({props}) {
             <Text style = {DrawContentStyles.AppName_Style}>{strings.AppName}</Text>
             <DrawerContentScrollView>
                 <Drawer.Section>
-                    <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {() => props.navigation.navigate('Home', { screen: 'Notes' })}/>
+                    <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {() => props.navigation.push('Home', { screen: 'Notes' })}/>
                     <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}/>
                 </Drawer.Section>
                 <Drawer.Section>

@@ -33,17 +33,15 @@ export default class AddNewNotes extends Component {
     addNotesToFirebase = async () => {
         const {onPress} = this.props
         if(this.state.title != '' || this.state.note != '') {
-            // const user = await KeyChain.getGenericPassword()
-            // const userDetails = JSON.parse(user.password)
-            // Firebase.database().ref('notes/' + userDetails.user.uid).push({
-            //     Title: this.state.title,
-            //     Notes: this.state.note
-            // })
-            //console.log(userDetails);
             UserNoteServices.addNoteToFirebase(this.state.title, this.state.note)
-            .then(() => this.props.navigation.push('Home', {screen: 'Notes'}))
+            .then(() => {
+                this.props.navigation.push('Home', {screen: 'Notes', 
+                params : {isEmptyNote : false}})
+            })
+            .catch(error => console.log(error))
+        } else {
+            this.props.navigation.push('Home', { screen: 'Notes',  params : {isEmptyNote : true}})
         }
-        //this.props.navigation.push('Home', { screen: 'Notes' })
         //onPress();
     }
 

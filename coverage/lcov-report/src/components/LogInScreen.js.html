@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.25% </span>
+                <span class="strong">78.37% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>168/212</span>
+                <span class='fraction'>163/208</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.83% </span>
+                <span class="strong">70.21% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>102/144</span>
+                <span class='fraction'>99/141</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.16% </span>
+                <span class="strong">88.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>55/61</span>
+                <span class='fraction'>52/59</span>
             </div>
         
             
@@ -338,23 +338,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">14x</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -390,9 +390,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -409,13 +409,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -435,7 +435,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">30x</span>
+<span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -569,17 +569,17 @@ export default class LogInScreen extends Component {
     passwordSecurityHandler = async () =&gt; {
         const {onPress} = this.props
         var passwordSecurity = this.state.passwordSecurity
-        if(passwordSecurity == true) {
+        if(pas<span class="missing-if-branch" title="else path not taken" >E</span>swordSecurity == true) {
             this.setState({
                 passwordSecurity: false
             })
         }
         else {
-            this.setState({
+            this<span class="cstat-no" title="statement not covered" >.setState({</span>
                 passwordSecurity: true
             })
         }
-        (this.props == undefined ) ? null<span class="branch-0 cbranch-no" title="branch not covered" > : on</span>Press();
+        //(this.props == undefined ) ? null : onPress();
     }
 &nbsp;
     handleLogInButton = async () =&gt; {
@@ -620,7 +620,7 @@ export default class LogInScreen extends Component {
                 })
             }
         }
-        onPress();
+        //onPress();
     }
 &nbsp;
     storeIteminAsyncStorage = async (User) =&gt; {
@@ -637,13 +637,13 @@ export default class LogInScreen extends Component {
     navigateToSignUpScreen = () =&gt; {
         const {onPress} = this.props
         this.props.navigation.navigate('SignUp')
-        onPress();
+        //onPress();
     }
 &nbsp;
     navigateToForgotPasswordScreen = () =&gt; {
         const {onPress} = this.props
         this.props.navigation.navigate('ForgotPassword')
-        onPress();
+        //onPress();
     }
 &nbsp;
     loginWithFacebook = async () <span class="fstat-no" title="function not covered" >=&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
@@ -748,7 +748,7 @@ export default class LogInScreen extends Component {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Dec 25 2020 16:01:43 GMT+0530 (India Standard Time)
+                at Mon Dec 28 2020 11:19:11 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

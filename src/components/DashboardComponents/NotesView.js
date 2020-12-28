@@ -6,6 +6,8 @@ import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import Firebase from '../../../config/Firebase';
 import Keychain from 'react-native-keychain';
 import { Card, Paragraph, Title } from 'react-native-paper';
+import NoteViewStyles from '../../styles/NoteViewStyles';
+import UserNoteServices from '../../../services/UserNoteServices';
 
 export default class extends Component {
     constructor() {
@@ -32,15 +34,14 @@ export default class extends Component {
     }
 
     componentDidMount = async () => {
-        const user = await Keychain.getGenericPassword();
-        const userDetails = JSON.parse(user.password);
-        Firebase.database().ref('notes/' + userDetails.user.uid).once('value').then(async snapShot => { 
-          let data = snapShot.val() ? snapShot.val() : {};
-            await this.setState({
-                notes: data
-            })
+        UserNoteServices.getDetailsFromFirebase()
+            .then(async data => {
+                let notes = data ? data : {}
+                await this.setState({
+                    notes : notes
+                })
           //console.log(this.state.notes);
-          });
+        })
       }
 
     navigateToLogInScreen = async () => {
@@ -62,11 +63,12 @@ export default class extends Component {
                     ? {height: 510, width: 350, alignSelf: 'center'} 
                     : {height: 750, width: 530, alignSelf: 'center'}}>
                 <ScrollView>
-                    <View>
+                    <View style = {NoteViewStyles.list_Style}>
                     {NoteKey.length > 0 ? NoteKey.reverse().map(key => ( 
+                        (this.props.changeLayout) ?
                     <Card
                         key = {key}
-                        style = {{margin: 5, backgroundColor: 'transparent',}}>
+                        style = {NoteViewStyles.list_grid_Container}>
                             <Card.Content>
                                 <Title>
                                     {this.state.notes[key].notes.title}
@@ -75,7 +77,18 @@ export default class extends Component {
                                     {this.state.notes[key].notes.note}
                                 </Paragraph>
                             </Card.Content>
-                    </Card>))  
+                        </Card> : <Card
+                            key = {key}
+                            style = {NoteViewStyles.list_Container}>
+                            <Card.Content>
+                                <Title>
+                                    {this.state.notes[key].notes.title}
+                                </Title>
+                                <Paragraph>
+                                    {this.state.notes[key].notes.note}
+                                </Paragraph>
+                            </Card.Content>
+                        </Card>))  
                     : (<View>
                         <Image style = {DashBoardScreenStyles.bulb_Style} source = {require('../../assets/bulb.png')}/>
                         <Text style = {DashBoardScreenStyles.Appear_Text_Style}>{strings.YourNoteswillApperHere}</Text>

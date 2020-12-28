@@ -8,22 +8,21 @@ export default class ToolBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            changeLayout: true
+            listView: true
         }
     }
 
-    changeLayout = () => {
+    changeLayout = async () => {
         const {onPress} = this.props
         if(this.state.changeLayout) {
-            this.setState({
-                changeLayout: false
+            await this.setState({
+                listView: false
             })
         } else {
-            this.setState({
-                changeLayout: true
+            await this.setState({
+                listView: true
             })
         }
-        console.log('Layout Changed')
         //onPress()
     }
 
@@ -41,10 +40,8 @@ export default class ToolBar extends Component {
                         onChangeText = {data => console.log(data)}
                     />
                     <Appbar.Action 
-                        icon = {(this.state.changeLayout) 
-                            ? "view-agenda-outline" 
-                            : "view-grid-outline"} 
-                        onPress  = {this.changeLayout}
+                        icon = {(this.props.listView) ? 'view-grid-outline' : 'view-agenda-outline'}
+                        onPress={this.props.onPress}
                     />
                     <TouchableOpacity 
                         onPress = {() => console.log('Pressed Profile')}

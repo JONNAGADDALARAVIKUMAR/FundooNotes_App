@@ -5,7 +5,6 @@ class UserNoteServices {
 
     addNoteToFirebase = (title, note) => {
         return new Promise(async (resolve, reject) => {
-            console.log('lllllll');
             const user = await KeyChain.getGenericPassword()
             const userDetails = JSON.parse(user.password)
             const notes = {
@@ -18,6 +17,17 @@ class UserNoteServices {
                 notes : notes
             })
             .then(() => resolve('success'))
+            .catch(error => reject(error))
+        })
+    }
+
+    getDetailsFromFirebase = () => {
+        return new Promise(async (resolve, reject) => {
+            const user = await KeyChain.getGenericPassword();
+            const userDetails = JSON.parse(user.password);
+            Firebase.database().ref('notes/' + userDetails.user.uid).once('value').then(async snapShot => { 
+                resolve(snapShot.val())
+            })
             .catch(error => reject(error))
         })
     }

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.75% </span>
+                <span class="strong">65.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>75/106</span>
+                <span class='fraction'>75/115</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.44% </span>
+                <span class="strong">54.88% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>45/77</span>
+                <span class='fraction'>45/82</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64% </span>
+                <span class="strong">61.54% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>16/25</span>
+                <span class='fraction'>16/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">63.16% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>12/20</span>
+                <span class='fraction'>12/19</span>
             </div>
         
             
@@ -115,10 +115,7 @@
 <a name='L56'></a><a href='#L56'>56</a>
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a>
-<a name='L61'></a><a href='#L61'>61</a>
-<a name='L62'></a><a href='#L62'>62</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
+<a name='L59'></a><a href='#L59'>59</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -132,21 +129,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,8 +155,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,22 +183,21 @@ export default class ToolBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            changeLayout: true
+            listView: true
         }
     }
 &nbsp;
-    changeLayout = <span class="fstat-no" title="function not covered" >()</span> =&gt; {
-        const {o<span class="cstat-no" title="statement not covered" >nPress} = this.props</span>
-<span class="cstat-no" title="statement not covered" >        if(this.state.changeLayout) {</span>
-<span class="cstat-no" title="statement not covered" >            this.setState({</span>
-                changeLayout: false
+    changeLayout = async () <span class="fstat-no" title="function not covered" >=&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+        const <span class="cstat-no" title="statement not covered" >{onPress} = this.props<span class="cstat-no" title="statement not covered" ></span></span>
+        if(this.state.changeLayout) {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span></span></span>
+            await this.setState({
+                listView: false<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ></span></span></span></span>
             })
         } else {
-<span class="cstat-no" title="statement not covered" >            this.setState({</span>
-                changeLayout: true
+            await this.setState({
+                listView: true<span class="cstat-no" title="statement not covered" ></span>
             })
         }
-<span class="cstat-no" title="statement not covered" >        console.log('Layout Changed')</span>
         //onPress()
     }
 &nbsp;
@@ -222,10 +215,8 @@ export default class ToolBar extends Component {
                         onChangeT<span class="fstat-no" title="function not covered" >ext = {data =</span>&gt; conso<span class="cstat-no" title="statement not covered" >le.log(data)}</span>
                     /&gt;
                     &lt;Appbar.Action 
-                        icon = {(this.state.changeLayout) 
-                            ? "view-agenda-outline" 
-<span class="branch-1 cbranch-no" title="branch not covered" >                            : </span>"view-grid-outline"} 
-                        onPress  = {this.changeLayout}
+                        icon = {(this.<span class="branch-0 cbranch-no" title="branch not covered" >props.listView) ? 'v</span>iew-grid-outline' : 'view-agenda-outline'}
+                        onPress={this.props.onPress}
                     /&gt;
                     &lt;TouchableOpacity 
                         onPr<span class="fstat-no" title="function not covered" >ess = {(</span>) =<span class="cstat-no" title="statement not covered" >&gt; console.log('Pressed Profile')}</span>
@@ -247,7 +238,7 @@ export default class ToolBar extends Component {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Dec 25 2020 16:01:43 GMT+0530 (India Standard Time)
+                at Mon Dec 28 2020 11:19:11 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
