@@ -12,18 +12,24 @@ export default class ToolBar extends Component {
         }
     }
 
-    changeLayout = async () => {
+    changeLayout = () => {
         const {onPress} = this.props
         if(this.state.changeLayout) {
-            await this.setState({
+            this.setState({
                 listView: false
             })
         } else {
-            await this.setState({
+            this.setState({
                 listView: true
             })
         }
         //onPress()
+    }
+
+    openDrawer = () => {
+        const {onPress} = this.props
+        this.props.navigation.openDrawer()
+        //onPress();
     }
 
     render() {
@@ -32,19 +38,19 @@ export default class ToolBar extends Component {
                 <Appbar style = {DashBoardScreenStyles.App_Bar_Style}>
                     <Appbar.Action
                         icon="menu"
-                        onPress = {() => this.props.navigation.openDrawer()}
+                        onPress = {this.openDrawer}
                     />
                     <Searchbar
                         style ={DashBoardScreenStyles.Search_Bar_Style}
                         placeholder = {strings.Search}
-                        onChangeText = {data => console.log(data)}
+                        //onChangeText = {data => console.log(data)}
                     />
                     <Appbar.Action 
                         icon = {(this.props.listView) ? 'view-grid-outline' : 'view-agenda-outline'}
                         onPress={this.props.onPress}
                     />
                     <TouchableOpacity 
-                        onPress = {() => console.log('Pressed Profile')}
+                        //onPress = {() => console.log('Pressed Profile')}
                         >
                         <Avatar.Image
                             size = {35}

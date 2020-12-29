@@ -31,10 +31,12 @@ export default class Dashboard extends Component {
         }
     }
 
-    selectView = async () => {
-        await this.setState({
+    selectView = () => {
+        const {onPress} = this.props
+        this.setState({
             listView: !this.state.listView
         })
+        //onPress();
     }
 
     emptyNoteSnackbarHandler = async () => {
@@ -56,9 +58,11 @@ export default class Dashboard extends Component {
     }
 
     restoreNotes = () => {
+        const {onPress} = this.props
         UserNoteServices.restoreNoteInFirebase(this.props.route.params.title, this.props.route.params.note, this.props.route.params.noteKey)
             .then(() => this.props.navigation.push('Home', {screen : 'Notes'}))
             .catch(error => console.log(error))
+        //onPress()
     }
 
     render() {

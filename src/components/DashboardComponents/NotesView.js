@@ -36,7 +36,7 @@ export default class extends Component {
         UserNoteServices.getDetailsFromFirebase()
         .then(async data => {
             let notes = data ? data : {}
-            await this.setState({
+            this.setState({
                 notes : notes
             })
             let NoteKey = Object.keys(this.state.notes);
@@ -69,6 +69,7 @@ export default class extends Component {
 
     render() {
         let NoteKey = Object.keys(this.state.notes);
+        
         return (
             <ImageBackground source = {require('../../assets/backgroundIcon.png')}
                 style = {(this.state.orientation == 'portrait') 

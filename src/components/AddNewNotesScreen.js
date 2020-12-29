@@ -4,7 +4,7 @@ import {Appbar, Menu, Snackbar} from 'react-native-paper';
 import { strings } from '../Languages/strings';
 import UserNoteServices from '../../services/UserNoteServices';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import Icon from 'react-native-vector-icons/Ionicons'
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default class AddNewNotes extends Component {
     constructor(props) {
@@ -153,15 +153,15 @@ export default class AddNewNotes extends Component {
                         },
                     }}>
                     <View>
-                        <Menu.Item icon="delete-outline" onPress = {this.handleDeleteButton} title="Delete" />
-                        <Menu.Item icon="content-copy" title="Make a copy" />
-                        <Menu.Item icon="share-variant" title="Send" />
+                        <Menu.Item icon = "delete-outline" onPress = {this.handleDeleteButton} title = "Delete" />
+                        <Menu.Item icon = "content-copy" title = "Make a copy" />
+                        <Menu.Item icon = "share-variant" title = "Send" />
                         <Menu.Item 
-                            icon={({ size, color }) => (
-                                <Icon name="person-add-outline" size={size} color={color} />
+                            icon = {({ size, color }) => (
+                                <Icon name = "person-add-outline" size = {size} color = {color} />
                                 )} 
-                            title="Collaborator"/>
-                        <Menu.Item icon="label-outline" title="Labels" />    
+                            title = "Collaborator"/>
+                        <Menu.Item icon = "label-outline" title = "Labels" />    
                     </View>
                 </RBSheet>
 

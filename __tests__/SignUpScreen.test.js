@@ -126,9 +126,9 @@ describe('test SignUp Screen', () => {
         })
         await instance.handleSignUpButton();
         expect(onPressEvent).toHaveBeenCalled();
-        UserServices.createAccount(instance.state.email, instance.state.password).then((message) => {
-            expect(message).toBe('User account created & signed in!')
-            //expect(navigation.navigate).toBeCalledWith('DashBoard')
+        UserServices.createAccount(instance.state.email, instance.state.password).then((user) => {
+            expect(navigation.navigate).toBeCalledWith('LogIn')
+            UserServices.writeUserDataToRealTimedataBase(user.user.email, instance.state.firstName, instance.state.lastName, user.user.uid)
         })
         instance.setState({
             emailValidation: true,

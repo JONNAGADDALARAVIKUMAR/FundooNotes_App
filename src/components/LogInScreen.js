@@ -25,7 +25,6 @@ export default class LogInScreen extends Component {
     async componentDidMount(){
         try {
             const isLoggedIn = JSON.parse(await AsyncStorage.getItem('isLoggedIn'))
-            console.log(isLoggedIn);
             if(isLoggedIn) {
               this.props.navigation.navigate("Home")
             }
@@ -139,7 +138,6 @@ export default class LogInScreen extends Component {
                                                         user.additionalUserInfo.profile.first_name, 
                                                         user.additionalUserInfo.profile.last_name, 
                                                         user.user.uid)            
-            //this.storeIteminAsyncStorage(user)
             this.props.navigation.navigate('Home')
         })
         .catch((error) => {

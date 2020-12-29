@@ -7,16 +7,20 @@ import NotesView from './NotesView';
 export default class DeletedNotesSreen extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-
-        }
     }
 
     render() {
         return(
             <View style = {DeletedNotesScreenStyles.Screen_Style}>
-                <DeletedNotesScreenTopbar navigation = {this.props.navigation} onPress = {() => this.props.navigation.openDrawer()}/>
-                <NotesView  navigation = {this.props.navigation} changeLayout = {this.state.listView} status = {true}/>
+                <DeletedNotesScreenTopbar 
+                    navigation = {this.props.navigation} 
+                    onPress = {() => this.props.navigation.openDrawer()}
+                />
+
+                <NotesView  
+                    navigation = {this.props.navigation}  
+                    status = {true}
+                />
             </View>
         )
     }

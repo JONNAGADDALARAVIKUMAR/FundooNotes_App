@@ -17,4 +17,13 @@ describe('test BottomBar Screen', () => {
         expect(component.find(Appbar.Action).at(3).props().icon).toEqual('panorama')
         expect(component.find(Appbar.Action).at(4).props().icon).toEqual('plus')
     })
+    it('test onPress event of handlePlusButton it should navigate to AddNewNotes Screen', async() => {
+        const navigation = { push : jest.fn() }
+        const onPressEvent = jest.fn();
+        const component = shallow(<BottomBar onPress = {onPressEvent} navigation = {navigation} />)
+        const instance = component.instance();
+        await instance.handlePlusButton();
+        expect(onPressEvent).toHaveBeenCalled();
+        expect(navigation.push).toBeCalledWith('AddNewNotes', {title: '', note: '', noteKey: undefined})
+    })
 })
