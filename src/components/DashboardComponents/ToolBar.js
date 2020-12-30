@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import {strings} from '../../Languages/strings';
-import {Appbar, Avatar, Modal, Portal, Searchbar, Provider} from 'react-native-paper';
+import {Appbar, Avatar, Searchbar} from 'react-native-paper';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
+import UserServices from '../../../services/UserServices'
 
 export default class ToolBar extends Component {
     constructor(props) {
@@ -10,8 +11,25 @@ export default class ToolBar extends Component {
         this.state = {
             listView: true,
             showProfile: false,
-            imageUri: ''
+            photoURL: ''
         }
+    }
+
+    componentDidMount = async () => {
+        await UserServices.getProfileUrl()
+        .then(url => {
+            this.setState({
+                photoURL: url
+            })
+        })
+        .catch(error => {
+            if(error.code == 'storage/object-not-found') {
+                this.setState({
+                    photoURL : ''
+                })
+            }
+            console.log(error);
+        })
     }
 
     changeLayout = () => {
@@ -56,7 +74,7 @@ export default class ToolBar extends Component {
                         >
                         <Avatar.Image
                             size = {35}
-                            source = {(this.state.imageUri != '') ? {uri: this.state.imageUri}: require('../../assets/defaultProfileImage.jpg')}
+                            source = {(this.state.photoURL != '') ? {uri: this.state.photoURL}: require('../../assets/defaultProfileImage.jpg')}
                             style = {DashBoardScreenStyles.Profile_Style}
                         />
                     </TouchableOpacity>

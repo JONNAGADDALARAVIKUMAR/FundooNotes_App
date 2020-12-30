@@ -5,7 +5,8 @@ import {Button} from 'react-native-paper';
 import {launchImageLibrary, launchCamera} from 'react-native-image-picker'
 import RBSheet from "react-native-raw-bottom-sheet";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import profileStyles from '../../styles/ProfileStyles'
+import profileStyles from '../../styles/ProfileStyles';
+import Topbar from './ToolBar';
   
 export default class App extends Component {  
     constructor(props) {
@@ -13,16 +14,30 @@ export default class App extends Component {
         this.state = {
             userDetails: '',
             isImagePressed: false,
-            imageUri: ''
+            photoURL: ''
         }
     } 
 
     componentDidMount = async () => {
-        UserServices.getDetails()
+        await UserServices.getDetails()
         .then(userDetails => {
+            this.setState({
+                userDetails: userDetails
+            })
+        })
+        await UserServices.getProfileUrl()
+        .then(url => {
+            this.setState({
+                photoURL: url
+            })
+        })
+        .catch(error => {
+            if(error.code == 'storage/object-not-found') {
                 this.setState({
-                    userDetails: userDetails
+                    photoURL : ''
                 })
+            }
+            console.log(error);
         })
     }
 
@@ -53,10 +68,21 @@ export default class App extends Component {
         }
         launchCamera(options, async response => {
             if(!response.didCancel) {  
-                console.log(response.uri); 
-                this.setState({
-                    imageUri: response.uri
+                await UserServices.uploadProfileImage(response.uri)
+                .then(url => {
+                    this.setState({
+                        photoURL: url
+                    })
                 })
+                .catch(async error => {
+                    if(error.code == 'storage/object-not-found') {
+                        await this.setState({
+                            photoURL : ''
+                        })
+                    }
+                    console.log(error)
+                })
+                //this.props.navigation.push('Home', {screen: 'Notes'})
             }
         })
     }
@@ -70,9 +96,21 @@ export default class App extends Component {
         } 
         launchImageLibrary(options, async response => {
             if(!response.didCancel) {  
-                this.setState({
-                    imageUri: response.uri
+                await UserServices.uploadProfileImage(response.uri)
+                .then(url => {
+                    this.setState({
+                        photoURL: url
+                    })
                 })
+                .catch(async error => {
+                    if(error.code == 'storage/object-not-found') {
+                        await this.setState({
+                            photoURL : ''
+                        })
+                    }
+                    console.log(error)
+                })
+                //this.props.navigation.push('Home', {screen: 'Notes'})
             }
         })
     }
@@ -84,8 +122,8 @@ export default class App extends Component {
                     <TouchableOpacity onPress = {this.handleProfileOnPress}>
                         <Image 
                             resizeMode = 'cover'
-                            source = {(this.state.imageUri != '') 
-                                ? {uri: this.state.imageUri}
+                            source = {(this.state.photoURL != '') 
+                                ? {uri: this.state.photoURL}
                                 : require('../../assets/defaultProfileImage.jpg')}
                             style = {(this.state.isImagePressed) ? profileStyles.image_OnPress_Style : profileStyles.imageStyle}
                         />

@@ -14,11 +14,11 @@ export default class Dashboard extends Component {
             listView: false,
             showEmptyNoteSnackbar : false,
             showDeletedNoteSnackbar : false,
-            showProfile: false
+            showProfile: false,
         }
     }
 
-    async componentDidMount() {
+    componentDidMount = async () => {
         if(this.props.route.params != undefined) {
             if(this.props.route.params.isEmptyNote != undefined) {
                 await this.setState({
@@ -114,7 +114,9 @@ export default class Dashboard extends Component {
                     <Portal>
                         <Modal
                             visible = {this.state.showProfile}>
-                            <Profile handleProfile = {this.handleProfile} navigation = {this.props.navigation}/>
+                            <Profile 
+                                handleProfile = {this.handleProfile} 
+                                navigation = {this.props.navigation}/>
                         </Modal>
                     </Portal>
             </View>
