@@ -56,7 +56,7 @@ export default class AddNewNotes extends Component {
         //onPress();
     }
 
-    handleDotIconButton = async() => {
+    handleDotIconButton = () => {
         const {onPress} = this.props
         this.RBSheet.open()
         //onPress()

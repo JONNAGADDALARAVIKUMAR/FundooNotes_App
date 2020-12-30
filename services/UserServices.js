@@ -1,6 +1,7 @@
 import Firebase from '../config/Firebase';
 import firebase from 'firebase';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
+import KeyChain from 'react-native-keychain';
 
 class UserServices {
     createAccount = (email, password) => {
@@ -86,6 +87,16 @@ class UserServices {
         catch(error) {
             //console.log(error);
         }
+    }
+    getDetails = () => {
+        return new Promise(async (resolve, reject) => {
+            const user = await KeyChain.getGenericPassword();
+            const userDetails = JSON.parse(user.password);
+            Firebase.database().ref('users/' +userDetails.user.uid).once('value').then(async snapShot => { 
+                resolve(snapShot.val())
+            })
+            .catch(error => console.log(error))
+        })
     }
 }
 

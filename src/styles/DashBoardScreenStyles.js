@@ -29,16 +29,6 @@ const DashBoardScreenStyles = StyleSheet.create({
         backgroundColor: '#f7e9f3', 
         height: '90%'
     },
-    LogOut_Button_Style: {
-        marginRight: '20%',
-        marginLeft: '20%',
-        marginTop: '5%',
-        backgroundColor: '#912c4c',
-        alignItems: 'center',
-        height: 50,
-        borderRadius: 10,
-        justifyContent: 'space-around'
-    },
     SearchBox_Style: {
         width: '60%', 
         backgroundColor: '#f7e9f3', 

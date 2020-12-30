@@ -3,8 +3,9 @@ import {View, ScrollView} from 'react-native';
 import ToolBar from './ToolBar';
 import BottomBar from './BottomBar';
 import ViewNotes from './NotesView';
-import {Snackbar} from 'react-native-paper';
-import UserNoteServices from '../../../services/UserNoteServices'
+import {Snackbar, Provider, Portal, Modal} from 'react-native-paper';
+import UserNoteServices from '../../../services/UserNoteServices';
+import Profile from './Profile';
 
 export default class Dashboard extends Component {
     constructor(props){
@@ -12,7 +13,8 @@ export default class Dashboard extends Component {
         this.state = {
             listView: false,
             showEmptyNoteSnackbar : false,
-            showDeletedNoteSnackbar : false
+            showDeletedNoteSnackbar : false,
+            showProfile: false
         }
     }
 
@@ -65,14 +67,32 @@ export default class Dashboard extends Component {
         //onPress()
     }
 
+    handleProfile = async () => {
+        await this.setState({
+            showProfile: !this.state.showProfile
+        })
+    }
+
     render() {
         return (
+            <Provider>
             <View style = {{backgroundColor: '#f2d5e5', height: '100%'}}>
-                <ToolBar navigation = {this.props.navigation} onPress = {this.selectView} listView = {this.state.listView}/>
+                <ToolBar 
+                    navigation = {this.props.navigation} 
+                    onPress = {this.selectView} 
+                    listView = {this.state.listView}
+                    handleProfile = {this.handleProfile}/>
+
                 <ScrollView>   
-                    <ViewNotes navigation = {this.props.navigation} changeLayout = {this.state.listView} status = {false}/>
+                    <ViewNotes 
+                        navigation = {this.props.navigation} 
+                        changeLayout = {this.state.listView} 
+                        status = {false}/>
                 </ScrollView>
-                <BottomBar navigation = {this.props.navigation}/>
+
+                <BottomBar 
+                    navigation = {this.props.navigation}/>
+
                 <Snackbar
                     style = {{marginBottom : 80}}
                     visible={this.state.showEmptyNoteSnackbar}
@@ -91,7 +111,14 @@ export default class Dashboard extends Component {
                     }}>
                     Note Moved to Bin
                 </Snackbar>
+                    <Portal>
+                        <Modal
+                            visible = {this.state.showProfile}>
+                            <Profile handleProfile = {this.handleProfile} navigation = {this.props.navigation}/>
+                        </Modal>
+                    </Portal>
             </View>
+            </Provider>
         )
     }
 }

@@ -50,17 +50,6 @@ export default class extends Component {
         .catch((error) => console.log(error))
     }
 
-    navigateToLogInScreen = async () => {
-        const {onPress} = this.props
-        try {
-            await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
-        } catch (e) {
-            console.log(e);
-        }
-        this.props.navigation.navigate('LogIn')
-        //onPress()
-    }
-
     handleDetailsToUpdate = (noteKey) => {
         this.props.navigation.push('AddNewNotes', { noteKey : noteKey, 
                                                     title : this.state.notes[noteKey].notes.title, 
@@ -100,12 +89,6 @@ export default class extends Component {
                             <Image style = {DashBoardScreenStyles.bulb_Style} source = {require('../../assets/bulb.png')}/>
                             <Text style = {DashBoardScreenStyles.Appear_Text_Style}>{strings.YourNoteswillApperHere}</Text>
                     </View>) : null }
-
-                    <TouchableOpacity
-                        style = {DashBoardScreenStyles.LogOut_Button_Style}
-                        onPress = {this.navigateToLogInScreen}>
-                        <Text style = {{color: '#dbced2'}}>{strings.LogOut}</Text>
-                    </TouchableOpacity>
                 </ScrollView>
             </ImageBackground>
         )

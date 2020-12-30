@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import {View, TouchableOpacity} from 'react-native';
 import {strings} from '../../Languages/strings';
-import {Appbar, Avatar, Searchbar} from 'react-native-paper';
+import {Appbar, Avatar, Modal, Portal, Searchbar, Provider} from 'react-native-paper';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 
 export default class ToolBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            listView: true
+            listView: true,
+            showProfile: false,
+            imageUri: ''
         }
     }
 
@@ -37,7 +39,7 @@ export default class ToolBar extends Component {
             <View>
                 <Appbar style = {DashBoardScreenStyles.App_Bar_Style}>
                     <Appbar.Action
-                        icon="menu"
+                        icon = "menu"
                         onPress = {this.openDrawer}
                     />
                     <Searchbar
@@ -50,11 +52,11 @@ export default class ToolBar extends Component {
                         onPress={this.props.onPress}
                     />
                     <TouchableOpacity 
-                        //onPress = {() => console.log('Pressed Profile')}
+                        onPress = {this.props.handleProfile}
                         >
                         <Avatar.Image
                             size = {35}
-                            source = {require("../../assets/profilePic.jpg")}
+                            source = {(this.state.imageUri != '') ? {uri: this.state.imageUri}: require('../../assets/defaultProfileImage.jpg')}
                             style = {DashBoardScreenStyles.Profile_Style}
                         />
                     </TouchableOpacity>
