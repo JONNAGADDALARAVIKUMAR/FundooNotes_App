@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 
 const profileStyles = StyleSheet.create({
     modal: {    
-        backgroundColor : "pink",   
+        backgroundColor : "#f5d3e9",   
         height: 300 ,  
         width: '80%',  
         borderRadius:10,  
@@ -44,19 +44,21 @@ const profileStyles = StyleSheet.create({
         borderWidth: 1,  
         borderColor: 'gray',    
         alignSelf: 'center', 
+        marginBottom: '20%'
    },
    icon_Style: {
         height: 50, 
         width: 50, 
         marginTop: '50%'
    }, 
-   cancel_Button_Style: {
-        backgroundColor: 'lightgray', 
-        marginTop: '10%', 
-        borderRadius: 50
+   RBSheet_Button_Style: {
+        backgroundColor: '#fccfed', 
+        marginTop: '5%', 
+        borderRadius: 50,
+        color: 'red'
    }, 
    button_Style: {
-       backgroundColor: '#bb214c', 
+       backgroundColor: '#fa91d7', 
        marginTop: '10%', 
        width: '40%', 
        alignSelf: 'center'

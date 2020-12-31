@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, TouchableOpacity, ImageBackground, Dimensions, ScrollView, Image} from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import {View, Text, ImageBackground, Dimensions, ScrollView, Image} from 'react-native';
 import {strings} from '../../Languages/strings';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import { Card, Paragraph, Title } from 'react-native-paper';

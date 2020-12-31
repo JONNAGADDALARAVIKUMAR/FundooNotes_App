@@ -22,3 +22,9 @@ jest.mock('react-native-reanimated', () => {
   
     return Reanimated;
   });
+  jest.mock('react-native-fetch-blob', () => {
+    return {
+      DocumentDir: () => {},
+      polyfill: () => {},
+    }
+  });

@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import SignUpStyles from '../styles/SignUpStyles';
 import UserServices from '../../services/UserServices';
-import {strings} from '../Languages/strings'
+import {strings} from '../Languages/strings';
+import SQLiteStorageServices from '../../services/SQLiteStorageServices'
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -154,6 +155,9 @@ export default class LogInScreen extends Component {
                 UserServices.createAccount(this.state.email, this.state.password)
                 .then((user) => {
                     this.props.navigation.push("LogIn");
+                    //SQLiteStorageServices.initDB(this.state.email).then((db) => console.log('created'));
+                    SQLiteStorageServices.initDB(this.state.email)
+                    .then(db => console.log('Table Created'))
                     UserServices.writeUserDataToRealTimedataBase(user.user.email, this.state.firstName, this.state.lastName, user.user.uid)
                 })
                 .catch(error => {

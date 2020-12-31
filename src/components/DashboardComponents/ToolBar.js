@@ -16,10 +16,10 @@ export default class ToolBar extends Component {
     }
 
     componentDidMount = async () => {
-        await UserServices.getProfileUrl()
-        .then(url => {
-            this.setState({
-                photoURL: url
+        await UserServices.getDetails()
+        .then(async details => {
+            await this.setState({
+                photoURL : details.imageURL
             })
         })
         .catch(error => {

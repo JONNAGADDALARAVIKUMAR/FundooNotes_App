@@ -6,6 +6,7 @@ import ViewNotes from './NotesView';
 import {Snackbar, Provider, Portal, Modal} from 'react-native-paper';
 import UserNoteServices from '../../../services/UserNoteServices';
 import Profile from './Profile';
+import UserServices from '../../../services/UserServices';
 
 export default class Dashboard extends Component {
     constructor(props){
@@ -15,10 +16,12 @@ export default class Dashboard extends Component {
             showEmptyNoteSnackbar : false,
             showDeletedNoteSnackbar : false,
             showProfile: false,
+            photoURL: ''
         }
     }
 
     componentDidMount = async () => {
+        this.getProfileImage();
         if(this.props.route.params != undefined) {
             if(this.props.route.params.isEmptyNote != undefined) {
                 await this.setState({
@@ -31,6 +34,23 @@ export default class Dashboard extends Component {
                 })
             }
         }
+    }
+
+    getProfileImage = async () => {
+        await UserServices.getDetails()
+        .then(async details => {
+            await this.setState({
+                photoURL : details.imageURL
+            })
+        })
+        .catch(error => {
+            if(error.code == 'storage/object-not-found') {
+                this.setState({
+                    photoURL : ''
+                })
+            }
+            console.log(error);
+        })
     }
 
     selectView = () => {
@@ -71,6 +91,7 @@ export default class Dashboard extends Component {
         await this.setState({
             showProfile: !this.state.showProfile
         })
+        this.getProfileImage();
     }
 
     render() {
@@ -81,7 +102,8 @@ export default class Dashboard extends Component {
                     navigation = {this.props.navigation} 
                     onPress = {this.selectView} 
                     listView = {this.state.listView}
-                    handleProfile = {this.handleProfile}/>
+                    handleProfile = {this.handleProfile}
+                    photoURL = {this.state.photoURL}/>
 
                 <ScrollView>   
                     <ViewNotes 
@@ -116,7 +138,8 @@ export default class Dashboard extends Component {
                             visible = {this.state.showProfile}>
                             <Profile 
                                 handleProfile = {this.handleProfile} 
-                                navigation = {this.props.navigation}/>
+                                navigation = {this.props.navigation}
+                                photoURL = {this.state.photoURL}/>
                         </Modal>
                     </Portal>
             </View>

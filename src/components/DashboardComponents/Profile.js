@@ -6,7 +6,15 @@ import {launchImageLibrary, launchCamera} from 'react-native-image-picker'
 import RBSheet from "react-native-raw-bottom-sheet";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import profileStyles from '../../styles/ProfileStyles';
-import Topbar from './ToolBar';
+import FetchBlob from 'react-native-fetch-blob';
+import Firebase from '../../../config/Firebase';
+import KeyChain from 'react-native-keychain';
+
+const Blob = FetchBlob.polyfill.Blob
+const fs = FetchBlob.fs
+window.XMLHttpRequest = FetchBlob.polyfill.XMLHttpRequest
+window.Blob = Blob
+const Fetch = FetchBlob.polyfill.Fetch
   
 export default class App extends Component {  
     constructor(props) {
@@ -14,7 +22,7 @@ export default class App extends Component {
         this.state = {
             userDetails: '',
             isImagePressed: false,
-            photoURL: ''
+            photoURL: this.props.photoURL
         }
     } 
 
@@ -24,20 +32,6 @@ export default class App extends Component {
             this.setState({
                 userDetails: userDetails
             })
-        })
-        await UserServices.getProfileUrl()
-        .then(url => {
-            this.setState({
-                photoURL: url
-            })
-        })
-        .catch(error => {
-            if(error.code == 'storage/object-not-found') {
-                this.setState({
-                    photoURL : ''
-                })
-            }
-            console.log(error);
         })
     }
 
@@ -52,6 +46,7 @@ export default class App extends Component {
         const {onPress} = this.props
         try {
             await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
+            UserServices.logOutFromFirebase()
         } catch (e) {
             console.log(e);
         }
@@ -68,7 +63,34 @@ export default class App extends Component {
         }
         launchCamera(options, async response => {
             if(!response.didCancel) {  
-                await UserServices.uploadProfileImage(response.uri)
+                await this.uploadProfileImage(response.uri)
+                .then(url => {
+                    this.setState({
+                        photoURL: url
+                    })
+                })
+                .catch(async error => {
+                    if(error.code == 'storage/object-not-found') {
+                        await this.setState({
+                            photoURL : ''
+                        })
+                    }
+                    console.log(error)
+                })
+            }
+        })
+    }
+
+    choosePhotoFromGallery = async () => {
+        this.RBSheet.close()
+        const options = {
+            mediaType : 'Profile Image',
+            maxWidth : 500,
+            maxHeight : 500,
+        } 
+        launchImageLibrary(options, async response => {
+            if(!response.didCancel) {  
+                await this.uploadProfileImage(response.uri)
                 .then(url => {
                     this.setState({
                         photoURL: url
@@ -87,31 +109,32 @@ export default class App extends Component {
         })
     }
 
-    choosePhotoFromGallery = async () => {
-        this.RBSheet.close()
-        const options = {
-            mediaType : 'Profile Image',
-            maxWidth : 500,
-            maxHeight : 500,
-        } 
-        launchImageLibrary(options, async response => {
-            if(!response.didCancel) {  
-                await UserServices.uploadProfileImage(response.uri)
-                .then(url => {
-                    this.setState({
-                        photoURL: url
-                    })
-                })
-                .catch(async error => {
-                    if(error.code == 'storage/object-not-found') {
-                        await this.setState({
-                            photoURL : ''
-                        })
-                    }
-                    console.log(error)
-                })
-                //this.props.navigation.push('Home', {screen: 'Notes'})
-            }
+    uploadProfileImage = (uri, mime = 'application/octet-stream') => {
+        return new Promise(async (resolve, reject) => {
+            const user = await KeyChain.getGenericPassword();
+            const userDetails = JSON.parse(user.password);
+            
+            let uploadBlob = null
+            const imageRef = Firebase.storage().ref(userDetails.user.uid)
+            fs.readFile(uri, 'base64')
+            .then((data) => {
+                return Blob.build(data, { type: `${mime};BASE64` })
+            })
+            .then((blob) => {
+                uploadBlob = blob
+                return imageRef.put(blob, { contentType: mime })
+            })
+            .then(() => {
+                uploadBlob.close()
+                return imageRef.getDownloadURL()
+            })
+            .then((url) => {
+                UserServices.uploadProfileImageUrlToUsers(url);
+                resolve(url)
+              })
+              .catch((error) => {
+                reject(error)
+            })
         })
     }
 
@@ -130,13 +153,14 @@ export default class App extends Component {
                     </TouchableOpacity>
                     {!this.state.isImagePressed 
                         ? <View>
-                            <Text style = {profileStyles.text}>First Name: {this.state.userDetails.firstName}</Text>
-                            <Text style = {profileStyles.text}>Last Name: {this.state.userDetails.lastName}</Text>
-                            <Text style = {profileStyles.text}>email: {this.state.userDetails.email}</Text>
+                            <Text style = {profileStyles.text}>{this.state.userDetails.firstName} {this.state.userDetails.lastName}</Text>
+                            <Text style = {profileStyles.text}>{this.state.userDetails.email}</Text>
                             <View style = {profileStyles.button_Align_Style}>
                                 <Button
                                     style = {profileStyles.button_Style}
-                                    onPress = {this.props.handleProfile}
+                                    onPress = {() => {
+                                        this.props.navigation.push('Home', {screen: 'Notes'})
+                                        this.props.handleProfile}}
                                     >Close
                                 </Button>
                                 <Button
@@ -159,27 +183,37 @@ export default class App extends Component {
                         duration={250}
                         customStyles={{
                             container: {
-                                alignItems: "center"
+                                alignItems: "center",
+                                borderTopRightRadius: 30,
+                                borderTopLeftRadius: 30
                             }
                         }}>
                         <View>
-                            <View style = {profileStyles.RBSheet_Icon_Style}>
-                                <TouchableOpacity onPress = {() => this.takePhoto()}>
-                                    <Image source = {require('../../assets/camera.png')} style = {profileStyles.icon_Style}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity onPress = {() => this.choosePhotoFromGallery()}>
-                                    <Image source = {require('../../assets/galary.jpg')} style = {profileStyles.icon_Style}/>   
-                                </TouchableOpacity>
-                            </View>
                             <Button
-                                style = {profileStyles.cancel_Button_Style}
+                                style = {profileStyles.RBSheet_Button_Style}
+                                onPress = {() => {
+                                    this.takePhoto()
+                                    this.RBSheet.close();
+                                }}
+                            >Take Photo
+                            </Button>
+                            <Button
+                                style = {profileStyles.RBSheet_Button_Style}
+                                onPress = {() => {
+                                    this.choosePhotoFromGallery()
+                                    this.RBSheet.close();
+                                }}
+                            >Choose From Library
+                            </Button>
+                            <Button
+                                style = {profileStyles.RBSheet_Button_Style}
                                 onPress = {() => {
                                     this.RBSheet.close();
                                     this.setState({
                                         isImagePressed: !this.state.isImagePressed
                                     })
                                 }}
-                                >Cancel
+                            >Cancel
                             </Button>
                         </View>
                     </RBSheet>

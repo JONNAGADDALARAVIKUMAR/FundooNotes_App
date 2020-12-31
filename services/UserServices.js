@@ -2,20 +2,9 @@ import Firebase from '../config/Firebase';
 import firebase from 'firebase';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import KeyChain from 'react-native-keychain';
-import FetchBlob from 'react-native-fetch-blob';
-
-const Blob = FetchBlob.polyfill.Blob
-const fs = FetchBlob.fs
-window.XMLHttpRequest = FetchBlob.polyfill.XMLHttpRequest
-window.Blob = Blob
-const Fetch = FetchBlob.polyfill.Fetch
-
-window.fetch = new Fetch({
-    auto : true,
-    binaryContentTypes : ['image/']
-}).build()
 
 class UserServices {
+
     createAccount = (email, password) => {
         return new Promise((resolve, reject) => {
             Firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -102,7 +91,7 @@ class UserServices {
     }
 
     getDetails = () => {
-        return new Promise(async (resolve, reject) => {
+        return new Promise(async (resolve) => {
             const user = await KeyChain.getGenericPassword();
             const userDetails = JSON.parse(user.password);
             Firebase.database().ref('users/' +userDetails.user.uid).once('value').then(async snapShot => { 
@@ -112,42 +101,21 @@ class UserServices {
         })
     }
 
-    uploadProfileImage = (uri, mime = 'application/octet-stream') => {
-        return new Promise(async (resolve, reject) => {
+    uploadProfileImageUrlToUsers = (imageUrl) => {
+        this.getDetails().then(async userDetails => {
             const user = await KeyChain.getGenericPassword();
-            const userDetails = JSON.parse(user.password);
-            
-            let uploadBlob = null
-            const imageRef = Firebase.storage().ref(userDetails.user.uid)
-            fs.readFile(uri, 'base64')
-            .then((data) => {
-                return Blob.build(data, { type: `${mime};BASE64` })
-            })
-            .then((blob) => {
-                uploadBlob = blob
-                return imageRef.put(blob, { contentType: mime })
-            })
-            .then(() => {
-                uploadBlob.close()
-                return imageRef.getDownloadURL()
-            })
-            .then((url) => {
-                resolve(url)
-              })
-              .catch((error) => {
-                reject(error)
+            const Details = JSON.parse(user.password);
+            Firebase.database().ref('users/' + Details.user.uid).set({
+                firstName : userDetails.firstName,
+                lastName : userDetails.lastName,
+                email : userDetails.email,
+                imageURL: imageUrl
             })
         })
     }
 
-    getProfileUrl = () => {
-        return new Promise(async (resolve, reject) => {
-            const user = await KeyChain.getGenericPassword();
-            const userDetails = JSON.parse(user.password);
-            Firebase.storage().ref('/' +userDetails.user.uid).getDownloadURL()
-            .then(url => resolve(url))
-            .catch(error => reject(error))
-        })
+    logOutFromFirebase = () => {
+        Firebase.auth().signOut().then(() => console.log('signed out'))
     }
 }
 
