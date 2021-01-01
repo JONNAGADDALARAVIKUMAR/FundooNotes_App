@@ -3,23 +3,6 @@ import KeyChain from 'react-native-keychain';
 
 class UserNoteServices {
 
-    addNoteToFirebase = (title, note, status) => {
-        return new Promise(async (resolve, reject) => {
-            const user = await KeyChain.getGenericPassword()
-            const userDetails = JSON.parse(user.password)
-            const notes = {
-                title : title,
-                note : note,
-                isDeleted: status
-            }
-            Firebase.database().ref('notes/' + userDetails.user.uid).push({
-                notes : notes
-            })
-            .then(() => resolve('success'))
-            .catch(error => reject(error))
-        })
-    }
-
     getDetailsFromFirebase = () => {
         return new Promise(async (resolve, reject) => {
             const user = await KeyChain.getGenericPassword();
@@ -31,14 +14,14 @@ class UserNoteServices {
         })
     }
     
-    updateNoteInFirebase = async (title, note, noteKey, status) => {
+    addNoteToFirebase = async (noteKey, title, note, Deletedstatus) => {
         return new Promise(async (resolve, reject) => {
             const user = await KeyChain.getGenericPassword();
             const userDetails = JSON.parse(user.password);
             const notes = {
                 title : title,
                 note : note,
-                isDeleted: status
+                isDeleted: Deletedstatus
             }
             Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + noteKey).set({
                 notes : notes

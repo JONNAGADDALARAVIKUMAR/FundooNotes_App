@@ -154,10 +154,7 @@ export default class LogInScreen extends Component {
             this.state.confirmPassword != '') {
                 UserServices.createAccount(this.state.email, this.state.password)
                 .then((user) => {
-                    this.props.navigation.push("LogIn");
-                    //SQLiteStorageServices.initDB(this.state.email).then((db) => console.log('created'));
-                    SQLiteStorageServices.initDB(this.state.email)
-                    .then(db => console.log('Table Created'))
+                    this.props.navigation.push("LogIn")
                     UserServices.writeUserDataToRealTimedataBase(user.user.email, this.state.firstName, this.state.lastName, user.user.uid)
                 })
                 .catch(error => {

@@ -5,6 +5,7 @@ import { strings } from '../Languages/strings';
 import UserNoteServices from '../../services/UserNoteServices';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
+import SQLiteStorageServices from '../../services/SQLiteStorageServices';
 
 export default class AddNewNotes extends Component {
     constructor(props) {
@@ -33,17 +34,20 @@ export default class AddNewNotes extends Component {
     addNotesToFirebase = async () => {
         const {onPress} = this.props
         if(this.state.title != '' || this.state.note != '') {
-
             if(this.state.noteKey == undefined) {
-                UserNoteServices.addNoteToFirebase(this.state.title, this.state.note, false)
-                .then(() => {
+                SQLiteStorageServices.storeDetailsInSQLiteDataBase(this.state.title, this.state.note, false)
+                .then((results) => {
+                    UserNoteServices.addNoteToFirebase(results.insertId, this.state.title, this.state.note, false)
+                    .then(() => console.log('Uploaded to Firabase'))
+                    .catch(() => console.log('Failed to upload Firebase'))
                     this.props.navigation.push('Home', {screen: 'Notes'})
                 })
-                .catch(error => console.log(error))
-            } 
+                .catch(error => console.log(error)) 
 
-            else if(this.state.noteKey != undefined) {
-                UserNoteServices.updateNoteInFirebase(this.state.title, this.state.note, this.state.noteKey, false)
+            } else if(this.state.noteKey != undefined) {
+                SQLiteStorageServices.updateDetailsInSQLiteDataBase(this.state.noteKey, this.state.title, this.state.note, false)
+
+                UserNoteServices.addNoteToFirebase(this.state.noteKey, this.state.title, this.state.note, false)
                 .then(() => {
                     this.props.navigation.push('Home', {screen: 'Notes', })
                 })
@@ -65,7 +69,9 @@ export default class AddNewNotes extends Component {
     handleDeleteButton = () => {
         this.RBSheet.close()
         if(this.state.title != '' || this.state.note != '') {
-            UserNoteServices.updateNoteInFirebase(this.state.title, this.state.note, this.state.noteKey, true)
+
+            SQLiteStorageServices.updateDetailsInSQLiteDataBase(this.state.noteKey, this.state.title, this.state.note, true)
+            UserNoteServices.addNoteToFirebase(this.state.noteKey, this.state.title, this.state.note, true)
             .then(() => {
                 this.props.navigation.push('Home', {screen: 'Notes',  params : {isNoteDeleted : true, title: this.state.title, note: this.state.note, noteKey: this.state.noteKey}})
             })

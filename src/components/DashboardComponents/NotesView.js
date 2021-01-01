@@ -5,6 +5,7 @@ import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import { Card, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import UserNoteServices from '../../../services/UserNoteServices';
+import SQLiteStorageServices from '../../../services/SQLiteStorageServices';
 
 export default class extends Component {
     constructor() {
@@ -21,6 +22,7 @@ export default class extends Component {
             width: Dimensions.get('window').width,
             orientation: isPortrait() ? 'portrait' : 'landscape',
             notes: '',
+            SQLiteNotes: [],
             isEmpty: true
         };
     
@@ -32,10 +34,29 @@ export default class extends Component {
     }
 
     componentDidMount = async () => {
+        SQLiteStorageServices.getDetailsFromSQLiteDatabase()
+        .then(async results => {
+            var temp = []
+            if(results.rows.length != 0) {
+                for (let i = 0; i < results.rows.length; ++i)
+                temp.push(results.rows.item(i));
+                await this.setState({
+                    SQLiteNotes : temp
+                })
+            } 
+            let SQLiteNotes = this.state.SQLiteNotes
+            SQLiteNotes.map(async (notes) => {
+                (SQLiteNotes.length > 0 && notes.isDeleted == this.props.status)
+                ? await this.setState({
+                    isEmpty: false
+                }) : null
+            })
+        })
+
         UserNoteServices.getDetailsFromFirebase()
         .then(async data => {
             let notes = data ? data : {}
-            this.setState({
+            await this.setState({
                 notes : notes
             })
             let NoteKey = Object.keys(this.state.notes);
@@ -53,6 +74,13 @@ export default class extends Component {
         this.props.navigation.push('AddNewNotes', { noteKey : noteKey, 
                                                     title : this.state.notes[noteKey].notes.title, 
                                                     note : this.state.notes[noteKey].notes.note})
+    }
+
+    handleDetailsToUpdateSQLite = (noteKey, Title, Notes) => {
+        this.props.navigation.push('AddNewNotes', { noteKey : noteKey, 
+                                                    title : Title, 
+                                                    note : Notes})
+        console.log(noteKey, Title, Notes);
     }
 
     render() {
@@ -83,6 +111,29 @@ export default class extends Component {
                             </Card>
                             : null))}
                         </View>
+
+                        <View style = {NoteViewStyles.list_Style}>
+                            {this.state.SQLiteNotes.length > 0 ?
+                            this.state.SQLiteNotes.map(val => (
+                                <React.Fragment key = {val.NoteKey}>
+                                    {val.isDeleted == 0 ? (
+                                        <Card
+                                            style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
+                                            onPress = {() =>this.handleDetailsToUpdateSQLite(val.NoteKey, val.Title, val.Notes)} >
+                                            <Card.Content>
+                                                <Title>
+                                                    {val.Title}
+                                                </Title>
+                                                <Paragraph>
+                                                    {val.Notes}
+                                                </Paragraph>
+                                            </Card.Content>  
+                                        </Card>)
+                                    : null}
+                                </React.Fragment>
+                            ))
+                            : null}
+                        </View>  
 
                         {(this.state.isEmpty) ? (<View>
                             <Image style = {DashBoardScreenStyles.bulb_Style} source = {require('../../assets/bulb.png')}/>
