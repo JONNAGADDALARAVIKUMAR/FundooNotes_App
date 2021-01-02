@@ -33,10 +33,12 @@ export default class AddNewNotes extends Component {
 
     addNotesToFirebase = async () => {
         const {onPress} = this.props
+
         if(this.state.title != '' || this.state.note != '') {
             if(this.state.noteKey == undefined) {
                 SQLiteStorageServices.storeDetailsInSQLiteDataBase(this.state.title, this.state.note, false)
                 .then((results) => {
+
                     UserNoteServices.addNoteToFirebase(results.insertId, this.state.title, this.state.note, false)
                     .then(() => console.log('Uploaded to Firabase'))
                     .catch(() => console.log('Failed to upload Firebase'))
@@ -45,11 +47,16 @@ export default class AddNewNotes extends Component {
                 .catch(error => console.log(error)) 
 
             } else if(this.state.noteKey != undefined) {
+                
                 SQLiteStorageServices.updateDetailsInSQLiteDataBase(this.state.noteKey, this.state.title, this.state.note, false)
+                .then(() => {
+                    this.props.navigation.push('Home', {screen: 'Notes', })
+                })
+                .catch(error => console.log(error))
 
                 UserNoteServices.addNoteToFirebase(this.state.noteKey, this.state.title, this.state.note, false)
                 .then(() => {
-                    this.props.navigation.push('Home', {screen: 'Notes', })
+                    console.log('Updated to Firebase');
                 })
                 .catch(error => console.log(error))
             }
@@ -71,9 +78,14 @@ export default class AddNewNotes extends Component {
         if(this.state.title != '' || this.state.note != '') {
 
             SQLiteStorageServices.updateDetailsInSQLiteDataBase(this.state.noteKey, this.state.title, this.state.note, true)
-            UserNoteServices.addNoteToFirebase(this.state.noteKey, this.state.title, this.state.note, true)
             .then(() => {
                 this.props.navigation.push('Home', {screen: 'Notes',  params : {isNoteDeleted : true, title: this.state.title, note: this.state.note, noteKey: this.state.noteKey}})
+            })
+            .catch(error => console.log(error))
+
+            UserNoteServices.addNoteToFirebase(this.state.noteKey, this.state.title, this.state.note, true)
+            .then(() => {
+                console.log('Updated to Firebase');
             })
             .catch(error => console.log(error))
         } else {

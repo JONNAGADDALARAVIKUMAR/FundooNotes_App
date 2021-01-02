@@ -116,7 +116,7 @@ export default class extends Component {
                             {this.state.SQLiteNotes.length > 0 ?
                             this.state.SQLiteNotes.map(val => (
                                 <React.Fragment key = {val.NoteKey}>
-                                    {val.isDeleted == 0 ? (
+                                    {val.isDeleted == this.props.status ? (
                                         <Card
                                             style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
                                             onPress = {() =>this.handleDetailsToUpdateSQLite(val.NoteKey, val.Title, val.Notes)} >
