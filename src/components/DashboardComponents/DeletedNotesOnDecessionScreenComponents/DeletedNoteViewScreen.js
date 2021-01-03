@@ -19,10 +19,7 @@ export default class DeletedNoteViewScreen extends Component {
     restoreNotes = () => {
         this.RBSheet.close()
         NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false)
-        this.setState({
-            showRestoreNotesSnackbar: true
-        })
-        //this.props.navigation.push('Home', {screen: 'Notes'})
+        this.props.navigation.push('Home', {screen: 'Notes'})
     }
 
     deletePermanently = () => {

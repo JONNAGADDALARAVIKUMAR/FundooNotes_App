@@ -16,7 +16,6 @@ export default class DeletedNotesSreen extends Component {
                     navigation = {this.props.navigation} 
                     onPress = {() => this.props.navigation.openDrawer()}
                 />
-
                 <NotesView  
                     navigation = {this.props.navigation}  
                     status = {true}

@@ -57,6 +57,10 @@ const DashBoardScreenStyles = StyleSheet.create({
     },
     Appear_Text_Style: {
         textAlign: 'center',
+    },
+    Search_Style: {
+        color: 'gray',
+        fontSize: 18
     }
 })
 

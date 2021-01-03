@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import {View, TouchableOpacity} from 'react-native';
-import {strings} from '../../Languages/strings';
-import {Appbar, Avatar, Searchbar} from 'react-native-paper';
+import {View, TouchableOpacity, Text} from 'react-native';
+import {Appbar, Avatar} from 'react-native-paper';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import UserServices from '../../../services/UserServices'
 
@@ -58,6 +57,10 @@ export default class ToolBar extends Component {
         //onPress();
     }
 
+    navigateToSearchScreen = () => {
+        this.props.navigation.push('SearchScreen')
+    }
+
     render() {
         return(
             <View>
@@ -66,11 +69,11 @@ export default class ToolBar extends Component {
                         icon = "menu"
                         onPress = {this.openDrawer}
                     />
-                    <Searchbar
-                        style ={DashBoardScreenStyles.Search_Bar_Style}
-                        placeholder = {strings.Search}
-                        //onChangeText = {data => console.log(data)}
-                    />
+                    <TouchableOpacity onPress = {this.navigateToSearchScreen}>
+                        <Text style = {DashBoardScreenStyles.Search_Style}>
+                            Search Your Notes
+                        </Text>
+                    </TouchableOpacity>
                     <Appbar.Action 
                         icon = {(this.props.listView) ? 'view-grid-outline' : 'view-agenda-outline'}
                         onPress={this.props.onPress}
