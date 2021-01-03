@@ -47,6 +47,17 @@ class UserNoteServices {
                 .catch(error => reject(error))
             })
         }
+
+        deleteNoteForever = (noteKey) => {
+            return new Promise(async (resolve, reject) => {
+                const user = await KeyChain.getGenericPassword();
+                const userDetails = JSON.parse(user.password);
+
+                Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + noteKey).remove()
+                .then(resolve('success'))
+                .catch((error) => reject(error))
+            })
+        }
     }
 
 export default new UserNoteServices();

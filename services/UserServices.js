@@ -2,6 +2,8 @@ import Firebase from '../config/Firebase';
 import firebase from 'firebase';
 import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import KeyChain from 'react-native-keychain';
+import UserNoteServices from './UserNoteServices';
+import SQLiteStorageServices from './SQLiteStorageServices';
 
 class UserServices {
 
@@ -26,7 +28,10 @@ class UserServices {
     logIn = (email, password) => {
         return new Promise((resolve, reject) => {
             Firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(user => resolve(user))
+            .then(user => {
+                this.fillSQLiteDatabaseWithMissingNotesByFetchingFromFirebase()
+                resolve(user)
+            })
             .catch((error) => {
                 if(error.code === 'auth/user-not-found') {
                     reject('User not Found')
@@ -116,6 +121,25 @@ class UserServices {
 
     logOutFromFirebase = () => {
         Firebase.auth().signOut().then(() => console.log('signed out'))
+    }
+
+    fillSQLiteDatabaseWithMissingNotesByFetchingFromFirebase = () => {
+        UserNoteServices.getDetailsFromFirebase()
+        .then(firebaseNotes => {
+            SQLiteStorageServices.getDetailsFromSQLiteDatabase()
+            .then(SQLiteNotes => {
+                let NoteKeys = []
+                for(let i = 0; i < SQLiteNotes.rows.length; i++) {
+                    NoteKeys.push(SQLiteNotes.rows.item(i).NoteKey)
+                }
+                let keys = Object.keys(firebaseNotes);
+                keys.map(key => {
+                    if(!NoteKeys.includes(key)){
+                        SQLiteStorageServices.addDetailsInSQLiteDataBaseFromFirebase(key, firebaseNotes[key].notes.title, firebaseNotes[key].notes.note, firebaseNotes[key].notes.isDeleted)
+                    }
+                })
+            })
+        })
     }
 }
 

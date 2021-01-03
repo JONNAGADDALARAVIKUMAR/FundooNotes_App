@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 import { ScrollView, TextInput, View } from 'react-native';
 import {Appbar, Menu, Snackbar} from 'react-native-paper';
 import { strings } from '../Languages/strings';
-import UserNoteServices from '../../services/UserNoteServices';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
-import SQLiteStorageServices from '../../services/SQLiteStorageServices';
+import NoteDataController from '../../services/NoteDataController';
 
 export default class AddNewNotes extends Component {
     constructor(props) {
@@ -31,33 +30,18 @@ export default class AddNewNotes extends Component {
         })
     }
 
-    addNotesToFirebase = async () => {
+    addNotesDatabase = async () => {
         const {onPress} = this.props
 
         if(this.state.title != '' || this.state.note != '') {
             if(this.state.noteKey == undefined) {
-                SQLiteStorageServices.storeDetailsInSQLiteDataBase(this.state.title, this.state.note, false)
-                .then((results) => {
-
-                    UserNoteServices.addNoteToFirebase(results.insertId, this.state.title, this.state.note, false)
-                    .then(() => console.log('Uploaded to Firabase'))
-                    .catch(() => console.log('Failed to upload Firebase'))
-                    this.props.navigation.push('Home', {screen: 'Notes'})
-                })
-                .catch(error => console.log(error)) 
+                NoteDataController.addNote(this.state.title, this.state.note, false)
+                .then(() => {this.props.navigation.push('Home', {screen: 'Notes'})})
+                .catch((error) => console.log(error))
 
             } else if(this.state.noteKey != undefined) {
-                
-                SQLiteStorageServices.updateDetailsInSQLiteDataBase(this.state.noteKey, this.state.title, this.state.note, false)
-                .then(() => {
-                    this.props.navigation.push('Home', {screen: 'Notes', })
-                })
-                .catch(error => console.log(error))
-
-                UserNoteServices.addNoteToFirebase(this.state.noteKey, this.state.title, this.state.note, false)
-                .then(() => {
-                    console.log('Updated to Firebase');
-                })
+                NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false)
+                .then(() => {this.props.navigation.push('Home', {screen: 'Notes', })})
                 .catch(error => console.log(error))
             }
             
@@ -77,15 +61,9 @@ export default class AddNewNotes extends Component {
         this.RBSheet.close()
         if(this.state.title != '' || this.state.note != '') {
 
-            SQLiteStorageServices.updateDetailsInSQLiteDataBase(this.state.noteKey, this.state.title, this.state.note, true)
+            NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, true)
             .then(() => {
                 this.props.navigation.push('Home', {screen: 'Notes',  params : {isNoteDeleted : true, title: this.state.title, note: this.state.note, noteKey: this.state.noteKey}})
-            })
-            .catch(error => console.log(error))
-
-            UserNoteServices.addNoteToFirebase(this.state.noteKey, this.state.title, this.state.note, true)
-            .then(() => {
-                console.log('Updated to Firebase');
             })
             .catch(error => console.log(error))
         } else {
@@ -108,7 +86,7 @@ export default class AddNewNotes extends Component {
                 <Appbar style = {{backgroundColor: 'transparent'}}>
                     <Appbar.Action
                         icon = "keyboard-backspace"
-                        onPress = {this.addNotesToFirebase}
+                        onPress = {() => this.addNotesDatabase()}
                     />
                     <Appbar.Content/>
                     <Appbar.Action 

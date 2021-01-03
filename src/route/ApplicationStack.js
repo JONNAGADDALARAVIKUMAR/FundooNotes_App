@@ -7,6 +7,7 @@ import ForgotPasswordScreen from '../components/ForgotPasswordScreen';
 import { View } from 'react-native';
 import DrawerStack from '../components/Drawer/DrawerStack'; 
 import AddNewNotes from '../components/AddNewNotesScreen';
+import DeletedNoteViewScreen from '../components/DashboardComponents/DeletedNotesOnDecessionScreenComponents/DeletedNoteViewScreen'
 
 
 const Stack = createStackNavigator()
@@ -21,6 +22,7 @@ const ApplicationStack = () => {
                 <Stack.Screen name = 'ForgotPassword' component = {ForgotPasswordScreen}/>
                 <Stack.Screen name = 'Home' component = {DrawerStack}/>
                 <Stack.Screen name = 'AddNewNotes' component = {AddNewNotes}/>
+                <Stack.Screen name = 'DeletedNoteView' component = {DeletedNoteViewScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
         </View>

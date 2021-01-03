@@ -11,20 +11,26 @@ export default class ToolBar extends Component {
         this.state = {
             listView: true,
             showProfile: false,
-            photoURL: ''
+            photoURL: this.props.photoURL
         }
     }
 
     componentDidMount = async () => {
         await UserServices.getDetails()
         .then(async details => {
-            await this.setState({
-                photoURL : details.imageURL
-            })
+            if(details.imageURL != undefined) {
+                await this.setState({
+                    photoURL : details.imageURL
+                })
+            } else {
+                await this.setState({
+                    photoURL : ''
+                })
+            }
         })
-        .catch(error => {
+        .catch(async error => {
             if(error.code == 'storage/object-not-found') {
-                this.setState({
+                await this.setState({
                     photoURL : ''
                 })
             }

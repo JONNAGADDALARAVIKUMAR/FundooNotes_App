@@ -36,7 +36,7 @@ export default class ToolBar extends Component {
                 <Appbar.Action
                     style = {DashBoardScreenStyles.Add_Notes_Icon_Style}
                     icon = "plus"
-                    onPress={this.handlePlusButton}
+                    onPress = {this.handlePlusButton}
                 />
             </Appbar>
         )
