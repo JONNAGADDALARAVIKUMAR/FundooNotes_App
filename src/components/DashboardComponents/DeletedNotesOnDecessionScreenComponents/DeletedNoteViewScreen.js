@@ -52,6 +52,10 @@ export default class DeletedNoteViewScreen extends Component {
         })   
     }
 
+    navigateTODeletedNotesScreen = () => {
+        this.props.navigation.push('Home', {screen: 'Deleted'})
+    }
+
     render() {
         return(
             <Provider>
@@ -59,7 +63,7 @@ export default class DeletedNoteViewScreen extends Component {
                 <Appbar style = {{backgroundColor: 'transparent'}}>
                     <Appbar.Action
                         icon = 'keyboard-backspace'
-                        onPress = {() => console.log('pressed')}
+                        onPress = {this.navigateTODeletedNotesScreen}
                     />
                 </Appbar>
                 <ScrollView>

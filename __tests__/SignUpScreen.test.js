@@ -137,7 +137,7 @@ describe('test SignUp Screen', () => {
             passwordValidation: true,
             firstName: 'Ravi',
             lastName: 'Kumar',
-            email: 'ravikumarjit583@gmail.com',
+            email: 'ravikumarj4444@gmail.com',
             password: 'Ravi@322',
             confirmPassword: 'Ravi@322',
         })

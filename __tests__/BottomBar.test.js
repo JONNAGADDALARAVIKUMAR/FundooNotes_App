@@ -24,6 +24,6 @@ describe('test BottomBar Screen', () => {
         const instance = component.instance();
         await instance.handlePlusButton();
         expect(onPressEvent).toHaveBeenCalled();
-        expect(navigation.push).toBeCalledWith('AddNewNotes')
+        expect(navigation.push).toBeCalledWith('AddNewNotes', {"note": "", "noteKey": undefined, "title": ""})
     })
 })

@@ -104,7 +104,6 @@ export default class App extends Component {
                     }
                     console.log(error)
                 })
-                //this.props.navigation.push('Home', {screen: 'Notes'})
             }
         })
     }

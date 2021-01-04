@@ -30,7 +30,7 @@ export default class AddNewNotes extends Component {
         })
     }
 
-    addNotesDatabase = async () => {
+    addNotesToDatabase = async () => {
         const {onPress} = this.props
 
         if(this.state.title != '' || this.state.note != '') {
@@ -41,7 +41,7 @@ export default class AddNewNotes extends Component {
 
             } else if(this.state.noteKey != undefined) {
                 NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false)
-                .then(() => {this.props.navigation.push('Home', {screen: 'Notes', })})
+                .then(() => {this.props.navigation.push('Home', {screen: 'Notes'})})
                 .catch(error => console.log(error))
             }
             
@@ -86,7 +86,7 @@ export default class AddNewNotes extends Component {
                 <Appbar style = {{backgroundColor: 'transparent'}}>
                     <Appbar.Action
                         icon = "keyboard-backspace"
-                        onPress = {() => this.addNotesDatabase()}
+                        onPress = {this.addNotesToDatabase}
                     />
                     <Appbar.Content/>
                     <Appbar.Action 

@@ -19,20 +19,22 @@ describe('test NotesView Class', () => {
             expect(instance.state.isEmpty).toBe(false)
         })
     })
-    it('test handleDetailsToUpdate method on press notes should navigate to AddNewNotes screen', async () => {
-        const onPressEvent = jest.fn();
-        const navigation = { push : jest.fn() }
-        const component = shallow(<NotesView onPress = {onPressEvent} navigation = {navigation}/>)
-        const instance = component.instance();
-        UserNoteServices.getDetailsFromFirebase()
-        .then(async data => {
-            let notes = data ? data : {}
-            instance.setState({
-                notes: notes
-            })
-        })
-        instance.handleDetailsToUpdate('-MPeP98ZrMON8GQ_Bv9t');
-        expect(onPressEvent).toHaveBeenCalled();
-        expect(navigation.push).toHaveBeenCalled('AddNewNotes')
-    })
+    // it('test handleDetailsToUpdateSQLite method on press notes should navigate to AddNewNotes screen', async () => {
+    //     const onPressEvent = jest.fn();
+    //     const navigation = { navigation : jest.fn() }
+    //     const component = shallow(<NotesView onPress = {onPressEvent} navigation = {navigation}/>)
+    //     const instance = component.instance();
+    //     instance.handleDetailsToUpdateSQLite('123', 'Ravi', false)
+    //     expect(onPressEvent).toHaveBeenCalled();
+    //     expect(navigation.push).toHaveBeenCalledWith('AddNewNotes')
+    // })
+    // it('test handleDeletedNotesToUpdate method on press notes should navigate to DeletedNoteView screen', async () => {
+    //     const onPressEvent = jest.fn();
+    //     const navigation = { navigation : jest.fn() }
+    //     const component = shallow(<NotesView onPress = {onPressEvent} navigation = {navigation}/>)
+    //     const instance = component.instance();
+    //     instance.handleDeletedNotesToUpdate('123', 'Ravi', false)
+    //     expect(onPressEvent).toHaveBeenCalled();
+    //     expect(navigation.push).toHaveBeenCalledWith('DeletedNoteView')
+    // })
 })

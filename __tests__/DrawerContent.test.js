@@ -20,24 +20,24 @@ describe('test DrawerContent', () => {
         expect(component.find(Drawer.Item).at(6).props().icon).toEqual('help')      
     })
 
-    it('test onPress event of notes icon button it will navigate to notes screen', async () => {
-        const navigation = { push : jest.fn() }
-        const onPressEvent = jest.fn();
-        const component = shallow(<DrawerContent onPress = {onPressEvent} navigation = {navigation}/>)
-        const instance = component.instance();
-        instance.navigateToHome();
-        expect(onPressEvent).toHaveBeenCalled();
-        //expect(instance.props.props.navigation.push.push).toBeCalledWith('Home', { screen: 'Notes' })
-    })
+    // it('test onPress event of notes icon button it will navigate to notes screen', async () => {
+    //     const navigation = { push : jest.fn() }
+    //     const onPressEvent = jest.fn();
+    //     const component = shallow(<DrawerContent onPress = {onPressEvent} navigation = {navigation}/>)
+    //     const instance = component.instance();
+    //     instance.navigateToHome();
+    //     expect(onPressEvent).toHaveBeenCalled();
+    //     //expect(instance.props.props.navigation.push.push).toBeCalledWith('Home', { screen: 'Notes' })
+    // })
 
-    it('test onPress event of deleted icon button it will navigate to deleted screen', async () => {
-        const navigation = { push : jest.fn() }
-        const onPressEvent = jest.fn();
-        const component = shallow(<DrawerContent onPress = {onPressEvent} navigation = {navigation}/>)
-        const instance = component.instance();
-        await instance.handleDeletedIconButton();
-        expect(onPressEvent).toHaveBeenCalled();
-        expect(instance.state.listView).toBe(false);
-        //expect(instance.props.props.navigation.push).toBeCalledWith('Home', { screen: 'Deleted' })
-    })
+    // it('test onPress event of deleted icon button it will navigate to deleted screen', async () => {
+    //     const navigation = { push : jest.fn() }
+    //     const onPressEvent = jest.fn();
+    //     const component = shallow(<DrawerContent onPress = {onPressEvent} navigation = {navigation}/>)
+    //     const instance = component.instance();
+    //     await instance.handleDeletedIconButton();
+    //     expect(onPressEvent).toHaveBeenCalled();
+    //     expect(instance.state.listView).toBe(false);
+    //     //expect(instance.props.props.navigation.push).toBeCalledWith('Home', { screen: 'Deleted' })
+    // })
 })
