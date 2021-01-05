@@ -35,6 +35,10 @@ class NotesView extends Component {
     }
 
     componentDidMount = async () => {
+
+        const credential = await KeyChain.getGenericPassword();
+        const UserCredential = JSON.parse(credential.password);
+        await this.props.storeUserId(UserCredential.user.uid)
         
         await SQLiteStorageServices.getDetailsFromSQLiteDatabase()
         .then(async (results) => {
@@ -55,10 +59,6 @@ class NotesView extends Component {
                 })
             }
         })
-
-        const credential = await KeyChain.getGenericPassword();
-        const UserCredential = JSON.parse(credential.password);
-        this.props.storeUserId(UserCredential.user.uid)
     }
 
     handleDetailsToUpdateSQLite = (noteKey, Title, Notes) => {

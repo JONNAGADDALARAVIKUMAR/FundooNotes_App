@@ -4,7 +4,8 @@ import { Appbar } from 'react-native-paper';
 import CreateNewLabelStyles from '../../../styles/CreateNewLabelStyles';
 import UserNoteServices from '../../../../services/UserNoteServices';
 import { connect } from 'react-redux';
-import {storeLabels} from '../../redux/actions/CreateNewLabelAction';
+import {storeLabelContent, storeNoteKeys} from '../../redux/actions/CreateNewLabelAction';
+import ShowLabels from './ShowLabels'
 
 
 class CreateLabelScreen extends Component {
@@ -13,43 +14,19 @@ class CreateLabelScreen extends Component {
         this.state = {
             createNewLabelTextboxActive: true,
             enteredLabel: '',
-            labels: [],
-            activeLabel: '',
-            labelAutoFocus: false,
-            renamedLabel: ''
+            labelContent: [],
+            labelNoteKeys: []
         }
     }
 
     componentDidMount = async () => {
-        this.updateLabels()
-    }
-
-    updateLabels = async () => {
-        await UserNoteServices.getLabelsFromFirebase(this.props.userId)
-        .then(async (labelContent) => {
-            this.setState({
-                labels: Object.keys(labelContent)
-            })
-            await this.props.storeLabels(this.state.labels)
+        await this.setState({
+            labelContent: this.props.labelContent,
         })
-        .catch(error => console.log(error))
     }
 
     navigateToPreviousScreen = () => {
-        this.props.navigation.push('Home', {screen: 'Notes'})
-    }
-
-    createLabel = async () => {
-        await this.setState({
-            createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive
-        })
-        if(this.state.enteredLabel != '') {
-            await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel)
-            this.setState({
-                enteredLabel: ''
-            })
-            this.updateLabels()
-        }
+        this.props.navigation.goBack()
     }
 
     handleText = (text) => {
@@ -69,31 +46,36 @@ class CreateLabelScreen extends Component {
     changeToCreateLabel = () => {
         this.setState({
             createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive,
-            activeLabel: ''
         })
     }
 
-    editLabel = (label) => {
-        this.setState({
-            activeLabel: label,
-            createNewLabelTextboxActive: false,
-            labelAutoFocus: true
-        })
-    }
-
-    handleLabelTexttoRename = async (renamedLabel) => {
-        let tempArray = this.state.labels
-        for(let i = 0; i < this.state.labels.length; i++) {
-            if(this.state.labels[i] == this.state.activeLabel)
-               tempArray[i] = renamedLabel
-            this.setState({
-                labels: tempArray
+    updateLabels = async () => {
+        await UserNoteServices.getLabelsFromFirebase()
+            .then(async (labelContent) => {
+                let tempKeys = Object.keys(labelContent)
+                let labels = []
+                tempKeys.map(key => {
+                    labels.push(labelContent[key].labelName)
+                })
+                await this.setState({
+                    labelNoteKeys: tempKeys,
+                    labelContent: labelContent,
+                    enteredLabel: ''
+                })
+                await this.props.storeLabelContent(this.state.labelContent)
+                await this.props.storeNoteKeys(this.state.labelNoteKeys)
             })
+            .catch(error => console.log(error))
+    }
+
+    createLabel = async () => {
+        await this.setState({
+            createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive
+        })
+        if(this.state.enteredLabel != '') {
+            await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel)
+            this.updateLabels()
         }
-        // await this.setState({
-        //     renamedLabel: renamedLabel,
-        // })
-        console.log(renamedLabel);
     }
 
     render() {
@@ -135,26 +117,20 @@ class CreateLabelScreen extends Component {
                         onPress= {(this.state.createNewLabelTextboxActive) ? this.createLabel : null}
                     />
                 </Appbar>
-                {this.props.labels.map(label => (
-                    <Appbar style = {(this.state.activeLabel == label) ? CreateNewLabelStyles.appbar_Style_Active : CreateNewLabelStyles.appbar_Style} key = {label}>
-                        <Appbar.Action
-                        icon = {(this.state.activeLabel == label) ? "delete-outline" : "label-outline"}/>
-                        {(this.state.activeLabel == label) 
-                        ? (<TextInput 
-                            style = {{marginLeft: 30}}
-                            value = {label}
-                            autoFocus = {this.state.labelAutoFocus}
-                            onChangeText = {this.handleLabelTexttoRename}/>) 
-                        : (<TouchableOpacity 
-                            onPress = {() => this.editLabel(label)} 
-                            style = {{width: '60%', marginLeft: 20}}>
-                                <Text 
-                                    style = {{color: 'black'}}>
-                                        {label}
-                                </Text>
-                    </TouchableOpacity>)}
-                    </Appbar>
-                ))}
+
+                    <View>
+                        {
+                            this.props.labelNoteKeys.length > 0 ?
+                            this.props.labelNoteKeys.map((key, index) => (
+                                <React.Fragment key = {key}>
+                                    <ShowLabels 
+                                        labelKey = {key} 
+                                        index = {index}
+                                        updateLabels = {this.updateLabels}/>
+                                </React.Fragment>
+                            ))
+                        : null}
+                    </View>
             </View>
         )
     }
@@ -163,13 +139,15 @@ class CreateLabelScreen extends Component {
 const mapStateToProps = state => {
     return {
         userId : state.createLabelReducer.userId,
-        labels : state.createLabelReducer.labels
+        labelContent : state.createLabelReducer.labelContent,
+        labelNoteKeys : state.createLabelReducer.labelNoteKeys
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        storeLabels : (labels) => dispatch(storeLabels(labels))
+        storeLabelContent : (labelContent) => dispatch(storeLabelContent(labelContent)),
+        storeNoteKeys: (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys))
     }
 }
 

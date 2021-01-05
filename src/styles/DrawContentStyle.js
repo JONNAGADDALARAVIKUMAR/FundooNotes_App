@@ -10,6 +10,6 @@ const DrawContentStyles = StyleSheet.create({
     drawer_Section_style: {
         borderBottomWidth: 1, 
         borderBottomColor: 'lightgray'
-    }
+    },
 })
 export default DrawContentStyles;
