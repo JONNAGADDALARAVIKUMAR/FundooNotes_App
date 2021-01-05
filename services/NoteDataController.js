@@ -9,7 +9,9 @@ class NoteDataController {
             SQLiteStorageServices.storeDetailsInSQLiteDataBase(noteKey, title, note, deletedStatus)
             .then((results) => {
                 UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus)
-                .then(() => console.log('Uploaded to Firabase'))
+                .then(() => {
+                    //console.log('Uploaded to Firabase')
+                })
                 .catch((error) => console.log(error))
                 resolve(results)
             })

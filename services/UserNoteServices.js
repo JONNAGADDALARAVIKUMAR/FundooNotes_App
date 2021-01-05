@@ -58,6 +58,22 @@ class UserNoteServices {
                 .catch((error) => reject(error))
             })
         }
+
+        addLabelToTheFirebase = (userId, labelName) => {
+            Firebase.database().ref('Labels/' + userId + '/' + labelName).set({
+                Empty: 'Nothing to Show'
+            })
+        }
+
+        getLabelsFromFirebase = (userId) => {
+            return new Promise((resolve, reject) => {
+                Firebase.database().ref('Labels/' + userId).once('value').then(async snapShot => {
+                    labels = snapShot.val() ? snapShot.val() : {}
+                    resolve(labels)
+                })
+                .catch(error => reject(error))
+            })
+        }
     }
 
 export default new UserNoteServices();

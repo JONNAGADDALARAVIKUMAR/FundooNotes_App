@@ -1,0 +1,2 @@
+export const STORE_USERID = 'STORE_USERID';
+export const STORE_LABELS = 'STORE_LABELS';

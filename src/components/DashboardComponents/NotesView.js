@@ -5,8 +5,11 @@ import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import { Card, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import SQLiteStorageServices from '../../../services/SQLiteStorageServices';
+import {storeUserID} from '../redux/actions/CreateNewLabelAction';
+import { connect } from 'react-redux';
+import KeyChain from 'react-native-keychain';
 
-export default class extends Component {
+class NotesView extends Component {
     constructor() {
         super();
 
@@ -20,9 +23,8 @@ export default class extends Component {
             height: Dimensions.get('window').height,
             width: Dimensions.get('window').width,
             orientation: isPortrait() ? 'portrait' : 'landscape',
-            notes: '',
-            SQLiteNotes: [],
-            isEmpty: true
+            notes: [],
+            isEmpty: true,
         };
     
         Dimensions.addEventListener('change', () => {
@@ -41,17 +43,22 @@ export default class extends Component {
                 for (let i = 0; i < results.rows.length; ++i)
                 temp.push(results.rows.item(i));
                 await this.setState({
-                    SQLiteNotes : temp
+                    notes : temp
                 })
-            } 
-            let SQLiteNotes = this.state.SQLiteNotes
-            SQLiteNotes.map(async (notes) => {
-                (SQLiteNotes.length > 0 && notes.isDeleted == this.props.status)
-                ? await this.setState({
-                    isEmpty: false
-                }) : null
-            })
+
+                temp.map(async (notes) => {
+                    (notes.isDeleted == this.props.status)
+                    ? this.setState({
+                        isEmpty: false
+                    })
+                    : null
+                })
+            }
         })
+
+        const credential = await KeyChain.getGenericPassword();
+        const UserCredential = JSON.parse(credential.password);
+        this.props.storeUserId(UserCredential.user.uid)
     }
 
     handleDetailsToUpdateSQLite = (noteKey, Title, Notes) => {
@@ -75,8 +82,8 @@ export default class extends Component {
 
                 <ScrollView>
                     <View style = {NoteViewStyles.list_Style}>
-                        {this.state.SQLiteNotes.length > 0 ?
-                        this.state.SQLiteNotes.map(val => (
+                        {this.state.notes.length > 0 ?
+                        this.state.notes.map(val => (
                             <React.Fragment key = {val.NoteKey}>
                                 {val.isDeleted == this.props.status ? (
                                     <Card
@@ -111,3 +118,17 @@ export default class extends Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        userId : state.createLabelReducer.userId,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        storeUserId : (userId) => dispatch(storeUserID(userId)),
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(NotesView)

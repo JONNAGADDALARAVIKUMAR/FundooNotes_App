@@ -75,7 +75,7 @@ export default class ToolBar extends Component {
                         </Text>
                     </TouchableOpacity>
                     <Appbar.Action 
-                        icon = {(this.props.listView) ? 'view-grid-outline' : 'view-agenda-outline'}
+                        icon = {(this.props.listView) ? 'view-agenda-outline' : 'view-grid-outline'}
                         onPress={this.props.onPress}
                     />
                     <TouchableOpacity 
