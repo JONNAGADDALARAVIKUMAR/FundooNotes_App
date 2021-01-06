@@ -5,6 +5,7 @@ const LabelAppBarStyle = StyleSheet.create({
         backgroundColor : 'transparent', 
         paddingLeft : 20, 
         fontSize : 17,
+        width : '65%',
     },
 
     textinput_error_style : {
@@ -12,6 +13,7 @@ const LabelAppBarStyle = StyleSheet.create({
         paddingLeft : 20, 
         fontSize : 17,
         paddingBottom : 0,
+        width : '65%',
     },
 
     text_style : {
@@ -24,6 +26,16 @@ const LabelAppBarStyle = StyleSheet.create({
         fontSize : 12, 
         color : 'red', 
         paddingLeft : 20
+    },
+    active_Appbar_Style: {
+        backgroundColor : 'transparent', 
+        borderTopWidth: 0.5,
+        borderBottomWidth: 0.5,
+        elevation: 0
+    },
+    appbar_Style: {
+        backgroundColor: 'transparent',
+        elevation: 0
     }
 })
 

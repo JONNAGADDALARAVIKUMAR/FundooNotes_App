@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import {TextInput, Text, TouchableWithoutFeedback, View} from 'react-native';
+import {TextInput, Text, TouchableWithoutFeedback, View, TouchableOpacity} from 'react-native';
 import LabelAppBarStyle from '../../../styles/LabelAppbarStyle';
 import {Appbar} from 'react-native-paper';
-import {storeLabelContent} from '../../redux/actions/CreateNewLabelAction'
+import {storeLabelContent, storeNoteKeys} from '../../../redux/actions/CreateNewLabelAction'
 import { connect } from 'react-redux';
 import UserNoteServices from '../../../../services/UserNoteServices'
 
@@ -11,32 +11,42 @@ class showLabel extends Component {
         super(props)
         this.state = {
             edit : false,
+            editLabel : '',
             editTextInput : this.props.labelContent[this.props.labelKey].labelName,
             emptyMsg : false,
             errorMsg : false,
+            noteKeys: []
         }
     }
 
     handleCheckButton = async () => {
         if(!this.state.errorMsg && !this.state.emptyMsg) {
+            this.setState({
+                editLabel: ''
+            })
             UserNoteServices.updateLabelInFirebase(this.props.userId, this.props.labelKey, this.state.editTextInput)
                 .then(() => {
                     UserNoteServices.getLabelsFromFirebase()
                     .then(async data => {
                         let labels = data ? data : {}
-                        this.props.storeLabelContent(labels)
-                        this.setState({
-                            edit : false
+                        let tempKeys = []
+                        tempKeys = Object.keys(labels)
+                        await this.setState({
+                            edit : false,
+                            noteKeys : tempKeys,
                         })
+                        await this.props.storeLabelContent(labels)
+                        await this.props.storeNoteKeys(this.state.noteKeys)
                     }) 
                 })
                 .catch(error => console.log(error))
         }
     }
 
-    handleEditButton = () => {
+    handleEditButton = (key) => {
         this.setState({
-            edit : true
+            editLabel : this.props.labelContent[key].labelName,
+            edit: true
         })
     }
 
@@ -76,13 +86,17 @@ class showLabel extends Component {
     handleDeleteButton = async () => {
         await UserNoteServices.deleteLabelInFirebase(this.props.userId, this.props.labelKey)
             .then(async () => {
-                this.props.updateLabels
                 await UserNoteServices.getLabelsFromFirebase()
                     .then(async data => {
                         let labels = data ? data : {}
-                        await this.props.storeLabelContent(labels)
-                        this.setState({
-                            edit : false
+                        let tempKeys = []
+                        tempKeys = Object.keys(labels)
+                        await this.setState({
+                            edit : false,
+                            noteKeys: tempKeys
+                        }, () => {
+                            this.props.storeNoteKeys(this.state.noteKeys)
+                            this.props.storeLabelContent(labels)
                         })
                     }) 
             })
@@ -92,25 +106,31 @@ class showLabel extends Component {
 
     render() {
         return(
-            <Appbar style = {{backgroundColor : 'transparent'}}>
+            <Appbar style = {(this.state.editLabel == this.state.editTextInput) ? LabelAppBarStyle.active_Appbar_Style : LabelAppBarStyle.appbar_Style}>
                 {
-                    (this.state.edit) ?
+                    (this.state.editLabel == this.state.editTextInput) ?
+                    <TouchableOpacity onPress = {this.handleDeleteButton}>
                     <Appbar.Action 
                         icon = 'delete-outline'
                         style = {{marginLeft : 10}}
-                        onPress = {this.handleDeleteButton}/>
+                        />
+                    </TouchableOpacity>
                     :
+                    <TouchableOpacity onPress = {() => this.handleEditButton(this.props.labelKey)}>
                     <Appbar.Action 
                         icon = 'label-outline'
                         style = {{marginLeft : 10}}/> 
+                    </TouchableOpacity>
                 }
                 {
-                    (this.state.edit)?
-                    <View style = {{flexDirection :'column', width : '65%'}}>
+                    (this.state.editLabel == this.state.editTextInput)?
+                    <View style = {{flexDirection :'column', 
+                                    width : '65%'}}>
                         <TextInput
                             style = {(this.state.errorMsg || this.state.emptyMsg) ? LabelAppBarStyle.textinput_error_style : LabelAppBarStyle.textinput_style}
                             autoFocus = {true}
                             onChangeText = {(text) => this.handleEditTextInput(text, this.props.labelKey)}
+                            //onEndEditing = {this.handleCheckButton}
                             value = {this.state.editTextInput}
                         />
                         {
@@ -128,11 +148,11 @@ class showLabel extends Component {
                         }
                     </View>
                     :
-                    <TouchableWithoutFeedback onPress = {this.handleEditButton}>
+                    <TouchableWithoutFeedback onPress = {() => this.handleEditButton(this.props.labelKey)}>
                         <View style = {{width : '65%'}}>
                             <Text
                                 style = {LabelAppBarStyle.text_style}>
-                                {this.props.labelContent[this.props.labelKey].labelName}
+                                {this.state.editTextInput}
                             </Text>
                         </View>
                     </TouchableWithoutFeedback>
@@ -140,13 +160,16 @@ class showLabel extends Component {
                 <Appbar.Content/>
                 {
                     (this.state.edit) ?
-                    <Appbar.Action 
+                    <TouchableOpacity onPress = {this.handleCheckButton}>
+                        <Appbar.Action 
                         icon = 'check'
-                        onPress = {this.handleCheckButton}/>
-                    :
-                    <Appbar.Action 
+                        />
+                    </TouchableOpacity>
+                    : <TouchableOpacity onPress = {() => this.handleEditButton(this.props.labelKey)}>
+                        <Appbar.Action 
                         icon = 'pencil'
-                        onPress = {this.handleEditButton}/>
+                        />
+                    </TouchableOpacity>
                 }
             </Appbar>
         )

@@ -6,14 +6,15 @@ import DrawContentStyles from '../../styles/DrawContentStyle';
 import {strings} from '../../Languages/strings'
 import { connect } from 'react-redux';
 import UserNoteServices from '../../../services/UserNoteServices';
-import {storeLabelContent, storeNoteKeys, storeLabels} from '../redux/actions/CreateNewLabelAction'
+import {storeLabelContent, storeNoteKeys, storeLabels} from '../../redux/actions/CreateNewLabelAction'
 
 class DrawerContent extends Component {
     constructor(props) {
         super(props)
         this.state = {
             labelsContent: [],
-            labelNoteKeys: []
+            labelNoteKeys: [],
+            labels: []
         }
     }
 
@@ -27,11 +28,12 @@ class DrawerContent extends Component {
              })
             await this.setState({
                 labelNoteKeys: tempKeys,
-                labelsContent: labelContent
+                labelsContent: labelContent,
+                labels: labels
             })
             await this.props.storeLabelContent(this.state.labelsContent)
             await this.props.storeNoteKeys(this.state.labelNoteKeys)
-            await this.props.storeLabels(this.state.labelNoteKeys)
+            await this.props.storeLabels(this.state.labels)
         })
         .catch(error => console.log(error))
     }

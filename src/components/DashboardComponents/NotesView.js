@@ -5,7 +5,7 @@ import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import { Card, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import SQLiteStorageServices from '../../../services/SQLiteStorageServices';
-import {storeUserID} from '../redux/actions/CreateNewLabelAction';
+import {storeUserID} from '../../redux/actions/CreateNewLabelAction';
 import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
 

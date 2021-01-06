@@ -4,8 +4,9 @@ import { Appbar } from 'react-native-paper';
 import CreateNewLabelStyles from '../../../styles/CreateNewLabelStyles';
 import UserNoteServices from '../../../../services/UserNoteServices';
 import { connect } from 'react-redux';
-import {storeLabelContent, storeNoteKeys} from '../../redux/actions/CreateNewLabelAction';
+import {storeLabelContent, storeNoteKeys} from '../../../redux/actions/CreateNewLabelAction';
 import ShowLabels from './ShowLabels'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 class CreateLabelScreen extends Component {
@@ -15,7 +16,8 @@ class CreateLabelScreen extends Component {
             createNewLabelTextboxActive: true,
             enteredLabel: '',
             labelContent: [],
-            labelNoteKeys: []
+            labelNoteKeys: [],
+            labelExistErrorMessage: false
         }
     }
 
@@ -30,6 +32,19 @@ class CreateLabelScreen extends Component {
     }
 
     handleText = (text) => {
+        let labels = []
+        this.props.labels.map(label => {
+            labels.push(label.toLowerCase())
+        })
+        if(labels.includes(text.toLowerCase())) {
+            this.setState({
+                labelExistErrorMessage: true
+            })
+        } else {
+            this.setState({
+                labelExistErrorMessage: false
+            })
+        }
         this.setState({
             enteredLabel: text
         })
@@ -60,7 +75,8 @@ class CreateLabelScreen extends Component {
                 await this.setState({
                     labelNoteKeys: tempKeys,
                     labelContent: labelContent,
-                    enteredLabel: ''
+                    enteredLabel: '',
+                    labelExistErrorMessage: false
                 })
                 await this.props.storeLabelContent(this.state.labelContent)
                 await this.props.storeNoteKeys(this.state.labelNoteKeys)
@@ -69,13 +85,13 @@ class CreateLabelScreen extends Component {
     }
 
     createLabel = async () => {
-        await this.setState({
-            createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive
-        })
-        if(this.state.enteredLabel != '') {
+        if(this.state.enteredLabel != '' && !this.state.labelExistErrorMessage) {
             await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel)
-            this.updateLabels()
         }
+        this.setState({
+            createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive,
+        })
+        this.updateLabels()
     }
 
     render() {
@@ -97,27 +113,38 @@ class CreateLabelScreen extends Component {
                         style = {{marginRight: '10%'}}
                     />
                     {this.state.createNewLabelTextboxActive ? 
+                    <View style = {{flexDirection :'column', width : '65%'}}>
                     <TextInput
+                        style = {{ backgroundColor : 'transparent', 
+                                    paddingBottom : 0,
+                        }}
                         placeholder = {'Create new Label'}
-                        style = {{width: '60%'}}
                         autoFocus = {this.state.createNewLabelTextboxActive}
                         onChangeText = {this.handleText}
+                        onEndEditing = {this.createLabel}
                         />
+                        {this.state.labelExistErrorMessage ?
+                            (<Text style = {{ fontSize : 12, 
+                                                color : 'red', 
+                                                paddingLeft : 10}}>
+                                Label Already exist
+                            </Text>)
+                            : null}
+                        </View>
                     : <TouchableOpacity 
                         onPress = {this.changeToCreateLabel} 
-                        style = {{width: '60%'}}>
+                        style = {{width: '65%'}}>
                             <Text 
                                 style = {{color: 'gray'}}>
                                     Create new Label
                             </Text>
                     </TouchableOpacity>}
-
                     <Appbar.Action
                         icon = {(this.state.createNewLabelTextboxActive) ? "check" : undefined}
                         onPress= {(this.state.createNewLabelTextboxActive) ? this.createLabel : null}
                     />
                 </Appbar>
-
+                    <ScrollView>
                     <View>
                         {
                             this.props.labelNoteKeys.length > 0 ?
@@ -125,12 +152,12 @@ class CreateLabelScreen extends Component {
                                 <React.Fragment key = {key}>
                                     <ShowLabels 
                                         labelKey = {key} 
-                                        index = {index}
-                                        updateLabels = {this.updateLabels}/>
+                                        index = {index}/>
                                 </React.Fragment>
                             ))
                         : null}
                     </View>
+                    </ScrollView>
             </View>
         )
     }
@@ -140,7 +167,8 @@ const mapStateToProps = state => {
     return {
         userId : state.createLabelReducer.userId,
         labelContent : state.createLabelReducer.labelContent,
-        labelNoteKeys : state.createLabelReducer.labelNoteKeys
+        labelNoteKeys : state.createLabelReducer.labelNoteKeys,
+        labels: state.createLabelReducer.labels
     }
 }
 
