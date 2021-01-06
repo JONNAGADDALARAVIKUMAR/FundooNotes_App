@@ -1,9 +1,21 @@
-import { STORE_USERID, STORE_LABEL_CONTENT, STORE_LABELS, NOTE_KEYS } from '../actions/CreateNewLabelType'
+import { STORE_USERID, 
+        STORE_LABEL_CONTENT, 
+        STORE_LABELS, 
+        NOTE_KEYS, 
+        SHOW_DELETE_DAILOG, 
+        DELETE_LABEL_KEY, 
+        SELECTED_LABEL_KEY, 
+        NOTES_ARCHIVED} from '../actions/CreateNewLabelType'
+
 const initialState = {
     userId : '',
     labelContent: [],
     labelNoteKeys: [],
-    labels: []
+    labels: [],
+    showDailog: false,
+    deleteLabelKey: null,
+    selectedLabelKey: null,
+    notesArchived: false
 }
 
 const CreateNewLabelReducer = (state = initialState, action) => {
@@ -27,6 +39,26 @@ const CreateNewLabelReducer = (state = initialState, action) => {
             return {
                 ...state,
                 labels : action.payload
+            }
+        case SHOW_DELETE_DAILOG:
+            return {
+                ...state,
+                showDailog : action.payload
+            }
+        case DELETE_LABEL_KEY:
+            return {
+                ...state,
+                deleteLabelKey : action.payload
+            }
+        case SELECTED_LABEL_KEY:
+            return {
+                ...state,
+                selectedLabelKey : action.payload
+            }
+        case NOTES_ARCHIVED:
+            return {
+                ...state,
+                notesArchived : action.payload
             }
         default:
             return state;

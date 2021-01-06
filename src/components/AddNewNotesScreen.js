@@ -1,20 +1,23 @@
 import React, { Component } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
-import {Appbar, Menu, Snackbar} from 'react-native-paper';
+import { ScrollView, Text, TextInput, View } from 'react-native';
+import {Appbar, Button, Menu, Snackbar} from 'react-native-paper';
 import { strings } from '../Languages/strings';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NoteDataController from '../../services/NoteDataController';
+import {connect} from 'react-redux';
+import {storeNotesArchivedStatus} from '../redux/actions/CreateNewLabelAction';
+import AddNewNotesStyles from '../styles/AddNewNotesStyles'
 
-export default class AddNewNotes extends Component {
+class AddNewNotes extends Component {
     constructor(props) {
         super(props);
-        
         this.state = {
             title: this.props.route.params.title,
             note: this.props.route.params.note,
             noteKey: this.props.route.params.noteKey,
-            isNoteNotAddedDeleted: false 
+            isNoteNotAddedDeleted: false,
+            archived: false
         }
     }
 
@@ -35,7 +38,7 @@ export default class AddNewNotes extends Component {
 
         if(this.state.title != '' || this.state.note != '') {
             if(this.state.noteKey == undefined) {
-                NoteDataController.addNote(this.state.title, this.state.note, false)
+                NoteDataController.addNote(this.state.title, this.state.note, false, this.props.selectedLabelKey, this.props.notesArchived)
                 .then(() => {this.props.navigation.push('Home', {screen: 'Notes'})})
                 .catch((error) => console.log(error))
 
@@ -55,6 +58,10 @@ export default class AddNewNotes extends Component {
         const {onPress} = this.props
         this.RBSheet.open()
         //onPress()
+    }
+
+    handleArchiveIcon = () => {
+        this.props.storeNotesArchivedStatus(!this.props.notesArchived)
     }
 
     handleDeleteButton = () => {
@@ -79,6 +86,11 @@ export default class AddNewNotes extends Component {
         })
     }
 
+    handleLabelsIcon = () => {
+        this.RBSheet.close()
+        this.props.navigation.push('ChooseLabel')
+    }
+
     render() {
         return(
             <View style = {{backgroundColor: '#f5dcef', height: '100%'}}>
@@ -96,7 +108,8 @@ export default class AddNewNotes extends Component {
                         icon = "bell-plus-outline"
                     />
                     <Appbar.Action 
-                        icon = "archive-arrow-down-outline"
+                        onPress = {this.handleArchiveIcon}
+                        icon = {(this.props.notesArchived) ? "archive-arrow-up-outline" : "archive-arrow-down-outline"}
                     />
                 </Appbar>
                 </View>
@@ -115,6 +128,11 @@ export default class AddNewNotes extends Component {
                         value = {this.state.note}
                         onChangeText = {this.handleNote}
                     />
+                    {(this.props.selectedLabelKey != null) ? 
+                        (<Button style = {AddNewNotesStyles.Label_Button_Style}>
+                            {this.props.labelContent[this.props.selectedLabelKey].labelName}
+                        </Button>) : null }
+                    
                 </ScrollView>
                 <View>
                     <Appbar style = {{justifyContent: 'space-around', backgroundColor: 'transparent'}}>
@@ -157,7 +175,7 @@ export default class AddNewNotes extends Component {
                                 <Icon name = "person-add-outline" size = {size} color = {color} />
                                 )} 
                             title = "Collaborator"/>
-                        <Menu.Item icon = "label-outline" title = "Labels" />    
+                        <Menu.Item icon = "label-outline" title = "Labels" onPress = {this.handleLabelsIcon}/>    
                     </View>
                 </RBSheet>
 
@@ -172,3 +190,20 @@ export default class AddNewNotes extends Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        userId : state.createLabelReducer.userId,
+        labelContent : state.createLabelReducer.labelContent,
+        selectedLabelKey : state.createLabelReducer.selectedLabelKey,
+        notesArchived : state.createLabelReducer.notesArchived
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        storeNotesArchivedStatus : (notesArchived) => dispatch(storeNotesArchivedStatus(notesArchived)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddNewNotes)

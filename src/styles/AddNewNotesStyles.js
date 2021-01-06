@@ -16,6 +16,14 @@ const AddNewNotesScreenStyles = StyleSheet.create({
     bottomBar_Style: {
         justifyContent: 'space-around', 
         backgroundColor: 'transparent'
+    },
+    Label_Button_Style : {
+        borderWidth: 0.5, 
+        borderRadius: 50, 
+        borderColor: '#f58cd0', 
+        fontSize: 20, 
+        width: '30%', 
+        marginLeft: 30
     }
 })
 export default AddNewNotesScreenStyles;

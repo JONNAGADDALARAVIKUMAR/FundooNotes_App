@@ -1,4 +1,10 @@
-import {STORE_USERID, STORE_LABEL_CONTENT, NOTE_KEYS, STORE_LABELS} from './CreateNewLabelType';
+import {STORE_USERID, 
+        STORE_LABEL_CONTENT, 
+        NOTE_KEYS, STORE_LABELS, 
+        SHOW_DELETE_DAILOG, 
+        DELETE_LABEL_KEY,
+        SELECTED_LABEL_KEY,
+        NOTES_ARCHIVED} from './CreateNewLabelType';
 
 export const storeUserID = (userId) => {
     return {
@@ -25,5 +31,33 @@ export const storeLabels = (labels) => {
     return {
         type : STORE_LABELS,
         payload : labels
+    }
+}
+
+export const storeDailogStatus = (showDailog) => {
+    return {
+        type : SHOW_DELETE_DAILOG,
+        payload : showDailog
+    }
+}
+
+export const storeDeleteKey = (deleteLabelKey) => {
+    return {
+        type : DELETE_LABEL_KEY,
+        payload : deleteLabelKey
+    }
+}
+
+export const storeSelectedLabelKey = (selectedLabelKey) => {
+    return {
+        type : SELECTED_LABEL_KEY,
+        payload : selectedLabelKey
+    }
+}
+
+export const storeNotesArchivedStatus = (notesArchived) => {
+    return {
+        type : NOTES_ARCHIVED,
+        payload : notesArchived
     }
 }

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {Text, View, TouchableOpacity, TextInput} from 'react-native';
-import { Appbar } from 'react-native-paper';
+import {Appbar, Provider, Portal, Dialog, Paragraph, Button} from 'react-native-paper';
 import CreateNewLabelStyles from '../../../styles/CreateNewLabelStyles';
 import UserNoteServices from '../../../../services/UserNoteServices';
 import { connect } from 'react-redux';
-import {storeLabelContent, storeNoteKeys} from '../../../redux/actions/CreateNewLabelAction';
+import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeLabels} from '../../../redux/actions/CreateNewLabelAction';
 import ShowLabels from './ShowLabels'
 import { ScrollView } from 'react-native-gesture-handler';
 
@@ -17,7 +17,7 @@ class CreateLabelScreen extends Component {
             enteredLabel: '',
             labelContent: [],
             labelNoteKeys: [],
-            labelExistErrorMessage: false
+            labelExistErrorMessage: false,
         }
     }
 
@@ -28,10 +28,10 @@ class CreateLabelScreen extends Component {
     }
 
     navigateToPreviousScreen = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.push('Home', {screen: 'Notes'})
     }
 
-    handleText = (text) => {
+    handleText = async (text) => {
         let labels = []
         this.props.labels.map(label => {
             labels.push(label.toLowerCase())
@@ -45,7 +45,7 @@ class CreateLabelScreen extends Component {
                 labelExistErrorMessage: false
             })
         }
-        this.setState({
+        await this.setState({
             enteredLabel: text
         })
     }
@@ -80,6 +80,7 @@ class CreateLabelScreen extends Component {
                 })
                 await this.props.storeLabelContent(this.state.labelContent)
                 await this.props.storeNoteKeys(this.state.labelNoteKeys)
+                await this.props.storeLabels(labels)
             })
             .catch(error => console.log(error))
     }
@@ -90,12 +91,32 @@ class CreateLabelScreen extends Component {
         }
         this.setState({
             createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive,
-        })
-        this.updateLabels()
+        }, () => this.updateLabels())
+    }
+
+    hideDialog() {
+        this.props.storeDailogStatus(false)
+    }
+
+    handleDeleteButton = async () => {
+        await UserNoteServices.deleteLabelInFirebase(this.props.userId, this.props.deleteLabelKey)
+            .then(async () => {
+                await UserNoteServices.getLabelsFromFirebase()
+                    .then(async data => {
+                        let labels = data ? data : {}
+                        let tempKeys = Object.keys(labels)
+                        this.props.storeNoteKeys(tempKeys)
+                        this.props.storeDailogStatus(false)
+                    }, () => {
+                        this.props.storeLabelContent(labels)
+                    }) 
+            })
+            .catch(error => console.log(error))
     }
 
     render() {
         return(
+            <Provider>
             <View style = {CreateNewLabelStyles.backGround_Style}>
                 <Appbar style = {CreateNewLabelStyles.appbar_Style}>
                     <Appbar.Action
@@ -115,9 +136,7 @@ class CreateLabelScreen extends Component {
                     {this.state.createNewLabelTextboxActive ? 
                     <View style = {{flexDirection :'column', width : '65%'}}>
                     <TextInput
-                        style = {{ backgroundColor : 'transparent', 
-                                    paddingBottom : 0,
-                        }}
+                        style = {{ backgroundColor : 'transparent', paddingBottom : 0,}}
                         placeholder = {'Create new Label'}
                         autoFocus = {this.state.createNewLabelTextboxActive}
                         onChangeText = {this.handleText}
@@ -158,7 +177,25 @@ class CreateLabelScreen extends Component {
                         : null}
                     </View>
                     </ScrollView>
+                    <Portal>
+                    <Dialog style = {{height: 100}} visible = {this.props.showDailog}>
+                        <Dialog.Content>
+                            <Paragraph>
+                                Delete this Label forever ?
+                            </Paragraph>
+                            <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                                <Dialog.Actions>
+                                    <Button onPress = {() => this.hideDialog()}>Cancel</Button>
+                                </Dialog.Actions>
+                                <Dialog.Actions>
+                                    <Button onPress = {this.handleDeleteButton}>Delete</Button>
+                                </Dialog.Actions>
+                        </View>
+                        </Dialog.Content>
+                    </Dialog>
+                </Portal>
             </View>
+            </Provider>
         )
     }
 }
@@ -168,14 +205,18 @@ const mapStateToProps = state => {
         userId : state.createLabelReducer.userId,
         labelContent : state.createLabelReducer.labelContent,
         labelNoteKeys : state.createLabelReducer.labelNoteKeys,
-        labels: state.createLabelReducer.labels
+        labels: state.createLabelReducer.labels,
+        showDailog: state.createLabelReducer.showDailog,
+        deleteLabelKey: state.createLabelReducer.deleteLabelKey,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         storeLabelContent : (labelContent) => dispatch(storeLabelContent(labelContent)),
-        storeNoteKeys: (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys))
+        storeNoteKeys: (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys)),
+        storeDailogStatus : (showDailog) => dispatch(storeDailogStatus(showDailog)),
+        storeLabels : (labels) => dispatch(storeLabels(labels))
     }
 }
 

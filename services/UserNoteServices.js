@@ -14,20 +14,26 @@ getDetailsFromFirebase = () => {
     })
 }
     
-addNoteToFirebase = async (noteKey, title, note, Deletedstatus) => {
+addNoteToFirebase = async (noteKey, title, note, Deletedstatus, labelKey, archivedStatus) => {
     return new Promise(async (resolve, reject) => {
-        const user = await KeyChain.getGenericPassword();
-        const userDetails = JSON.parse(user.password);
-        const notes = {
-            title : title,
-            note : note,
-            isDeleted: Deletedstatus
-        }
-        Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + noteKey).set({
-            notes : notes
-        })
-        .then(() => resolve('success'))
-        .catch(error => reject(error))
+        if(labelKey == null) {
+            const user = await KeyChain.getGenericPassword();
+            const userDetails = JSON.parse(user.password);
+            const notes = {
+                title : title,
+                note : note,
+                isDeleted: Deletedstatus,
+                archivedStatus: archivedStatus
+            }
+            Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + noteKey).set({
+                notes : notes
+            })
+            .then(() => resolve('success'))
+            .catch(error => reject(error))
+            }
+            else {
+                this.storeDetailsInLabel(noteKey, title, note, Deletedstatus, labelKey, archivedStatus)
+            }
         })
     }
 
@@ -105,6 +111,21 @@ addNoteToFirebase = async (noteKey, title, note, Deletedstatus) => {
             Firebase.database().ref('Labels/' + userId  + '/' + labelKey).remove()
             .then(() => resolve('success'))
             .catch(error => reject(error))
+        })
+    }
+
+    storeDetailsInLabel = async (noteKey, title, note, Deletedstatus, labelKey, archivedStatus) => {
+        const user = await KeyChain.getGenericPassword();
+        const userDetails = JSON.parse(user.password);
+        console.log(noteKey, labelKey);
+        const notes = {
+            title : title,
+            note : note,
+            isDeleted: Deletedstatus,
+            archivedStatus: archivedStatus
+        }
+        Firebase.database().ref('LabelNotes/' + userDetails.user.uid + '/' + labelKey).set({
+            notes : notes
         })
     }
 }

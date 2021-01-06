@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {TextInput, Text, TouchableWithoutFeedback, View, TouchableOpacity} from 'react-native';
 import LabelAppBarStyle from '../../../styles/LabelAppbarStyle';
 import {Appbar} from 'react-native-paper';
-import {storeLabelContent, storeNoteKeys} from '../../../redux/actions/CreateNewLabelAction'
+import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeDeleteKey} from '../../../redux/actions/CreateNewLabelAction'
 import { connect } from 'react-redux';
 import UserNoteServices from '../../../../services/UserNoteServices'
 
@@ -15,7 +15,8 @@ class showLabel extends Component {
             editTextInput : this.props.labelContent[this.props.labelKey].labelName,
             emptyMsg : false,
             errorMsg : false,
-            noteKeys: []
+            noteKeys: [],
+            showDailog: false
         }
     }
 
@@ -31,11 +32,11 @@ class showLabel extends Component {
                         let labels = data ? data : {}
                         let tempKeys = []
                         tempKeys = Object.keys(labels)
+                        await this.props.storeLabelContent(labels)
                         await this.setState({
                             edit : false,
                             noteKeys : tempKeys,
                         })
-                        await this.props.storeLabelContent(labels)
                         await this.props.storeNoteKeys(this.state.noteKeys)
                     }) 
                 })
@@ -70,7 +71,8 @@ class showLabel extends Component {
             await this.setState({
                 emptyMsg : false
             })
-            if(temp.includes(this.state.editTextInput.toLowerCase()) && this.state.editTextInput.toLowerCase() != this.props.labelContent[labelKey].labelName.toLowerCase()){
+            if(temp.includes(this.state.editTextInput.toLowerCase()) && 
+                this.state.editTextInput.toLowerCase() != this.props.labelContent[labelKey].labelName.toLowerCase()){
                 await this.setState({
                     errorMsg : true,
                 })
@@ -83,6 +85,20 @@ class showLabel extends Component {
         }
     }
 
+    handelDeleteIcon = () => {
+       this.props.storeDailogStatus(true)
+       this.props.storeDeleteKey(this.props.labelKey)
+       this.setState({
+        edit : false,
+       })
+    }
+
+    hideDialog() {
+        this.setState({
+            showDailog: false
+        })
+    }
+
     handleDeleteButton = async () => {
         await UserNoteServices.deleteLabelInFirebase(this.props.userId, this.props.labelKey)
             .then(async () => {
@@ -93,7 +109,8 @@ class showLabel extends Component {
                         tempKeys = Object.keys(labels)
                         await this.setState({
                             edit : false,
-                            noteKeys: tempKeys
+                            noteKeys: tempKeys,
+                            showDailog: false
                         }, () => {
                             this.props.storeNoteKeys(this.state.noteKeys)
                             this.props.storeLabelContent(labels)
@@ -101,15 +118,15 @@ class showLabel extends Component {
                     }) 
             })
             .catch(error => console.log(error))
-
     }
 
     render() {
         return(
+                <View>
             <Appbar style = {(this.state.editLabel == this.state.editTextInput) ? LabelAppBarStyle.active_Appbar_Style : LabelAppBarStyle.appbar_Style}>
                 {
                     (this.state.editLabel == this.state.editTextInput) ?
-                    <TouchableOpacity onPress = {this.handleDeleteButton}>
+                    <TouchableOpacity onPress = {this.handelDeleteIcon}>
                     <Appbar.Action 
                         icon = 'delete-outline'
                         style = {{marginLeft : 10}}
@@ -172,6 +189,8 @@ class showLabel extends Component {
                     </TouchableOpacity>
                 }
             </Appbar>
+            
+        </View>
         )
     }
 }
@@ -186,7 +205,9 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         storeLabelContent : (labelContent) => dispatch(storeLabelContent(labelContent)),
-        storeNoteKeys : (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys))
+        storeNoteKeys : (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys)),
+        storeDailogStatus : (showDailog) => dispatch(storeDailogStatus(showDailog)),
+        storeDeleteKey : (deleteLabelKey) => dispatch(storeDeleteKey(deleteLabelKey))
     }
 }
 

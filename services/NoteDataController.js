@@ -3,12 +3,13 @@ import UserNoteServices from "./UserNoteServices";
 
 class NoteDataController {
 
-    addNote = (title, note, deletedStatus) => {
+    addNote = (title, note, deletedStatus, labelKey, archivedStatus) => {
         return new Promise(async (resolve, reject) => {
             var noteKey = await this.generateRandomKey();
             SQLiteStorageServices.storeDetailsInSQLiteDataBase(noteKey, title, note, deletedStatus)
             .then((results) => {
-                UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus)
+                console.log(labelKey);
+                UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus, labelKey, archivedStatus)
                 .then(() => {
                     //console.log('Uploaded to Firabase')
                 })

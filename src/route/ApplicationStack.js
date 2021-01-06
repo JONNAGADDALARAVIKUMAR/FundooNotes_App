@@ -9,7 +9,8 @@ import DrawerStack from '../components/Drawer/DrawerStack';
 import AddNewNotes from '../components/AddNewNotesScreen';
 import DeletedNoteViewScreen from '../components/DashboardComponents/DeletedNotesOnDecessionScreenComponents/DeletedNoteViewScreen';
 import SearchScreen from '../components/DashboardComponents/SearchScreen';
-import CreateLabelScreen from '../components/DashboardComponents/LabelComponents/CreateLabelScreen'
+import CreateLabelScreen from '../components/DashboardComponents/LabelComponents/CreateLabelScreen';
+import StoreNotesInLabelScreen from '../components/DashboardComponents/LabelComponents/StoreNotesInLabelScreen';
 
 const Stack = createStackNavigator()
 
@@ -26,6 +27,7 @@ const ApplicationStack = () => {
                 <Stack.Screen name = 'DeletedNoteView' component = {DeletedNoteViewScreen}/>
                 <Stack.Screen name = 'SearchScreen' component = {SearchScreen}/>
                 <Stack.Screen name = 'CreateLabel' component = {CreateLabelScreen}/>
+                <Stack.Screen name = 'ChooseLabel' component = {StoreNotesInLabelScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
         </View>
