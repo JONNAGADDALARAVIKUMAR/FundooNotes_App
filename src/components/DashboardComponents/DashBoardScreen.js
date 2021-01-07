@@ -87,7 +87,7 @@ export default class Dashboard extends Component {
 
     restoreNotes = () => {
         const {onPress} = this.props
-        UserNoteServices.restoreNoteInFirebase(this.props.route.params.title, this.props.route.params.note, this.props.route.params.noteKey)
+        UserNoteServices.restoreNoteInFirebase(this.props.route.params.title, this.props.route.params.note, this.props.route.params.noteKey, this.props.route.params.archivedStatus, this.props.route.params.labelNoteKeys)
             .then(() => this.props.navigation.push('Home', {screen : 'Notes'}))
             .catch(error => console.log(error))
         //onPress()

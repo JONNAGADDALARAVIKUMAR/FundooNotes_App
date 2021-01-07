@@ -37,14 +37,15 @@ addNoteToFirebase = async (noteKey, title, note, Deletedstatus, labelKey, archiv
         })
     }
 
-    restoreNoteInFirebase = async (title, note, notekey) => {
+    restoreNoteInFirebase = async (title, note, notekey, archivedStatus, labelNoteKeys) => {
         return new Promise(async (resolve, reject) => {
             const user = await KeyChain.getGenericPassword();
             const userDetails = JSON.parse(user.password);
             const notes = {
                 title : title,
                 note : note,
-                isDeleted : false
+                isDeleted : false,
+                archivedStatus: archivedStatus
             }
             Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + notekey).set({
                 notes : notes
@@ -117,14 +118,13 @@ addNoteToFirebase = async (noteKey, title, note, Deletedstatus, labelKey, archiv
     storeDetailsInLabel = async (noteKey, title, note, Deletedstatus, labelKey, archivedStatus) => {
         const user = await KeyChain.getGenericPassword();
         const userDetails = JSON.parse(user.password);
-        console.log(noteKey, labelKey);
         const notes = {
             title : title,
             note : note,
             isDeleted: Deletedstatus,
             archivedStatus: archivedStatus
         }
-        Firebase.database().ref('LabelNotes/' + userDetails.user.uid + '/' + labelKey).set({
+        Firebase.database().ref('LabelNotes/' + userDetails.user.uid + '/' + labelKey + '/' + noteKey).set({
             notes : notes
         })
     }

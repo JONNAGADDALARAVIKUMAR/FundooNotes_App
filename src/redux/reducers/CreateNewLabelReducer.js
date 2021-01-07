@@ -14,7 +14,7 @@ const initialState = {
     labels: [],
     showDailog: false,
     deleteLabelKey: null,
-    selectedLabelKey: null,
+    selectedLabelKey: [],
     notesArchived: false
 }
 

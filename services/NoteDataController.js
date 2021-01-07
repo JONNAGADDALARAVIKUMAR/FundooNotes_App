@@ -3,32 +3,45 @@ import UserNoteServices from "./UserNoteServices";
 
 class NoteDataController {
 
-    addNote = (title, note, deletedStatus, labelKey, archivedStatus) => {
+    addNote = (title, note, deletedStatus, labelKeys, archivedStatus) => {
         return new Promise(async (resolve, reject) => {
             var noteKey = await this.generateRandomKey();
             SQLiteStorageServices.storeDetailsInSQLiteDataBase(noteKey, title, note, deletedStatus)
             .then((results) => {
-                console.log(labelKey);
-                UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus, labelKey, archivedStatus)
-                .then(() => {
-                    //console.log('Uploaded to Firabase')
-                })
-                .catch((error) => console.log(error))
+                if(labelKeys.length > 0) {
+                    labelKeys.map(labelKey => {
+                        UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus, labelKey, archivedStatus)
+                        .then(() => {
+                            //console.log('Uploaded to Firabase')
+                        })
+                        .catch((error) => console.log(error))
+                    })
+                } else {
+                    UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus, null, archivedStatus)
+                }
                 resolve(results)
             })
             .catch(error => reject(error)) 
         })
     } 
 
-    updateNote = (noteKey, title, note, deletedStatus) => {
+    updateNote = (noteKey, title, note, deletedStatus, labelKeys, archivedStatus) => {
         return new Promise((resolve, reject) => {
             SQLiteStorageServices.updateDetailsInSQLiteDataBase(noteKey, title, note, deletedStatus)
             .then((results) => resolve(results))
             .catch(error => reject(error))
 
-            UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus)
-            .then(console.log('Updated in Firebase'))
-            .catch((error) => console.log(error))
+            if(labelKeys.length > 0) {
+                labelKeys.map(labelKey => {
+                    UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus, labelKey, archivedStatus)
+                    .then(() => {
+                        //console.log('Uploaded to Firabase')
+                    })
+                    .catch((error) => console.log(error))
+                })
+            } else {
+                UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus, null, archivedStatus)
+            }
         })
     }
 

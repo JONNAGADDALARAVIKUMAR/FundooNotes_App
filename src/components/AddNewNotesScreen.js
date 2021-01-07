@@ -43,7 +43,7 @@ class AddNewNotes extends Component {
                 .catch((error) => console.log(error))
 
             } else if(this.state.noteKey != undefined) {
-                NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false)
+                NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false, this.props.selectedLabelKey, this.props.notesArchived)
                 .then(() => {this.props.navigation.push('Home', {screen: 'Notes'})})
                 .catch(error => console.log(error))
             }
@@ -68,9 +68,9 @@ class AddNewNotes extends Component {
         this.RBSheet.close()
         if(this.state.title != '' || this.state.note != '') {
 
-            NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, true)
+            NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, true, this.props.selectedLabelKey, this.props.notesArchived)
             .then(() => {
-                this.props.navigation.push('Home', {screen: 'Notes',  params : {isNoteDeleted : true, title: this.state.title, note: this.state.note, noteKey: this.state.noteKey}})
+                this.props.navigation.push('Home', {screen: 'Notes',  params : {isNoteDeleted : true, title: this.state.title, note: this.state.note, noteKey: this.state.noteKey, archivedStatus: this.props.notesArchived, LabelNoteKeys: this.props.labelNoteKeys}})
             })
             .catch(error => console.log(error))
         } else {
@@ -128,10 +128,15 @@ class AddNewNotes extends Component {
                         value = {this.state.note}
                         onChangeText = {this.handleNote}
                     />
-                    {(this.props.selectedLabelKey != null) ? 
-                        (<Button style = {AddNewNotesStyles.Label_Button_Style}>
-                            {this.props.labelContent[this.props.selectedLabelKey].labelName}
-                        </Button>) : null }
+                    {(this.props.selectedLabelKey.length > 0 ? 
+                        this.props.selectedLabelKey.map(labelKey => (
+                            <React.Fragment key = {labelKey}>
+                                <Button style = {AddNewNotesStyles.Label_Button_Style}>
+                                    {this.props.labelContent[labelKey].labelName}
+                                </Button>
+                            </React.Fragment>)
+                        )
+                        : console.log(this.props.selectedLabelKey))}
                     
                 </ScrollView>
                 <View>
@@ -196,7 +201,8 @@ const mapStateToProps = state => {
         userId : state.createLabelReducer.userId,
         labelContent : state.createLabelReducer.labelContent,
         selectedLabelKey : state.createLabelReducer.selectedLabelKey,
-        notesArchived : state.createLabelReducer.notesArchived
+        notesArchived : state.createLabelReducer.notesArchived,
+        labelNoteKeys : state.createLabelReducer.labelNoteKeys,
     }
 }
 

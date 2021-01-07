@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import {View, ScrollView, TextInput, Text, TouchableWithoutFeedback} from 'react-native';
 import { Appbar, Menu, Snackbar, Portal, Dialog, Provider, Paragraph, Button } from 'react-native-paper';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import NoteDataController from '../../../../services/NoteDataController'
+import NoteDataController from '../../../../services/NoteDataController';
+import {connect} from 'react-redux';
 
-export default class DeletedNoteViewScreen extends Component {
+class DeletedNoteViewScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -18,7 +19,7 @@ export default class DeletedNoteViewScreen extends Component {
 
     restoreNotes = () => {
         this.RBSheet.close()
-        NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false)
+        NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false, this.props.selectedLabelKey, this.props.notesArchived)
         this.props.navigation.push('Home', {screen: 'Notes'})
     }
 
@@ -145,3 +146,12 @@ export default class DeletedNoteViewScreen extends Component {
         )
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        selectedLabelKey : state.createLabelReducer.selectedLabelKey,
+        notesArchived : state.createLabelReducer.notesArchived
+    }
+}
+
+export default connect(mapStateToProps)(DeletedNoteViewScreen)
