@@ -24,7 +24,7 @@ class DrawerContent extends Component {
              let tempKeys = await Object.keys(labelContent)
              let labels = []
              tempKeys.map(key => {
-                 labels.push(labelContent[key].labelName)
+                 labels.push(labelContent[key].label.labelName)
              })
             await this.setState({
                 labelNoteKeys: tempKeys,
@@ -67,7 +67,7 @@ class DrawerContent extends Component {
                     <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {this.navigateToHome}/>
                     <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style}/>
                     {this.state.labelNoteKeys.map(key => (
-                        <Drawer.Item key = {key} icon = 'label-outline' label = {this.state.labelsContent[key].labelName} onPress = {this.navigateToCreateNewLabel}/>
+                        <Drawer.Item key = {key} icon = 'label-outline' label = {this.state.labelsContent[key].label.labelName} onPress = {this.navigateToCreateNewLabel}/>
                     ))}
                     <Drawer.Item icon = 'plus' label = {strings.Createnewlabel} onPress = {this.navigateToCreateNewLabel} style = {DrawContentStyles.drawer_Section_style}/>
                     <Drawer.Item icon = 'archive-arrow-down-outline' label = {strings.Archive}/>

@@ -25,7 +25,7 @@ class SelectLabelToNotesScreen extends Component {
         let tempNoteKeys = []
         if(this.state.search != '') {
             this.props.labelNoteKeys.map(noteKey => {
-                if(this.props.labelContent[noteKey].labelName.toLowerCase().includes(searchText.toLowerCase())) {
+                if(this.props.labelContent[noteKey].label.labelName.toLowerCase().includes(searchText.toLowerCase())) {
                     tempNoteKeys.push(noteKey)
                 }
             })

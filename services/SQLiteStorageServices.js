@@ -1,11 +1,12 @@
 import { openDatabase } from 'react-native-sqlite-storage';
 import KeyChain from 'react-native-keychain';
+import UserNoteServices from './UserNoteServices';
 
 var db = openDatabase({ name: 'SQLiteStorage.db', createFromLocation: 1 });
 
 class SQLiteStorageServices {
 
-    storeDetailsInSQLiteDataBase = async (noteKey, title, notes, deletedStatus) => {
+    storeDetailsInSQLiteDataBase = async (noteKey, notes) => {
         return new Promise(async (resolve, reject) => {
             let user = await KeyChain.getGenericPassword();
             let userDetails = JSON.parse(user.password);
@@ -13,8 +14,8 @@ class SQLiteStorageServices {
 
             db.transaction((tx) => {
                 tx.executeSql(
-                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted) VALUES (?,?,?,?)`,
-                    [noteKey, title, notes, deletedStatus],
+                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted, isArchived, Labels) VALUES (?,?,?,?,?,?)`,
+                    [noteKey, notes.title, notes.note, notes.isDeleted, notes.isArchived, JSON.stringify(notes.labels)],
                     async (tx, results) => {
                         resolve(results)
                     },
@@ -24,7 +25,7 @@ class SQLiteStorageServices {
         })
     }
 
-    updateDetailsInSQLiteDataBase = (insertID, title, notes, deletedStatus) => {
+    updateDetailsInSQLiteDataBase = (noteKey, notes) => {
         return new Promise(async (resolve, reject) => {
             let user = await KeyChain.getGenericPassword();
             let userDetails = JSON.parse(user.password);
@@ -32,8 +33,8 @@ class SQLiteStorageServices {
 
             db.transaction(async (tx) => {
                 tx.executeSql(
-                    `UPDATE ${UserID} set Title = ? , Notes = ?,isDeleted = ?  where NoteKey = ?`,
-                    [title, notes, deletedStatus, insertID],
+                    `UPDATE ${UserID} set Title = ?, Notes = ?, isDeleted = ? , isArchived = ?, Labels = ?  where NoteKey = ?`,
+                    [notes.title, notes.note, notes.isDeleted, notes.isArchived, JSON.stringify(notes.labels), noteKey],
                     async (tx, results) => {
                         console.log('Success Results Updated to SQLite');
                         resolve(results)
@@ -51,7 +52,7 @@ class SQLiteStorageServices {
             let UserID = userDetails.user.uid
 
             db.transaction((tx) => {
-                tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
+                tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, "isArchived" INTEGER, "Labels" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                 })
             })
             db.transaction((tx) => {
@@ -72,11 +73,10 @@ class SQLiteStorageServices {
             let UserID = userDetails.user.uid
 
             db.transaction((tx) => {
-                tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
-                    console.log('-')
+                tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, "isArchived" INTEGER, "Labels" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                 })
                 tx.executeSql(
-                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted) VALUES (?,?,?,?)`,
+                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted) VALUES (?,?,?,?,?,?)`,
                     [noteKey, title, notes, deletedStatus],
                     async (tx, results) => {
                         console.log('Results Inserted to SQLIite');

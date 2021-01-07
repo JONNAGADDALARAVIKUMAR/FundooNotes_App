@@ -9,17 +9,28 @@ class DeletedNoteViewScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: this.props.route.params.title,
-            note: this.props.route.params.note,
-            noteKey: this.props.route.params.noteKey,
+            title: this.props.editNotesDetails.title,
+            note: this.props.editNotesDetails.note,
+            noteKey: this.props.noteKeyToUpdateNotes,
+            isDeleted: this.props.editNotesDetails.isDeleted,
+            archived: this.props.editNotesDetails.isArchived,
+            labels: this.props.editNotesDetails.labels,
             showCantEditSnackbar: false,
-            showDailog: false
+            showDailog: false,
+            editNotesDetails: this.props.editNotesDetails,
         }
     }
 
     restoreNotes = () => {
         this.RBSheet.close()
-        NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false, this.props.selectedLabelKey, this.props.notesArchived)
+        const notes = {
+            title: this.state.title,
+            note: this.state.note,
+            labels: JSON.parse(this.state.labels),
+            isArchived: this.state.archived,
+            isDeleted: false
+        }
+        NoteDataController.updateNote(this.state.noteKey, notes)
         this.props.navigation.push('Home', {screen: 'Notes'})
     }
 
@@ -150,7 +161,8 @@ class DeletedNoteViewScreen extends Component {
 const mapStateToProps = state => {
     return {
         selectedLabelKey : state.createLabelReducer.selectedLabelKey,
-        notesArchived : state.createLabelReducer.notesArchived
+        editNotesDetails : state.createLabelReducer.editNotesDetails,
+        noteKeyToUpdateNotes : state.createLabelReducer.noteKeyToUpdateNotes
     }
 }
 

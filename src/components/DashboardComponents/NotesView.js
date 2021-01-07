@@ -2,12 +2,13 @@ import React, { Component } from 'react';
 import {View, Text, ImageBackground, Dimensions, ScrollView, Image} from 'react-native';
 import {strings} from '../../Languages/strings';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
-import { Card, Paragraph, Title } from 'react-native-paper';
+import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import SQLiteStorageServices from '../../../services/SQLiteStorageServices';
-import {storeUserID} from '../../redux/actions/CreateNewLabelAction';
+import {storeUserID, storeEditNotesDetails, storeNoteKeyToUpdateNotes, storeSelectedLabelKeys} from '../../redux/actions/CreateNewLabelAction';
 import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
+import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
 
 class NotesView extends Component {
     constructor() {
@@ -25,6 +26,7 @@ class NotesView extends Component {
             orientation: isPortrait() ? 'portrait' : 'landscape',
             notes: [],
             isEmpty: true,
+            labels: []
         };
     
         Dimensions.addEventListener('change', () => {
@@ -39,7 +41,7 @@ class NotesView extends Component {
         const credential = await KeyChain.getGenericPassword();
         const UserCredential = JSON.parse(credential.password);
         await this.props.storeUserId(UserCredential.user.uid)
-        
+
         await SQLiteStorageServices.getDetailsFromSQLiteDatabase()
         .then(async (results) => {
             var temp = []
@@ -49,7 +51,6 @@ class NotesView extends Component {
                 await this.setState({
                     notes : temp
                 })
-
                 temp.map(async (notes) => {
                     (notes.isDeleted == this.props.status)
                     ? this.setState({
@@ -58,19 +59,50 @@ class NotesView extends Component {
                     : null
                 })
             }
+            SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
+            .then(results => {
+                if(results.rows.length > 0) {
+                    let labels = [];
+                    for(let i = 0; i<results.rows.length; i++ ) {
+                        labels.push(results.rows.item(i))
+                    }
+                    this.setState({
+                        labels: labels
+                    })
+                }
+            })
+            .catch(error => console.log(error))
         })
     }
 
-    handleDetailsToUpdateSQLite = (noteKey, Title, Notes) => {
-        this.props.navigation.push('AddNewNotes', { noteKey : noteKey, 
-                                                    title : Title, 
-                                                    note : Notes})
+    handleDetailsToUpdateSQLite = (noteKey, Title, Notes, isDeleted, isArchived, Labels) => {
+        const notes = {
+            title: Title,
+            note: Notes,
+            labels: Labels,
+            isArchived: isArchived,
+            isDeleted: isDeleted
+        }
+        this.props.storeEditNotesDetails(notes)
+        this.props.storeNoteKeyToUpdateNotes(noteKey)
+        this.props.storeSelectedLabelKeys(JSON.parse(Labels))
+
+        this.props.navigation.push('AddNewNotes')
     }
 
-    handleDeletedNotesToUpdate = (noteKey, Title, Notes) => {
-        this.props.navigation.push('DeletedNoteView', { noteKey : noteKey, 
-                                                        title : Title, 
-                                                        note : Notes})
+    handleDeletedNotesToUpdate = (noteKey, Title, Notes, isDeleted, isArchived, Labels) => {
+        const notes = {
+            title: Title,
+            note: Notes,
+            labels: Labels,
+            isArchived: isArchived,
+            isDeleted: isDeleted
+        }
+        this.props.storeEditNotesDetails(notes)
+        this.props.storeNoteKeyToUpdateNotes(noteKey)
+        this.props.storeSelectedLabelKeys(JSON.parse(Labels))
+        
+        this.props.navigation.push('DeletedNoteView')
     }
 
     render() {
@@ -90,8 +122,8 @@ class NotesView extends Component {
                                         style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
                                         onPress = {() => {
                                             (val.isDeleted) 
-                                            ? this.handleDeletedNotesToUpdate(val.NoteKey, val.Title, val.Notes) 
-                                            : this.handleDetailsToUpdateSQLite(val.NoteKey, val.Title, val.Notes)}
+                                            ? this.handleDeletedNotesToUpdate(val.NoteKey, val.Title, val.Notes, val.isDeleted, val.isArchived, val.Labels) 
+                                            : this.handleDetailsToUpdateSQLite(val.NoteKey, val.Title, val.Notes, val.isDeleted, val.isArchived, val.Labels)}
                                         }>
                                         <Card.Content>
                                             <Title>
@@ -100,6 +132,21 @@ class NotesView extends Component {
                                             <Paragraph>
                                                 {val.Notes}
                                             </Paragraph>
+                                                <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
+                                                {(val.Labels.length > 0) ?
+                                                    this.state.labels.map(labels => (
+                                                        val.Labels.includes(labels.lebelKey) ?
+                                                            <React.Fragment key = {labels.lebelKey}>
+                                                                <View style = {{}}>
+                                                                    <Text>{labels.labelName}</Text>
+                                                                </View>
+                                                            </React.Fragment>
+                                                        :
+                                                        null
+                                                    ))
+                                                :
+                                                null}
+                                                </View>
                                         </Card.Content>  
                                     </Card>)
                                 : null}
@@ -122,12 +169,16 @@ class NotesView extends Component {
 const mapStateToProps = state => {
     return {
         userId : state.createLabelReducer.userId,
+        labelContent : state.createLabelReducer.labelContent,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         storeUserId : (userId) => dispatch(storeUserID(userId)),
+        storeEditNotesDetails : (notes) => dispatch(storeEditNotesDetails(notes)),
+        storeNoteKeyToUpdateNotes : (noteKeyToUpdateNotes) => dispatch(storeNoteKeyToUpdateNotes(noteKeyToUpdateNotes)),
+        storeSelectedLabelKeys : (selectedLabelKeys) => dispatch(storeSelectedLabelKeys(selectedLabelKeys)),
     }
 }
 

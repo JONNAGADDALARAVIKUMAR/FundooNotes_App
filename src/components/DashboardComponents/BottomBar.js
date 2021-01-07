@@ -1,11 +1,24 @@
 import React, { Component } from 'react';
 import {Appbar} from 'react-native-paper';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
+import {connect} from 'react-redux';
+import {storeEditNotesDetails, storeNoteKeyToUpdateNotes, storeSelectedLabelKeys} from '../../redux/actions/CreateNewLabelAction';
 
-export default class ToolBar extends Component {
+class Bottombar extends Component {
     handlePlusButton = () => {
         const {onPress} = this.props
-        this.props.navigation.push('AddNewNotes', {title: '', note: '', noteKey: undefined})
+        const notes = {
+            title: '',
+            note: '',
+            labels: [],
+            isArchived: false,
+            isDeleted: false
+        }
+        this.props.storeEditNotesDetails(notes)
+        this.props.storeNoteKeyToUpdateNotes(undefined)
+        this.props.storeSelectedLabelKeys([])
+
+        this.props.navigation.push('AddNewNotes')
         //onPress();
     }
     
@@ -42,3 +55,13 @@ export default class ToolBar extends Component {
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        storeEditNotesDetails : (notes) => dispatch(storeEditNotesDetails(notes)),
+        storeNoteKeyToUpdateNotes : (noteKeyToUpdateNotes) => dispatch(storeNoteKeyToUpdateNotes(noteKeyToUpdateNotes)),
+        storeSelectedLabelKeys : (selectedLabelKeys) => dispatch(storeSelectedLabelKeys(selectedLabelKeys)),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Bottombar)

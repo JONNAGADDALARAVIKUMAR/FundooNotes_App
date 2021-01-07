@@ -5,7 +5,9 @@ import { STORE_USERID,
         SHOW_DELETE_DAILOG, 
         DELETE_LABEL_KEY, 
         SELECTED_LABEL_KEY, 
-        NOTES_ARCHIVED} from '../actions/CreateNewLabelType'
+        NOTES_ARCHIVED,
+        EDIT_NOTES_DETAILS,
+        NOTEKEY_TO_ADD_NOTE} from '../actions/CreateNewLabelType'
 
 const initialState = {
     userId : '',
@@ -14,8 +16,10 @@ const initialState = {
     labels: [],
     showDailog: false,
     deleteLabelKey: null,
-    selectedLabelKey: [],
-    notesArchived: false
+    selectedLabelKeys: [],
+    notesArchived: false,
+    editNotesDetails: null,
+    noteKeyToUpdateNotes: ''
 }
 
 const CreateNewLabelReducer = (state = initialState, action) => {
@@ -53,12 +57,22 @@ const CreateNewLabelReducer = (state = initialState, action) => {
         case SELECTED_LABEL_KEY:
             return {
                 ...state,
-                selectedLabelKey : action.payload
+                selectedLabelKeys : action.payload
             }
         case NOTES_ARCHIVED:
             return {
                 ...state,
                 notesArchived : action.payload
+            }
+        case EDIT_NOTES_DETAILS:
+            return {
+                ...state,
+                editNotesDetails : action.payload
+            }
+        case NOTEKEY_TO_ADD_NOTE:
+            return {
+                ...state,
+                noteKeyToUpdateNotes : action.payload
             }
         default:
             return state;

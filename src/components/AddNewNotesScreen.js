@@ -1,23 +1,25 @@
 import React, { Component } from 'react';
-import { ScrollView, Text, TextInput, View } from 'react-native';
-import {Appbar, Button, Menu, Snackbar} from 'react-native-paper';
+import { ScrollView, TextInput, View } from 'react-native';
+import {Appbar, Menu, Snackbar} from 'react-native-paper';
 import { strings } from '../Languages/strings';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NoteDataController from '../../services/NoteDataController';
 import {connect} from 'react-redux';
 import {storeNotesArchivedStatus} from '../redux/actions/CreateNewLabelAction';
-import AddNewNotesStyles from '../styles/AddNewNotesStyles'
 
 class AddNewNotes extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            title: this.props.route.params.title,
-            note: this.props.route.params.note,
-            noteKey: this.props.route.params.noteKey,
+            title: this.props.editNotesDetails.title,
+            note: this.props.editNotesDetails.note,
+            noteKey: this.props.noteKeyToUpdateNotes,
             isNoteNotAddedDeleted: false,
-            archived: false
+            isDeleted: this.props.editNotesDetails.isDeleted,
+            archived: this.props.editNotesDetails.isArchived,
+            editNotesDetails: this.props.editNotesDetails,
+            labels: this.props.editNotesDetails.labels
         }
     }
 
@@ -35,15 +37,24 @@ class AddNewNotes extends Component {
 
     addNotesToDatabase = async () => {
         const {onPress} = this.props
-
+        const notes = {
+            title: this.state.title,
+            note: this.state.note,
+            labels: this.props.selectedLabelKeys,
+            isArchived: this.state.archived,
+            isDeleted: false
+        }
+        
         if(this.state.title != '' || this.state.note != '') {
             if(this.state.noteKey == undefined) {
-                NoteDataController.addNote(this.state.title, this.state.note, false, this.props.selectedLabelKey, this.props.notesArchived)
-                .then(() => {this.props.navigation.push('Home', {screen: 'Notes'})})
+                noteKey = this.generateRandomKey()
+                NoteDataController.addNote(noteKey, notes)
+                .then(() => { 
+                    this.props.navigation.push('Home', {screen: 'Notes'})})
                 .catch((error) => console.log(error))
 
             } else if(this.state.noteKey != undefined) {
-                NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, false, this.props.selectedLabelKey, this.props.notesArchived)
+                NoteDataController.updateNote(this.state.noteKey, notes)
                 .then(() => {this.props.navigation.push('Home', {screen: 'Notes'})})
                 .catch(error => console.log(error))
             }
@@ -61,16 +72,24 @@ class AddNewNotes extends Component {
     }
 
     handleArchiveIcon = () => {
-        this.props.storeNotesArchivedStatus(!this.props.notesArchived)
+        this.setState({
+            archived: !this.state.archived
+        })
     }
 
     handleDeleteButton = () => {
         this.RBSheet.close()
         if(this.state.title != '' || this.state.note != '') {
-
-            NoteDataController.updateNote(this.state.noteKey, this.state.title, this.state.note, true, this.props.selectedLabelKey, this.props.notesArchived)
+            const notes = {
+                title: this.state.title,
+                note: this.state.note,
+                labels: this.props.selectedLabelKeys,
+                isArchived: this.props.notesArchived,
+                isDeleted: true
+            }
+            NoteDataController.updateNote(this.state.noteKey, notes)
             .then(() => {
-                this.props.navigation.push('Home', {screen: 'Notes',  params : {isNoteDeleted : true, title: this.state.title, note: this.state.note, noteKey: this.state.noteKey, archivedStatus: this.props.notesArchived, LabelNoteKeys: this.props.labelNoteKeys}})
+                this.props.navigation.push('Home', {screen: 'Notes'})
             })
             .catch(error => console.log(error))
         } else {
@@ -78,6 +97,23 @@ class AddNewNotes extends Component {
                 isNoteNotAddedDeleted: true
             })
         }
+    }
+
+    generateRandomKey = () => {
+        const alphaNemuricChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+        var today = new Date()
+        var noteKey = ''
+        noteKey = today.getFullYear() 
+                    + String((today.getMonth() + 1) < 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
+                    + String(today.getDate() < 10 ? (0 + String(today.getDate())) : today.getDate()) 
+                    + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
+                    + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
+                    + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
+
+        for(let i = 0; i < 6; i++) {
+            noteKey += alphaNemuricChars.charAt(Math.floor(Math.random() * alphaNemuricChars.length))
+        }
+        return noteKey
     }
 
     emptyNotesDeleteHandler = async () => {
@@ -109,7 +145,7 @@ class AddNewNotes extends Component {
                     />
                     <Appbar.Action 
                         onPress = {this.handleArchiveIcon}
-                        icon = {(this.props.notesArchived) ? "archive-arrow-up-outline" : "archive-arrow-down-outline"}
+                        icon = {(this.state.archived) ? "archive-arrow-up-outline" : "archive-arrow-down-outline"}
                     />
                 </Appbar>
                 </View>
@@ -128,15 +164,15 @@ class AddNewNotes extends Component {
                         value = {this.state.note}
                         onChangeText = {this.handleNote}
                     />
-                    {(this.props.selectedLabelKey.length > 0 ? 
-                        this.props.selectedLabelKey.map(labelKey => (
+                    {/* {(this.props.selectedLabelKeys.length > 0 ? 
+                        this.props.selectedLabelKeys.map(labelKey => (
                             <React.Fragment key = {labelKey}>
-                                <Button style = {AddNewNotesStyles.Label_Button_Style}>
-                                    {this.props.labelContent[labelKey].labelName}
-                                </Button>
+                                <Text style = {AddNewNotesStyles.Label_Button_Style}>
+                                    {this.props.labelContent[labelKey].label.labelName}
+                                </Text>
                             </React.Fragment>)
                         )
-                        : console.log(this.props.selectedLabelKey))}
+                        : null)} */}
                     
                 </ScrollView>
                 <View>
@@ -200,9 +236,11 @@ const mapStateToProps = state => {
     return {
         userId : state.createLabelReducer.userId,
         labelContent : state.createLabelReducer.labelContent,
-        selectedLabelKey : state.createLabelReducer.selectedLabelKey,
+        selectedLabelKeys : state.createLabelReducer.selectedLabelKeys,
         notesArchived : state.createLabelReducer.notesArchived,
         labelNoteKeys : state.createLabelReducer.labelNoteKeys,
+        editNotesDetails : state.createLabelReducer.editNotesDetails,
+        noteKeyToUpdateNotes : state.createLabelReducer.noteKeyToUpdateNotes
     }
 }
 

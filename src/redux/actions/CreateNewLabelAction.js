@@ -4,7 +4,9 @@ import {STORE_USERID,
         SHOW_DELETE_DAILOG, 
         DELETE_LABEL_KEY,
         SELECTED_LABEL_KEY,
-        NOTES_ARCHIVED} from './CreateNewLabelType';
+        NOTES_ARCHIVED,
+        EDIT_NOTES_DETAILS,
+        NOTEKEY_TO_ADD_NOTE} from './CreateNewLabelType';
 
 export const storeUserID = (userId) => {
     return {
@@ -48,10 +50,10 @@ export const storeDeleteKey = (deleteLabelKey) => {
     }
 }
 
-export const storeSelectedLabelKey = (selectedLabelKey) => {
+export const storeSelectedLabelKeys = (selectedLabelKeys) => {
     return {
         type : SELECTED_LABEL_KEY,
-        payload : selectedLabelKey
+        payload : selectedLabelKeys
     }
 }
 
@@ -59,5 +61,19 @@ export const storeNotesArchivedStatus = (notesArchived) => {
     return {
         type : NOTES_ARCHIVED,
         payload : notesArchived
+    }
+}
+
+export const storeEditNotesDetails = (editNotesDetails) => {
+    return {
+        type : EDIT_NOTES_DETAILS,
+        payload : editNotesDetails
+    }
+}
+
+export const storeNoteKeyToUpdateNotes = (noteKeyToUpdateNotes) => {
+    return {
+        type : NOTEKEY_TO_ADD_NOTE,
+        payload : noteKeyToUpdateNotes
     }
 }

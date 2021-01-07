@@ -7,6 +7,8 @@ import { connect } from 'react-redux';
 import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeLabels} from '../../../redux/actions/CreateNewLabelAction';
 import ShowLabels from './ShowLabels'
 import { ScrollView } from 'react-native-gesture-handler';
+import SQLiteStorageServices from '../../../../services/SQLiteStorageServices';
+import SQLiteLabelServices from '../../../../services/SQLiteLabelServices';
 
 
 class CreateLabelScreen extends Component {
@@ -14,6 +16,7 @@ class CreateLabelScreen extends Component {
         super(props)
         this.state = {
             createNewLabelTextboxActive: true,
+            activeLabel: '',
             enteredLabel: '',
             labelContent: [],
             labelNoteKeys: [],
@@ -27,6 +30,13 @@ class CreateLabelScreen extends Component {
         })
     }
 
+    selectActiveLabel = (labelKey) => {
+        this.setState({
+            activeLabel : labelKey,
+            createNewLabelTextboxActive: false
+        })
+    }
+
     navigateToPreviousScreen = () => {
         this.props.navigation.push('Home', {screen: 'Notes'})
     }
@@ -35,6 +45,7 @@ class CreateLabelScreen extends Component {
         let labels = []
         this.props.labels.map(label => {
             labels.push(label.toLowerCase())
+            console.log(labels);
         })
         if(labels.includes(text.toLowerCase())) {
             this.setState({
@@ -70,7 +81,7 @@ class CreateLabelScreen extends Component {
                 let tempKeys = Object.keys(labelContent)
                 let labels = []
                 tempKeys.map(key => {
-                    labels.push(labelContent[key].labelName)
+                    labels.push(labelContent[key].label.labelName)
                 })
                 await this.setState({
                     labelNoteKeys: tempKeys,
@@ -87,7 +98,11 @@ class CreateLabelScreen extends Component {
 
     createLabel = async () => {
         if(this.state.enteredLabel != '' && !this.state.labelExistErrorMessage) {
-            await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel)
+            await SQLiteLabelServices.storeLabelinSQliteStorage(this.props.userId, this.state.enteredLabel)
+            .then(async (results) => {
+                console.log('---',results);
+                await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel)})
+            .catch(error => console.log(error))
         }
         this.setState({
             createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive,
@@ -171,7 +186,9 @@ class CreateLabelScreen extends Component {
                                 <React.Fragment key = {key}>
                                     <ShowLabels 
                                         labelKey = {key} 
-                                        index = {index}/>
+                                        index = {index}
+                                        selectActiveLabel = {this.selectActiveLabel}
+                                        activeLabel = {this.state.activeLabel}/>
                                 </React.Fragment>
                             ))
                         : null}

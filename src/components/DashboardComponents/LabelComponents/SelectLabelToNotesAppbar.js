@@ -2,29 +2,30 @@ import React, {Component} from 'react'
 import {View} from 'react-native'
 import {Appbar, Checkbox, TouchableRipple} from 'react-native-paper';
 import { connect } from 'react-redux';
-import {storeSelectedLabelKey} from '../../../redux/actions/CreateNewLabelAction'
+import {storeSelectedLabelKeys} from '../../../redux/actions/CreateNewLabelAction'
 
 class SelectLabelAppbar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedLabelKeys: this.props.selectedLabelKey
+            selectedLabelKeys: this.props.selectedLabelKeys
         }
     }
 
     handleCheckbox = async (noteKey) => {
-        let selectedLabelKeys = this.props.selectedLabelKey
-        if(selectedLabelKeys.includes(noteKey)) {
-            selectedLabelKeys.pop(noteKey)
+        let selectedLabels = this.props.selectedLabelKeys
+        if(selectedLabels.includes(noteKey)) {
+            let index = selectedLabels.indexOf(noteKey)
+            selectedLabels.splice(index, 1)
             this.setState({
-                selectedLabelKeys: selectedLabelKeys
-            }, () => this.props.storeSelectedLabelKey(selectedLabelKeys))
+                selectedLabelKeys: selectedLabels
+            }, () => this.props.storeSelectedLabelKeys(selectedLabels))
         }
         else {
-            await selectedLabelKeys.push(noteKey)
+            await selectedLabels.push(noteKey)
             this.setState({
-                selectedLabelKeys: selectedLabelKeys
-            }, () => this.props.storeSelectedLabelKey(selectedLabelKeys))
+                selectedLabelKeys: selectedLabels
+            }, () => this.props.storeSelectedLabelKeys(selectedLabels))
         }
     }
 
@@ -37,7 +38,7 @@ class SelectLabelAppbar extends Component {
                             style = {{marginLeft : 10}}
                             icon = 'label-outline' />
                         <Appbar.Content
-                            title = {this.props.labelContent[this.props.noteKey].labelName}
+                            title = {this.props.labelContent[this.props.noteKey].label.labelName}
                             titleStyle = {{fontSize : 18}} />
                         <View
                             style = {{marginRight : 10}}>
@@ -58,12 +59,12 @@ const mapStateToProps = state => {
     return {
         userId : state.createLabelReducer.userId,
         labelContent : state.createLabelReducer.labelContent,
-        selectedLabelKey : state.createLabelReducer.selectedLabelKey,
+        selectedLabelKeys : state.createLabelReducer.selectedLabelKeys,
     }
 }
 const mapDispatchToProps = dispatch => {
     return {
-        storeSelectedLabelKey : (selectedLabelKey) => dispatch(storeSelectedLabelKey(selectedLabelKey)),
+        storeSelectedLabelKeys : (selectedLabelKeys) => dispatch(storeSelectedLabelKeys(selectedLabelKeys)),
     }
 }
 
