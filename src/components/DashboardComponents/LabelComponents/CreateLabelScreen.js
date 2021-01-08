@@ -4,10 +4,9 @@ import {Appbar, Provider, Portal, Dialog, Paragraph, Button} from 'react-native-
 import CreateNewLabelStyles from '../../../styles/CreateNewLabelStyles';
 import UserNoteServices from '../../../../services/UserNoteServices';
 import { connect } from 'react-redux';
-import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeLabels} from '../../../redux/actions/CreateNewLabelAction';
+import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeLabels, storelabelsAndLabelKeys} from '../../../redux/actions/CreateNewLabelAction';
 import ShowLabels from './ShowLabels'
 import { ScrollView } from 'react-native-gesture-handler';
-import SQLiteStorageServices from '../../../../services/SQLiteStorageServices';
 import SQLiteLabelServices from '../../../../services/SQLiteLabelServices';
 
 
@@ -21,6 +20,7 @@ class CreateLabelScreen extends Component {
             labelContent: [],
             labelNoteKeys: [],
             labelExistErrorMessage: false,
+            labels: []
         }
     }
 
@@ -28,6 +28,20 @@ class CreateLabelScreen extends Component {
         await this.setState({
             labelContent: this.props.labelContent,
         })
+        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
+            .then(results => {
+                if(results.rows.length > 0) {
+                    let labels = [];
+                    for(let i = 0; i<results.rows.length; i++ ) {
+                        labels.push(results.rows.item(i))
+                    }
+                    this.setState({
+                        labels: labels
+                    })
+                    this.props.storelabelsAndLabelKeys(labels)
+                }
+            })
+            .catch(error => console.log(error))
     }
 
     selectActiveLabel = (labelKey) => {
@@ -45,7 +59,6 @@ class CreateLabelScreen extends Component {
         let labels = []
         this.props.labels.map(label => {
             labels.push(label.toLowerCase())
-            console.log(labels);
         })
         if(labels.includes(text.toLowerCase())) {
             this.setState({
@@ -91,7 +104,6 @@ class CreateLabelScreen extends Component {
                 })
                 await this.props.storeLabelContent(this.state.labelContent)
                 await this.props.storeNoteKeys(this.state.labelNoteKeys)
-                await this.props.storeLabels(labels)
             })
             .catch(error => console.log(error))
     }
@@ -100,7 +112,6 @@ class CreateLabelScreen extends Component {
         if(this.state.enteredLabel != '' && !this.state.labelExistErrorMessage) {
             await SQLiteLabelServices.storeLabelinSQliteStorage(this.props.userId, this.state.enteredLabel)
             .then(async (results) => {
-                console.log('---',results);
                 await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel)})
             .catch(error => console.log(error))
         }
@@ -181,12 +192,13 @@ class CreateLabelScreen extends Component {
                     <ScrollView>
                     <View>
                         {
-                            this.props.labelNoteKeys.length > 0 ?
-                            this.props.labelNoteKeys.map((key, index) => (
-                                <React.Fragment key = {key}>
+                            this.state.labels.length > 0 ?
+                            this.state.labels.map((label) => ( 
+                                <React.Fragment key = {label.lebelKey}>
                                     <ShowLabels 
-                                        labelKey = {key} 
-                                        index = {index}
+                                        label = {label} 
+                                        labelKey = {label.lebelKey}
+                                        labelName = {label.labelName}
                                         selectActiveLabel = {this.selectActiveLabel}
                                         activeLabel = {this.state.activeLabel}/>
                                 </React.Fragment>
@@ -225,6 +237,7 @@ const mapStateToProps = state => {
         labels: state.createLabelReducer.labels,
         showDailog: state.createLabelReducer.showDailog,
         deleteLabelKey: state.createLabelReducer.deleteLabelKey,
+        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
     }
 }
 
@@ -233,7 +246,7 @@ const mapDispatchToProps = dispatch => {
         storeLabelContent : (labelContent) => dispatch(storeLabelContent(labelContent)),
         storeNoteKeys: (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys)),
         storeDailogStatus : (showDailog) => dispatch(storeDailogStatus(showDailog)),
-        storeLabels : (labels) => dispatch(storeLabels(labels))
+        storelabelsAndLabelKeys : (labelsAndLabelKeys) => dispatch(storelabelsAndLabelKeys(labelsAndLabelKeys))
     }
 }
 

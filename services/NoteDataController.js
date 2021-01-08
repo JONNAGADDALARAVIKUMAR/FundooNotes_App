@@ -37,23 +37,6 @@ class NoteDataController {
         .then(() => console.log('deleted Note in Firebase'))
         .catch((error) => console.log(error))
     }
-
-    generateRandomKey = () => {
-        const alphaNemuricChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
-        var today = new Date()
-        var noteKey = ''
-        noteKey = today.getFullYear() 
-                    + String((today.getMonth() + 1) < 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
-                    + String(today.getDate() < 10 ? (0 + String(today.getDate())) : today.getDate()) 
-                    + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
-                    + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
-                    + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
-
-        for(let i = 0; i < 6; i++) {
-            noteKey += alphaNemuricChars.charAt(Math.floor(Math.random() * alphaNemuricChars.length))
-        }
-        return noteKey
-    }
 }
 
 export default new NoteDataController

@@ -7,7 +7,8 @@ import { STORE_USERID,
         SELECTED_LABEL_KEY, 
         NOTES_ARCHIVED,
         EDIT_NOTES_DETAILS,
-        NOTEKEY_TO_ADD_NOTE} from '../actions/CreateNewLabelType'
+        NOTEKEY_TO_ADD_NOTE, 
+        LABELS_LABELKEYS} from '../actions/CreateNewLabelType'
 
 const initialState = {
     userId : '',
@@ -19,7 +20,9 @@ const initialState = {
     selectedLabelKeys: [],
     notesArchived: false,
     editNotesDetails: null,
-    noteKeyToUpdateNotes: ''
+    noteKeyToUpdateNotes: '',
+    labelsAndLabelKeys: []
+
 }
 
 const CreateNewLabelReducer = (state = initialState, action) => {
@@ -73,6 +76,11 @@ const CreateNewLabelReducer = (state = initialState, action) => {
             return {
                 ...state,
                 noteKeyToUpdateNotes : action.payload
+            }
+        case LABELS_LABELKEYS:
+            return {
+                ...state,
+                labelsAndLabelKeys : action.payload
             }
         default:
             return state;

@@ -23,6 +23,16 @@ class SQLiteLabelServices {
         })
     }
 
+    updateLabelinSQliteStorage = (userId, labelName, labelKey) => {
+        return new Promise(async (resolve, reject) => {
+            db.transaction(tx => {
+                tx.executeSql(
+                    `UPDATE ${userId}Label set labelName = ? where lebelKey = ?`,
+                    [labelName, labelKey],
+            )})
+        })
+    }
+
     getLabelsFromSQliteStorage = (userId) => {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
@@ -38,6 +48,9 @@ class SQLiteLabelServices {
                     (tx, results) => resolve(results),
                     error => reject(error)
                 );
+                // db.transaction((tx) => {
+                //     tx.executeSql(`DROP TABLE ${userId}Label`)
+                // })
             });
         })
     }

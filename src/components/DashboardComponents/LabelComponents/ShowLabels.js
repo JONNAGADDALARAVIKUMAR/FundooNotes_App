@@ -4,7 +4,8 @@ import LabelAppBarStyle from '../../../styles/LabelAppbarStyle';
 import {Appbar} from 'react-native-paper';
 import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeDeleteKey} from '../../../redux/actions/CreateNewLabelAction'
 import { connect } from 'react-redux';
-import UserNoteServices from '../../../../services/UserNoteServices'
+import UserNoteServices from '../../../../services/UserNoteServices';
+import SQLiteLabelServices from '../../../../services/SQLiteLabelServices';
 
 class showLabel extends Component {
     constructor(props) {
@@ -12,17 +13,20 @@ class showLabel extends Component {
         this.state = {
             edit : false,
             editLabel : '',
-            editTextInput : this.props.labelContent[this.props.labelKey].label.labelName,
+            editTextInput : this.props.label.labelName,
             emptyMsg : false,
             errorMsg : false,
             noteKeys: [],
-            showDailog: false
+            showDailog: false,
+            labels: []
         }
     }
 
     handleCheckButton = async () => {
         if(!this.state.errorMsg && !this.state.emptyMsg) {
             this.props.selectActiveLabel('')
+            if(!this.state.emptyMsg && !this.state.errorMsg)
+            SQLiteLabelServices.updateLabelinSQliteStorage(this.props.userId, this.state.editTextInput, this.props.labelKey)
             UserNoteServices.updateLabelInFirebase(this.props.userId, this.props.labelKey, this.state.editTextInput)
                 .then(() => {
                     UserNoteServices.getLabelsFromFirebase()
@@ -43,20 +47,36 @@ class showLabel extends Component {
     }
 
     handleEditButton = () => {
-       this.props.selectActiveLabel(this.props.labelContent[this.props.labelKey].label.labelName)
+       this.props.selectActiveLabel(this.props.label.labelName)
     }
 
     handleEditTextInput = async (editText) => {
-        let labelId = Object.keys(this.props.labelContent);
+        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
+            .then(async results => {
+                let labels = [];
+                if(results.rows.length > 0) {
+                    for(let i = 0; i < results.rows.length; i++ ) {
+                        labels.push(results.rows.item(i))
+                    }
+                }
+                await this.setState({
+                    labels: labels
+                })
+            })
+            .catch(error => console.log(error))
+            
+        
         let temp = []
-        if(labelId.length > 0) {
-            labelId.map(key => {
-                temp.push(this.props.labelContent[key].label.labelName.toLowerCase())
+        if(this.state.labels.length > 0) {
+            this.state.labels.map(label => {
+                temp.push(label.labelName.toLowerCase())
             })
         }
+        this.props.selectActiveLabel(editText)
         await this.setState({
             editTextInput : editText
         })
+       
         if(this.state.editTextInput == '') {
             await this.setState({
                 emptyMsg : true,
@@ -67,7 +87,7 @@ class showLabel extends Component {
                 emptyMsg : false
             })
             if(temp.includes(this.state.editTextInput.toLowerCase()) && 
-                this.state.editTextInput.toLowerCase() != this.props.labelContent[this.props.labelKey].label.labelName.toLowerCase()){
+                this.state.editTextInput.toLowerCase() != this.props.labelName.toLowerCase()){
                 await this.setState({
                     errorMsg : true,
                 })

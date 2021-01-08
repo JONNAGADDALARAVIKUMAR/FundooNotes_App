@@ -5,7 +5,11 @@ import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import { Button, Card, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import SQLiteStorageServices from '../../../services/SQLiteStorageServices';
-import {storeUserID, storeEditNotesDetails, storeNoteKeyToUpdateNotes, storeSelectedLabelKeys} from '../../redux/actions/CreateNewLabelAction';
+import {storeUserID, 
+        storeEditNotesDetails, 
+        storeNoteKeyToUpdateNotes, 
+        storeSelectedLabelKeys,
+        storelabelsAndLabelKeys} from '../../redux/actions/CreateNewLabelAction';
 import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
 import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
@@ -69,6 +73,7 @@ class NotesView extends Component {
                     this.setState({
                         labels: labels
                     })
+                    this.storelabelsAndLabelKeys(labels)
                 }
             })
             .catch(error => console.log(error))
@@ -179,6 +184,7 @@ const mapDispatchToProps = dispatch => {
         storeEditNotesDetails : (notes) => dispatch(storeEditNotesDetails(notes)),
         storeNoteKeyToUpdateNotes : (noteKeyToUpdateNotes) => dispatch(storeNoteKeyToUpdateNotes(noteKeyToUpdateNotes)),
         storeSelectedLabelKeys : (selectedLabelKeys) => dispatch(storeSelectedLabelKeys(selectedLabelKeys)),
+        storelabelsAndLabelKeys : (labelsAndLabelKeys) => dispatch(storelabelsAndLabelKeys(labelsAndLabelKeys)),
     }
 }
 
