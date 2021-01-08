@@ -91,8 +91,11 @@ addNoteToFirebase = async (noteKey, notes) => {
 
     updateLabelInFirebase = (userId, labelNoteKey, labelName) => {
         return new Promise((resolve, reject) => {
+            const label = {
+                labelName: labelName,
+            } 
             Firebase.database().ref('Labels/' + userId  + '/' + labelNoteKey).set({
-                labelName : labelName
+                label: label
             })
             .then(() => resolve('success'))
             .catch(error => reject(error))

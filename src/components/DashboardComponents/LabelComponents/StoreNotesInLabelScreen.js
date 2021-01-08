@@ -10,8 +10,18 @@ class SelectLabelToNotesScreen extends Component {
         super(props)
         this.state = {
             search : '',
-            noteKeysAfterSearch : this.props.labelNoteKeys
+            labelsAndLabelKeysAfterSearch : this.props.labelsAndLabelKeys,
+            labelsAndLabelKeys: this.props.labelsAndLabelKeys
         }
+    }
+
+    componentDidMount = async () => {
+        let tempLabelKeys = []
+        await this.props.labelsAndLabelKeys.map(labelNameAndLabelKey => {
+            tempLabelKeys.push(labelNameAndLabelKey.lebelKey)
+        }, this.setState({
+            noteKeysAfterSearch: tempLabelKeys
+        }))
     }
 
     handleBackIconButton = () => {
@@ -22,20 +32,19 @@ class SelectLabelToNotesScreen extends Component {
         await this.setState({
             search : searchText,
         })
-        let tempNoteKeys = []
+        let tempLabelAndLabelKeys = []
         if(this.state.search != '') {
-            this.props.labelNoteKeys.map(noteKey => {
-                if(this.props.labelContent[noteKey].label.labelName.toLowerCase().includes(searchText.toLowerCase())) {
-                    tempNoteKeys.push(noteKey)
+            this.state.labelsAndLabelKeys.map(labelNameAndKey => {
+                if(labelNameAndKey.labelName.toLowerCase().includes(searchText.toLowerCase())) {
+                    tempLabelAndLabelKeys.push(labelNameAndKey)
                 }
             })
             this.setState({
-                noteKeysAfterSearch: tempNoteKeys,
+                labelsAndLabelKeysAfterSearch: tempLabelAndLabelKeys,
             })
-        }
-        else {
+        } else {
             await this.setState({
-                noteKeysAfterSearch : this.props.labelNoteKeys
+                labelsAndLabelKeysAfterSearch : this.props.labelsAndLabelKeys,
             })
         }
     }
@@ -60,10 +69,12 @@ class SelectLabelToNotesScreen extends Component {
                 <ScrollView>
                     <View>
                         {
-                            (this.state.noteKeysAfterSearch.length > 0) ?
-                                this.state.noteKeysAfterSearch.map((noteKey => (
-                                    <React.Fragment key = {noteKey}>
-                                        <SelectLabelToNotesAppbar noteKey = {noteKey}/>
+                            (this.state.labelsAndLabelKeysAfterSearch.length > 0) ?
+                                this.state.labelsAndLabelKeysAfterSearch.map((labelNameAndKey => (
+                                    <React.Fragment key = {labelNameAndKey.lebelKey}>
+                                        <SelectLabelToNotesAppbar 
+                                                labelKey = {labelNameAndKey.lebelKey} 
+                                                labelName = {labelNameAndKey.labelName}/>
                                     </React.Fragment>
                                 )))
                             : <Text style = {{alignSelf: 'center', marginTop: 30}}>
@@ -81,6 +92,7 @@ const mapStateToProps = state => {
         userId : state.createLabelReducer.userId,
         labelContent : state.createLabelReducer.labelContent,
         labelNoteKeys : state.createLabelReducer.labelNoteKeys,
+        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
     }
 }
 

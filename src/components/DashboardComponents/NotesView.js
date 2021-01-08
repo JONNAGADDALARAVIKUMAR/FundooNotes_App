@@ -73,7 +73,7 @@ class NotesView extends Component {
                     this.setState({
                         labels: labels
                     })
-                    this.storelabelsAndLabelKeys(labels)
+                    this.props.storelabelsAndLabelKeys(labels)
                 }
             })
             .catch(error => console.log(error))

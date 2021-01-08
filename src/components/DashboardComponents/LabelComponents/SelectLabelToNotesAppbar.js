@@ -10,6 +10,7 @@ class SelectLabelAppbar extends Component {
         this.state = {
             selectedLabelKeys: this.props.selectedLabelKeys
         }
+        console.log(this.props.labelKey);
     }
 
     handleCheckbox = async (noteKey) => {
@@ -38,13 +39,13 @@ class SelectLabelAppbar extends Component {
                             style = {{marginLeft : 10}}
                             icon = 'label-outline' />
                         <Appbar.Content
-                            title = {this.props.labelContent[this.props.noteKey].label.labelName}
+                            title = {this.props.labelName}
                             titleStyle = {{fontSize : 18}} />
                         <View
                             style = {{marginRight : 10}}>
                             <Checkbox 
-                                status = {this.state.selectedLabelKeys.includes(this.props.noteKey) ? 'checked' : 'unchecked'}
-                                onPress = {() => this.handleCheckbox(this.props.noteKey)}
+                                status = {this.state.selectedLabelKeys.includes(this.props.labelKey) ? 'checked' : 'unchecked'}
+                                onPress = {() => this.handleCheckbox(this.props.labelKey)}
                                 uncheckedColor = 'black'
                                 color = '#912c4c'/>
                         </View>
@@ -60,6 +61,7 @@ const mapStateToProps = state => {
         userId : state.createLabelReducer.userId,
         labelContent : state.createLabelReducer.labelContent,
         selectedLabelKeys : state.createLabelReducer.selectedLabelKeys,
+        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
     }
 }
 const mapDispatchToProps = dispatch => {

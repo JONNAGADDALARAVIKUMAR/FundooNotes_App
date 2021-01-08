@@ -5,37 +5,18 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import DrawContentStyles from '../../styles/DrawContentStyle';
 import {strings} from '../../Languages/strings'
 import { connect } from 'react-redux';
-import UserNoteServices from '../../../services/UserNoteServices';
-import {storeLabelContent, storeNoteKeys, storeLabels} from '../../redux/actions/CreateNewLabelAction'
 
 class DrawerContent extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            labelsContent: [],
-            labelNoteKeys: [],
-            labels: []
-        }
     }
 
     componentDidMount = async () => {
-        await UserNoteServices.getLabelsFromFirebase()
-        .then(async (labelContent) => {
-             let tempKeys = await Object.keys(labelContent)
-             let labels = []
-             tempKeys.map(key => {
-                 labels.push(labelContent[key].label.labelName)
-             })
-            await this.setState({
-                labelNoteKeys: tempKeys,
-                labelsContent: labelContent,
-                labels: labels
-            })
-            await this.props.storeLabelContent(this.state.labelsContent)
-            await this.props.storeNoteKeys(this.state.labelNoteKeys)
-            await this.props.storeLabels(this.state.labels)
-        })
-        .catch(error => console.log(error))
+        let templabelsAndLabelKeys = this.props.labelsAndLabelKeys
+        let labelNoteKeys = []
+        for(let i = 0; i < templabelsAndLabelKeys.length; i++) {
+            labelNoteKeys.push(templabelsAndLabelKeys[i].lebelKey)
+        }
     }
 
     navigateToHome = () => {
@@ -66,8 +47,8 @@ class DrawerContent extends Component {
             <DrawerContentScrollView>
                     <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {this.navigateToHome}/>
                     <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style}/>
-                    {this.state.labelNoteKeys.map(key => (
-                        <Drawer.Item key = {key} icon = 'label-outline' label = {this.state.labelsContent[key].label.labelName} onPress = {this.navigateToCreateNewLabel}/>
+                    {this.props.labelsAndLabelKeys.map((labelAndKey) => (
+                        <Drawer.Item key = {labelAndKey.lebelKey} icon = 'label-outline' label = {labelAndKey.labelName} onPress = {this.navigateToCreateNewLabel}/>
                     ))}
                     <Drawer.Item icon = 'plus' label = {strings.Createnewlabel} onPress = {this.navigateToCreateNewLabel} style = {DrawContentStyles.drawer_Section_style}/>
                     <Drawer.Item icon = 'archive-arrow-down-outline' label = {strings.Archive}/>
@@ -82,19 +63,8 @@ class DrawerContent extends Component {
 
 const mapStateToProps = state => {
     return {
-        userId : state.createLabelReducer.userId,
-        labelsContent : state.createLabelReducer.labelsContent,
-        labelNoteKeys : state.createLabelReducer.labelNoteKeys,
-        labels : state.createLabelReducer.labels 
+        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        storeLabelContent : (labelsContent) => dispatch(storeLabelContent(labelsContent)),
-        storeNoteKeys : (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys)),
-        storeLabels : (labels) => dispatch(storeLabels(labels))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent)
+export default connect(mapStateToProps)(DrawerContent)

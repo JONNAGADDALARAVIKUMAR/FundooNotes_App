@@ -10,7 +10,7 @@ class SQLiteLabelServices {
             db.transaction(tx => {
                 tx.executeSql(
                     `CREATE TABLE IF NOT EXISTS ${userId}Label (lebelKey TEXT PRIMARY KEY, labelName TEXT)`,
-                    [],
+                    [],(tx, results) => {},
                     error => console.log(error)
                 )
                 tx.executeSql(
@@ -31,6 +31,14 @@ class SQLiteLabelServices {
                     [labelName, labelKey],
             )})
         })
+    }
+
+    deleteLabel = (userId, labelKey) => {
+        db.transaction(tx => {
+            tx.executeSql(
+                `DELETE FROM ${userId}Label WHERE lebelKey = ?`,
+                [labelKey],
+        )})
     }
 
     getLabelsFromSQliteStorage = (userId) => {

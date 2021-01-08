@@ -4,7 +4,7 @@ import {Appbar, Provider, Portal, Dialog, Paragraph, Button} from 'react-native-
 import CreateNewLabelStyles from '../../../styles/CreateNewLabelStyles';
 import UserNoteServices from '../../../../services/UserNoteServices';
 import { connect } from 'react-redux';
-import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeLabels, storelabelsAndLabelKeys} from '../../../redux/actions/CreateNewLabelAction';
+import {storeDailogStatus, storelabelsAndLabelKeys} from '../../../redux/actions/CreateNewLabelAction';
 import ShowLabels from './ShowLabels'
 import { ScrollView } from 'react-native-gesture-handler';
 import SQLiteLabelServices from '../../../../services/SQLiteLabelServices';
@@ -17,29 +17,32 @@ class CreateLabelScreen extends Component {
             createNewLabelTextboxActive: true,
             activeLabel: '',
             enteredLabel: '',
-            labelContent: [],
-            labelNoteKeys: [],
             labelExistErrorMessage: false,
-            labels: []
+            labels: this.props.labelsAndLabelKeys
         }
     }
 
     componentDidMount = async () => {
-        await this.setState({
-            labelContent: this.props.labelContent,
-        })
+        this.updateLabels()
+    }
+
+    updateLabels = () => {
         SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
-            .then(results => {
+            .then(async results => {
+                let labels = [];
                 if(results.rows.length > 0) {
-                    let labels = [];
                     for(let i = 0; i<results.rows.length; i++ ) {
                         labels.push(results.rows.item(i))
                     }
                     this.setState({
                         labels: labels
                     })
-                    this.props.storelabelsAndLabelKeys(labels)
+                } else {
+                    this.setState({
+                        labels: []
+                    })
                 }
+                this.props.storelabelsAndLabelKeys(labels)
             })
             .catch(error => console.log(error))
     }
@@ -52,13 +55,14 @@ class CreateLabelScreen extends Component {
     }
 
     navigateToPreviousScreen = () => {
-        this.props.navigation.push('Home', {screen: 'Notes'})
+        this.props.navigation.goBack()//push('Home', {screen: 'Notes'})
     }
 
     handleText = async (text) => {
         let labels = []
-        this.props.labels.map(label => {
-            labels.push(label.toLowerCase())
+        this.props.labelsAndLabelKeys.map(label => {
+            console.log(label);
+            labels.push(label.labelName.toLowerCase())
         })
         if(labels.includes(text.toLowerCase())) {
             this.setState({
@@ -88,36 +92,17 @@ class CreateLabelScreen extends Component {
         })
     }
 
-    updateLabels = async () => {
-        await UserNoteServices.getLabelsFromFirebase()
-            .then(async (labelContent) => {
-                let tempKeys = Object.keys(labelContent)
-                let labels = []
-                tempKeys.map(key => {
-                    labels.push(labelContent[key].label.labelName)
-                })
-                await this.setState({
-                    labelNoteKeys: tempKeys,
-                    labelContent: labelContent,
-                    enteredLabel: '',
-                    labelExistErrorMessage: false
-                })
-                await this.props.storeLabelContent(this.state.labelContent)
-                await this.props.storeNoteKeys(this.state.labelNoteKeys)
-            })
-            .catch(error => console.log(error))
-    }
-
     createLabel = async () => {
         if(this.state.enteredLabel != '' && !this.state.labelExistErrorMessage) {
             await SQLiteLabelServices.storeLabelinSQliteStorage(this.props.userId, this.state.enteredLabel)
             .then(async (results) => {
+                this.updateLabels()
                 await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel)})
             .catch(error => console.log(error))
         }
         this.setState({
             createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive,
-        }, () => this.updateLabels())
+        })
     }
 
     hideDialog() {
@@ -125,19 +110,10 @@ class CreateLabelScreen extends Component {
     }
 
     handleDeleteButton = async () => {
+        await SQLiteLabelServices.deleteLabel(this.props.userId, this.props.deleteLabelKey)
         await UserNoteServices.deleteLabelInFirebase(this.props.userId, this.props.deleteLabelKey)
-            .then(async () => {
-                await UserNoteServices.getLabelsFromFirebase()
-                    .then(async data => {
-                        let labels = data ? data : {}
-                        let tempKeys = Object.keys(labels)
-                        this.props.storeNoteKeys(tempKeys)
-                        this.props.storeDailogStatus(false)
-                    }, () => {
-                        this.props.storeLabelContent(labels)
-                    }) 
-            })
-            .catch(error => console.log(error))
+        this.props.storeDailogStatus(false)
+        this.updateLabels()
     }
 
     render() {
@@ -232,9 +208,6 @@ class CreateLabelScreen extends Component {
 const mapStateToProps = state => {
     return {
         userId : state.createLabelReducer.userId,
-        labelContent : state.createLabelReducer.labelContent,
-        labelNoteKeys : state.createLabelReducer.labelNoteKeys,
-        labels: state.createLabelReducer.labels,
         showDailog: state.createLabelReducer.showDailog,
         deleteLabelKey: state.createLabelReducer.deleteLabelKey,
         labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
@@ -243,8 +216,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        storeLabelContent : (labelContent) => dispatch(storeLabelContent(labelContent)),
-        storeNoteKeys: (labelNoteKeys) => dispatch(storeNoteKeys(labelNoteKeys)),
         storeDailogStatus : (showDailog) => dispatch(storeDailogStatus(showDailog)),
         storelabelsAndLabelKeys : (labelsAndLabelKeys) => dispatch(storelabelsAndLabelKeys(labelsAndLabelKeys))
     }

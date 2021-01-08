@@ -60,9 +60,9 @@ class SQLiteStorageServices {
                     resolve(results)
                 }, error => console.log(error))
             })
-            db.transaction((tx) => {
-                tx.executeSql(`DROP TABLE ${UserID}`)
-            })
+            // db.transaction((tx) => {
+            //     tx.executeSql(`DROP TABLE ${UserID}`)
+            // })
         })
     }
 
