@@ -61,7 +61,6 @@ class CreateLabelScreen extends Component {
     handleText = async (text) => {
         let labels = []
         this.props.labelsAndLabelKeys.map(label => {
-            console.log(label);
             labels.push(label.labelName.toLowerCase())
         })
         if(labels.includes(text.toLowerCase())) {

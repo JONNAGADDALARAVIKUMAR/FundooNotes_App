@@ -14,9 +14,12 @@ class Bottombar extends Component {
             isArchived: false,
             isDeleted: false
         }
+        if(this.props.labelAndKey != undefined)
+            this.props.storeSelectedLabelKeys([this.props.labelAndKey.lebelKey])
+        else
+            this.props.storeSelectedLabelKeys([])
         this.props.storeEditNotesDetails(notes)
         this.props.storeNoteKeyToUpdateNotes(undefined)
-        this.props.storeSelectedLabelKeys([])
 
         this.props.navigation.push('AddNewNotes')
         //onPress();

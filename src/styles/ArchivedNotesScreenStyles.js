@@ -1,21 +1,22 @@
 import {StyleSheet} from 'react-native';
 
-const AddNewNotesScreenStyles = StyleSheet.create({
+const ArchivedNotesScreenStyles = StyleSheet.create({
     backGround_Style: {
         backgroundColor: '#f5dcef', 
         height: '100%'
     },
     title_Style: {
         fontSize: 20, 
-        paddingLeft: 30
+        paddingLeft: 20
     },
     notes_Style: {
         fontSize: 17, 
         paddingLeft: 30
     },
-    bottomBar_Style: {
-        justifyContent: 'space-around', 
-        backgroundColor: 'transparent'
+    App_Bar_Style_Bottom: {
+        justifyContent: 'space-around',
+        backgroundColor: '#f0cee6',
+        marginBottom: 20
     },
     Label_Button_Style : {
         padding: 5,
@@ -27,5 +28,4 @@ const AddNewNotesScreenStyles = StyleSheet.create({
         textAlign: 'center'
     },
 })
-export default AddNewNotesScreenStyles;
-
+export default ArchivedNotesScreenStyles;

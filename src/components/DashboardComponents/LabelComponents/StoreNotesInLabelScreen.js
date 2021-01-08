@@ -25,7 +25,7 @@ class SelectLabelToNotesScreen extends Component {
     }
 
     handleBackIconButton = () => {
-        this.props.navigation.goBack();
+        this.props.navigation.push('AddNewNotes');
     }
 
     handleSearchTextInput = async (searchText) => {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, TextInput, View, Text } from 'react-native';
 import {Appbar, Menu, Snackbar} from 'react-native-paper';
 import { strings } from '../Languages/strings';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import NoteDataController from '../../services/NoteDataController';
 import {connect} from 'react-redux';
 import {storeNotesArchivedStatus} from '../redux/actions/CreateNewLabelAction';
+import AddNewNotesStyles from '../styles/AddNewNotesStyles'
 
 class AddNewNotes extends Component {
     constructor(props) {
@@ -19,7 +20,31 @@ class AddNewNotes extends Component {
             isDeleted: this.props.editNotesDetails.isDeleted,
             archived: this.props.editNotesDetails.isArchived,
             editNotesDetails: this.props.editNotesDetails,
-            labels: this.props.editNotesDetails.labels
+            labels: this.props.editNotesDetails.labels,
+            noteLabels: []
+        }
+    }
+
+    componentDidMount = async () => {
+        let noteLabels = []
+        if(this.state.labels.length > 0 || this.props.selectedLabelKeys > 0) {
+            let labelKeys = []
+            if(this.state.labels > 0) {
+                labelKeys = JSON.parse(this.state.labels)
+            }
+            this.props.selectedLabelKeys.map(label => {
+                if(!labelKeys.includes(label)) {
+                    labelKeys.push(label)
+                }
+            })
+            await this.props.labelsAndLabelKeys.map(labelAndKey => {
+                if(labelKeys.includes(labelAndKey.lebelKey)) {
+                    noteLabels.push(labelAndKey.labelName)
+                }
+            })
+            this.setState({
+                noteLabels: noteLabels
+            })
         }
     }
 
@@ -47,7 +72,7 @@ class AddNewNotes extends Component {
         
         if(this.state.title != '' || this.state.note != '') {
             if(this.state.noteKey == undefined) {
-                noteKey = this.generateRandomKey()
+                let noteKey = this.generateRandomKey()
                 NoteDataController.addNote(noteKey, notes)
                 .then(() => { 
                     this.props.navigation.push('Home', {screen: 'Notes'})})
@@ -164,16 +189,17 @@ class AddNewNotes extends Component {
                         value = {this.state.note}
                         onChangeText = {this.handleNote}
                     />
-                    {/* {(this.props.selectedLabelKeys.length > 0 ? 
-                        this.props.selectedLabelKeys.map(labelKey => (
-                            <React.Fragment key = {labelKey}>
-                                <Text style = {AddNewNotesStyles.Label_Button_Style}>
-                                    {this.props.labelContent[labelKey].label.labelName}
+                    <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
+                    {(this.state.noteLabels.length > 0 ? 
+                        this.state.noteLabels.map((label, index) => (
+                            <React.Fragment key = {index}>
+                                <Text style = {AddNewNotesStyles.Label_Button_Style} onPress = {this.handleLabelsIcon}>
+                                    {label}
                                 </Text>
                             </React.Fragment>)
                         )
-                        : null)} */}
-                    
+                        : null)}
+                    </View>
                 </ScrollView>
                 <View>
                     <Appbar style = {{justifyContent: 'space-around', backgroundColor: 'transparent'}}>
@@ -240,7 +266,8 @@ const mapStateToProps = state => {
         notesArchived : state.createLabelReducer.notesArchived,
         labelNoteKeys : state.createLabelReducer.labelNoteKeys,
         editNotesDetails : state.createLabelReducer.editNotesDetails,
-        noteKeyToUpdateNotes : state.createLabelReducer.noteKeyToUpdateNotes
+        noteKeyToUpdateNotes : state.createLabelReducer.noteKeyToUpdateNotes,
+        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
     }
 }
 

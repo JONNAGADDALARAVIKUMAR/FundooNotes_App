@@ -24,6 +24,15 @@ const NoteViewStyles = StyleSheet.create({
     list_Style : {
         flexDirection: 'row', 
         flexWrap: 'wrap'
-    }
+    },
+    Label_Button_Style : {
+        padding: 5,
+        margin: 5,
+        borderWidth: 1, 
+        borderRadius: 30, 
+        borderColor: '#912c4c', 
+        fontSize: 5, 
+        textAlign: 'center',
+    },
 })
 export default NoteViewStyles;

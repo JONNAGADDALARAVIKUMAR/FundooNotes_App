@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {View, Text, ImageBackground, Dimensions, ScrollView, Image} from 'react-native';
 import {strings} from '../../Languages/strings';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
-import { Button, Card, Paragraph, Title } from 'react-native-paper';
+import { Card, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import SQLiteStorageServices from '../../../services/SQLiteStorageServices';
 import {storeUserID, 
@@ -50,27 +50,35 @@ class NotesView extends Component {
         .then(async (results) => {
             var temp = []
             if(results.rows.length != 0) {
-                for (let i = 0; i < results.rows.length; ++i)
-                temp.push(results.rows.item(i));
+                for (let i = 0; i < results.rows.length; ++i) {
+                    if(this.props.labelAndKey != undefined) {
+                        if(results.rows.item(i).Labels.includes(this.props.labelAndKey.lebelKey)) {
+                            temp.push(results.rows.item(i));
+                        }
+                    } else {
+                        temp.push(results.rows.item(i));
+                    }
+                }
                 await this.setState({
                     notes : temp
                 })
                 temp.map(async (notes) => {
-                    (notes.isDeleted == this.props.status)
+                    (notes.isDeleted == this.props.deletedStatus && notes.isArchived == this.props.archivedStatus)
                     ? this.setState({
                         isEmpty: false
                     })
                     : null
                 })
             }
+
             SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
-            .then(results => {
+            .then(async results => {
                 if(results.rows.length > 0) {
                     let labels = [];
                     for(let i = 0; i<results.rows.length; i++ ) {
                         labels.push(results.rows.item(i))
                     }
-                    this.setState({
+                    await this.setState({
                         labels: labels
                     })
                     this.props.storelabelsAndLabelKeys(labels)
@@ -122,7 +130,7 @@ class NotesView extends Component {
                         {this.state.notes.length > 0 ?
                         this.state.notes.map(val => (
                             <React.Fragment key = {val.NoteKey}>
-                                {val.isDeleted == this.props.status ? (
+                                {(val.isDeleted == this.props.deletedStatus && val.isArchived == this.props.archivedStatus) ? (
                                     <Card
                                         style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
                                         onPress = {() => {
@@ -137,12 +145,12 @@ class NotesView extends Component {
                                             <Paragraph>
                                                 {val.Notes}
                                             </Paragraph>
-                                                <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
+                                            <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
                                                 {(val.Labels.length > 0) ?
                                                     this.state.labels.map(labels => (
                                                         val.Labels.includes(labels.lebelKey) ?
                                                             <React.Fragment key = {labels.lebelKey}>
-                                                                <View style = {{}}>
+                                                                <View style = {NoteViewStyles.Label_Button_Style}>
                                                                     <Text>{labels.labelName}</Text>
                                                                 </View>
                                                             </React.Fragment>
@@ -151,7 +159,7 @@ class NotesView extends Component {
                                                     ))
                                                 :
                                                 null}
-                                                </View>
+                                            </View>
                                         </Card.Content>  
                                     </Card>)
                                 : null}

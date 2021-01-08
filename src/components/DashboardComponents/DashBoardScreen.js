@@ -115,7 +115,8 @@ export default class Dashboard extends Component {
                     <ViewNotes 
                         navigation = {this.props.navigation} 
                         changeLayout = {this.state.listView} 
-                        status = {false}/>
+                        deletedStatus = {false}
+                        archivedStatus = {false}/>
                 </ScrollView>
 
                 <BottomBar 

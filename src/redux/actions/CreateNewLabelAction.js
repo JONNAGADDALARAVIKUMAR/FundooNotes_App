@@ -7,7 +7,8 @@ import {STORE_USERID,
         NOTES_ARCHIVED,
         EDIT_NOTES_DETAILS,
         NOTEKEY_TO_ADD_NOTE,
-        LABELS_LABELKEYS} from './CreateNewLabelType';
+        LABELS_LABELKEYS, 
+        LABEL_AND_KEYS_LABEL_NOTES} from './CreateNewLabelType';
 
 export const storeUserID = (userId) => {
     return {
@@ -83,5 +84,12 @@ export const storelabelsAndLabelKeys = (labelsAndLabelKeys) => {
     return {
         type : LABELS_LABELKEYS,
         payload : labelsAndLabelKeys
+    }
+}
+
+export const storelabelAndKey = (labelAndKey) => {
+    return {
+        type : LABEL_AND_KEYS_LABEL_NOTES,
+        payload : labelAndKey
     }
 }

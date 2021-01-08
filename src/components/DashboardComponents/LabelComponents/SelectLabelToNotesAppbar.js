@@ -10,7 +10,6 @@ class SelectLabelAppbar extends Component {
         this.state = {
             selectedLabelKeys: this.props.selectedLabelKeys
         }
-        console.log(this.props.labelKey);
     }
 
     handleCheckbox = async (noteKey) => {

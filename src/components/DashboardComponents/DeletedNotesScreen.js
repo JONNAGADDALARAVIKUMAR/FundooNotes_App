@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Text, View} from 'react-native';
+import {View} from 'react-native';
 import DeletedNotesScreenTopbar from './DeletedNotesScreenTopbar';
 import DeletedNotesScreenStyles from '../../styles/DeletedNotesScreenStyles';
 import NotesView from './NotesView';
@@ -18,7 +18,8 @@ export default class DeletedNotesSreen extends Component {
                 />
                 <NotesView  
                     navigation = {this.props.navigation}  
-                    status = {true}
+                    deletedStatus = {true}
+                    archivedStatus = {false}
                 />
             </View>
         )

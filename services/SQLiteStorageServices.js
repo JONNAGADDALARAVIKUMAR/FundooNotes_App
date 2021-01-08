@@ -66,7 +66,7 @@ class SQLiteStorageServices {
         })
     }
 
-    addDetailsInSQLiteDataBaseFromFirebase = async (noteKey, title, notes, deletedStatus) => {
+    addDetailsInSQLiteDataBaseFromFirebase = async (noteKey, notes) => {
         return new Promise(async (resolve, reject) => {
             let user = await KeyChain.getGenericPassword();
             let userDetails = JSON.parse(user.password);
@@ -76,8 +76,8 @@ class SQLiteStorageServices {
                 tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, "isArchived" INTEGER, "Labels" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                 })
                 tx.executeSql(
-                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted) VALUES (?,?,?,?,?,?)`,
-                    [noteKey, title, notes, deletedStatus],
+                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted, isArchived, Labels) VALUES (?,?,?,?,?,?)`,
+                    [noteKey, notes.notes.title, notes.notes.note, notes.notes.isDeleted, notes.notes.isArchived, JSON.stringify(notes.notes.labels)],
                     async (tx, results) => {
                         console.log('Results Inserted to SQLIite');
                         resolve(results)

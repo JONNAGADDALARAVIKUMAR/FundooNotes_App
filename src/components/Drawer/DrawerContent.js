@@ -5,6 +5,7 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import DrawContentStyles from '../../styles/DrawContentStyle';
 import {strings} from '../../Languages/strings'
 import { connect } from 'react-redux';
+import {storelabelAndKey} from '../../redux/actions/CreateNewLabelAction'
 
 class DrawerContent extends Component {
     constructor(props) {
@@ -40,6 +41,18 @@ class DrawerContent extends Component {
         //onPress();
     }
 
+    navigateToArchiveScreen = () => {
+        const {onPress} = this.props
+        this.props.props.navigation.closeDrawer()
+        this.props.props.navigation.push('Home', { screen: 'Archived'})
+        //onPress();
+    } 
+
+    navigateLabelScreen = (labelAndKey) => {
+        this.props.storelabelAndKey(labelAndKey)
+        this.props.props.navigation.push('Home', { screen: 'Label'})
+    }
+
     render() {
     return(
         <View style = {{flex: 1}}>
@@ -48,10 +61,10 @@ class DrawerContent extends Component {
                     <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {this.navigateToHome}/>
                     <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style}/>
                     {this.props.labelsAndLabelKeys.map((labelAndKey) => (
-                        <Drawer.Item key = {labelAndKey.lebelKey} icon = 'label-outline' label = {labelAndKey.labelName} onPress = {this.navigateToCreateNewLabel}/>
+                        <Drawer.Item key = {labelAndKey.lebelKey} icon = 'label-outline' label = {labelAndKey.labelName} onPress = {() => this.navigateLabelScreen(labelAndKey)}/>
                     ))}
                     <Drawer.Item icon = 'plus' label = {strings.Createnewlabel} onPress = {this.navigateToCreateNewLabel} style = {DrawContentStyles.drawer_Section_style}/>
-                    <Drawer.Item icon = 'archive-arrow-down-outline' label = {strings.Archive}/>
+                    <Drawer.Item icon = 'archive-arrow-down-outline' label = {strings.Archive} onPress = {this.navigateToArchiveScreen}/>
                     <Drawer.Item icon = 'delete' label = {strings.Deleted} style = {DrawContentStyles.drawer_Section_style} onPress = {this.handleDeletedIconButton}/>
                     <Drawer.Item icon = 'cog-outline' label = {strings.Settings}/>
                     <Drawer.Item icon = 'help' label = {strings.HelpfeedBack}/>
@@ -67,4 +80,10 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(DrawerContent)
+const mapDispatchToProps = dispatch => {
+    return {
+        storelabelAndKey : (labelAndKey) => dispatch(storelabelAndKey(labelAndKey)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DrawerContent)
