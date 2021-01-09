@@ -35,10 +35,7 @@ class SQLiteStorageServices {
                 tx.executeSql(
                     `UPDATE ${UserID} set Title = ?, Notes = ?, isDeleted = ? , isArchived = ?, Labels = ?  where NoteKey = ?`,
                     [notes.title, notes.note, notes.isDeleted, notes.isArchived, JSON.stringify(notes.labels), noteKey],
-                    async (tx, results) => {
-                        console.log('Success Results Updated to SQLite');
-                        resolve(results)
-                    },
+                    async (tx, results) => {resolve(results)},
                     error => reject(error)
                 )
             })
@@ -78,10 +75,7 @@ class SQLiteStorageServices {
                 tx.executeSql(
                     `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted, isArchived, Labels) VALUES (?,?,?,?,?,?)`,
                     [noteKey, notes.notes.title, notes.notes.note, notes.notes.isDeleted, notes.notes.isArchived, JSON.stringify(notes.notes.labels)],
-                    async (tx, results) => {
-                        console.log('Results Inserted to SQLIite');
-                        resolve(results)
-                    },
+                    async (tx, results) => {resolve(results)},
                     error => reject(error)
                 );
             })

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Appbar} from 'react-native-paper';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import {connect} from 'react-redux';
-import {storeEditNotesDetails, storeNoteKeyToUpdateNotes, storeSelectedLabelKeys} from '../../redux/actions/CreateNewLabelAction';
+import {storeEditNotesDetails, storeNoteKeyToUpdateNotes, storeSelectedLabelKeys, storelabelScreen} from '../../redux/actions/CreateNewLabelAction';
 
 class Bottombar extends Component {
     handlePlusButton = () => {
@@ -14,15 +14,20 @@ class Bottombar extends Component {
             isArchived: false,
             isDeleted: false
         }
-        if(this.props.labelAndKey != undefined)
+
+        if(this.props.labelAndKey != undefined) 
             this.props.storeSelectedLabelKeys([this.props.labelAndKey.lebelKey])
         else
             this.props.storeSelectedLabelKeys([])
+
         this.props.storeEditNotesDetails(notes)
         this.props.storeNoteKeyToUpdateNotes(undefined)
-
         this.props.navigation.push('AddNewNotes')
         //onPress();
+    }
+
+    navigateViewFragment = () => {
+        this.props.navigation.push('ViewFragment')
     }
     
     render() {
@@ -46,7 +51,7 @@ class Bottombar extends Component {
                 <Appbar.Action
                     style = {{margin: '5%'}}
                     icon = "panorama"
-                    //onPress={() => console.log('Clicked panorama')}
+                    onPress={this.navigateViewFragment}
                 />
                 <Appbar.Content/>
                 <Appbar.Action
@@ -64,6 +69,7 @@ const mapDispatchToProps = dispatch => {
         storeEditNotesDetails : (notes) => dispatch(storeEditNotesDetails(notes)),
         storeNoteKeyToUpdateNotes : (noteKeyToUpdateNotes) => dispatch(storeNoteKeyToUpdateNotes(noteKeyToUpdateNotes)),
         storeSelectedLabelKeys : (selectedLabelKeys) => dispatch(storeSelectedLabelKeys(selectedLabelKeys)),
+        storelabelScreen : (labelScreen) => dispatch(storelabelScreen(labelScreen)),
     }
 }
 

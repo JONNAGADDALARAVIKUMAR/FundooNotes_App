@@ -2,14 +2,20 @@ import React, { Component } from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import { Appbar } from 'react-native-paper';
 import ArchivedNotesScreenStyles from '../../styles/ArchivedNotesScreenStyles';
-import NotesView from '../DashboardComponents/NotesView'
+import NotesView from '../DashboardComponents/NotesView';
+import { connect } from 'react-redux'
+import {storelabelScreen} from '../../redux/actions/CreateNewLabelAction';
 
-export default class ArchivedScreen extends Component {
+class ArchivedScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
             listView: false
         }
+    }
+
+    componentDidMount = () => {
+        this.props.storelabelScreen(1000)
     }
 
     openDrawer = () => {
@@ -58,3 +64,11 @@ export default class ArchivedScreen extends Component {
         )
     }
 }
+
+const mapDispatchToProps = dispatch => {
+    return {
+        storelabelScreen : (labelScreen) => dispatch(storelabelScreen(labelScreen)),
+    }
+}
+
+export default connect(null, mapDispatchToProps)(ArchivedScreen)

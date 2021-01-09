@@ -6,7 +6,7 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NoteDataController from '../../services/NoteDataController';
 import {connect} from 'react-redux';
-import {storeNotesArchivedStatus} from '../redux/actions/CreateNewLabelAction';
+import {storeNotesArchivedStatus, storelabelScreen} from '../redux/actions/CreateNewLabelAction';
 import AddNewNotesStyles from '../styles/AddNewNotesStyles'
 
 class AddNewNotes extends Component {
@@ -27,7 +27,7 @@ class AddNewNotes extends Component {
 
     componentDidMount = async () => {
         let noteLabels = []
-        if(this.state.labels.length > 0 || this.props.selectedLabelKeys > 0) {
+        if(this.state.labels.length > 0 || this.props.selectedLabelKeys.length > 0) {
             let labelKeys = []
             if(this.state.labels > 0) {
                 labelKeys = JSON.parse(this.state.labels)
@@ -75,12 +75,13 @@ class AddNewNotes extends Component {
                 let noteKey = this.generateRandomKey()
                 NoteDataController.addNote(noteKey, notes)
                 .then(() => { 
-                    this.props.navigation.push('Home', {screen: 'Notes'})})
+                    this.navigateToSelectedScreen()
+                })
                 .catch((error) => console.log(error))
 
             } else if(this.state.noteKey != undefined) {
                 NoteDataController.updateNote(this.state.noteKey, notes)
-                .then(() => {this.props.navigation.push('Home', {screen: 'Notes'})})
+                .then(() => {this.navigateToSelectedScreen()})
                 .catch(error => console.log(error))
             }
             
@@ -90,16 +91,36 @@ class AddNewNotes extends Component {
         //onPress();
     }
 
+    handleBackIcon = () => {
+        if(this.props.labelScreen == 1000)
+            this.props.storelabelScreen(null)
+        this.addNotesToDatabase()
+    }
+
+    navigateToSelectedScreen = () => {
+        if(this.props.labelScreen == 1000) {
+            if(this.state.archived) 
+                this.props.navigation.push('Home', { screen: 'Archived'})
+        }
+         else if(this.props.labelScreen != null) {
+            this.props.navigation.push('Home', { screen: 'Label'})
+        }
+        else {
+            this.props.navigation.push('Home', {screen: 'Notes'})
+        }
+    }
+
     handleDotIconButton = () => {
         const {onPress} = this.props
         this.RBSheet.open()
         //onPress()
     }
 
-    handleArchiveIcon = () => {
-        this.setState({
+    handleArchiveIcon = async () => {
+        await this.setState({
             archived: !this.state.archived
         })
+        this.addNotesToDatabase()
     }
 
     handleDeleteButton = () => {
@@ -159,7 +180,7 @@ class AddNewNotes extends Component {
                 <Appbar style = {{backgroundColor: 'transparent'}}>
                     <Appbar.Action
                         icon = "keyboard-backspace"
-                        onPress = {this.addNotesToDatabase}
+                        onPress = {this.handleBackIcon}
                     />
                     <Appbar.Content/>
                     <Appbar.Action 
@@ -267,13 +288,15 @@ const mapStateToProps = state => {
         labelNoteKeys : state.createLabelReducer.labelNoteKeys,
         editNotesDetails : state.createLabelReducer.editNotesDetails,
         noteKeyToUpdateNotes : state.createLabelReducer.noteKeyToUpdateNotes,
-        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
+        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys,
+        labelScreen : state.createLabelReducer.labelScreen,
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         storeNotesArchivedStatus : (notesArchived) => dispatch(storeNotesArchivedStatus(notesArchived)),
+        storelabelScreen : (labelScreen) => dispatch(storelabelScreen(labelScreen))
     }
 }
 

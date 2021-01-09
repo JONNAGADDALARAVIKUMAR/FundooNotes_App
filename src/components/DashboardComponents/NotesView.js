@@ -30,7 +30,7 @@ class NotesView extends Component {
             orientation: isPortrait() ? 'portrait' : 'landscape',
             notes: [],
             isEmpty: true,
-            labels: []
+            labels: [],
         };
     
         Dimensions.addEventListener('change', () => {

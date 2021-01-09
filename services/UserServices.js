@@ -132,7 +132,6 @@ class UserServices {
                 for(let i = 0; i < SQLiteNotes.rows.length; i++) {
                     NoteKeys.push(SQLiteNotes.rows.item(i).NoteKey)
                 }
-                console.log(NoteKeys);
                 let keys = Object.keys(firebaseNotes);
                 keys.map(key => {
                     if(!NoteKeys.includes(key)){

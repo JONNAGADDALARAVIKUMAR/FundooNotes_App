@@ -5,14 +5,19 @@ import {connect} from 'react-redux';
 import LabelScreenStyles from '../../styles/LabelScreenStyles';
 import BottomBar from './BottomBar';
 import NotesView from './NotesView';
+import {storelabelScreen} from '../../redux/actions/CreateNewLabelAction';
 
 class LabelScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            listView: false
+            listView: false,
         }
     }
+
+    componentDidMount = () => {
+        this.props.storelabelScreen(this.props.labelAndKey.lebelKey)
+    } 
 
     openDrawer = () => {
         const {onPress} = this.props
@@ -77,4 +82,10 @@ const mapStateToProps = state => {
     }
 }
 
-export default connect(mapStateToProps)(LabelScreen)
+const mapDispatchToProps = dispatch => {
+    return {
+        storelabelScreen : (labelScreen) => dispatch(storelabelScreen(labelScreen)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LabelScreen)

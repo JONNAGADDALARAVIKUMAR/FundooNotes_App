@@ -11,6 +11,7 @@ import DeletedNoteViewScreen from '../components/DashboardComponents/DeletedNote
 import SearchScreen from '../components/DashboardComponents/SearchScreen';
 import CreateLabelScreen from '../components/DashboardComponents/LabelComponents/CreateLabelScreen';
 import StoreNotesInLabelScreen from '../components/DashboardComponents/LabelComponents/StoreNotesInLabelScreen';
+import ViewFragment from '../components/FragmentView';
 
 const Stack = createStackNavigator()
 
@@ -28,6 +29,7 @@ const ApplicationStack = () => {
                 <Stack.Screen name = 'SearchScreen' component = {SearchScreen}/>
                 <Stack.Screen name = 'CreateLabel' component = {CreateLabelScreen}/>
                 <Stack.Screen name = 'ChooseLabel' component = {StoreNotesInLabelScreen}/>
+                <Stack.Screen name = 'ViewFragment' component = {ViewFragment}/>
             </Stack.Navigator>
         </NavigationContainer>
         </View>
