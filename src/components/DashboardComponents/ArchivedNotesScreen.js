@@ -53,13 +53,11 @@ class ArchivedScreen extends Component {
                         onPress={this.selectView}
                     />
                 </Appbar>
-                <ScrollView>
-                    <NotesView
-                        navigation = {this.props.navigation} 
-                        changeLayout = {this.state.listView} 
-                        deletedStatus = {false}
-                        archivedStatus = {true}/>
-                </ScrollView>
+                <NotesView
+                    navigation = {this.props.navigation} 
+                    changeLayout = {this.state.listView} 
+                    deletedStatus = {false}
+                    archivedStatus = {true}/>
             </View>
         )
     }

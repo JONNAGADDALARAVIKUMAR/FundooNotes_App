@@ -59,15 +59,12 @@ class LabelScreen extends Component {
                     />
                 </Appbar>
                 </View>
-
-                <ScrollView>
-                    <NotesView
-                        navigation = {this.props.navigation} 
-                        changeLayout = {this.state.listView} 
-                        deletedStatus = {false}
-                        archivedStatus = {false}
-                        labelAndKey = {this.props.labelAndKey}/>
-                </ScrollView>
+                <NotesView
+                    navigation = {this.props.navigation} 
+                    changeLayout = {this.state.listView} 
+                    deletedStatus = {false}
+                    archivedStatus = {false}
+                    labelAndKey = {this.props.labelAndKey}/>
                 <BottomBar 
                     navigation = {this.props.navigation}
                     labelAndKey = {this.props.labelAndKey}/>

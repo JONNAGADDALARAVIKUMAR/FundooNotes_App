@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, Text, ImageBackground, Dimensions, ScrollView, Image} from 'react-native';
+import {View, Text, ImageBackground, Dimensions, FlatList, Image} from 'react-native';
 import {strings} from '../../Languages/strings';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import { Card, Paragraph, Title } from 'react-native-paper';
@@ -29,9 +29,12 @@ class NotesView extends Component {
             width: Dimensions.get('window').width,
             orientation: isPortrait() ? 'portrait' : 'landscape',
             notes: [],
-            isEmpty: true,
+            results: [],
             labels: [],
+            endReached: false,
+            index: 0
         };
+        let key = -1
     
         Dimensions.addEventListener('change', () => {
             this.setState({
@@ -46,28 +49,24 @@ class NotesView extends Component {
         const UserCredential = JSON.parse(credential.password);
         await this.props.storeUserId(UserCredential.user.uid)
 
-        await SQLiteStorageServices.getDetailsFromSQLiteDatabase()
+        await SQLiteStorageServices.getDetailsFromSQLiteDatabase(this.props.deletedStatus, this.props.archivedStatus)
         .then(async (results) => {
             var temp = []
             if(results.rows.length != 0) {
-                for (let i = 0; i < results.rows.length; ++i) {
-                    if(this.props.labelAndKey != undefined) {
-                        if(results.rows.item(i).Labels.includes(this.props.labelAndKey.lebelKey)) {
-                            temp.push(results.rows.item(i));
-                        }
-                    } else {
-                        temp.push(results.rows.item(i));
-                    }
+                for (let index = 0; index < results.rows.length; ++index) {
+                    temp.push(results.rows.item(index));
                 }
                 await this.setState({
-                    notes : temp
+                    results : temp
                 })
-                temp.map(async (notes) => {
-                    (notes.isDeleted == this.props.deletedStatus && notes.isArchived == this.props.archivedStatus)
-                    ? this.setState({
-                        isEmpty: false
-                    })
-                    : null
+                let tempNotes = []
+                let loadingIndex
+                for(loadingIndex = 0; loadingIndex < 10 && loadingIndex < this.state.results.length ; loadingIndex++) {
+                    tempNotes.push(this.state.results[loadingIndex])
+                }
+                await this.setState({
+                    notes: tempNotes,
+                    index: loadingIndex
                 })
             }
 
@@ -75,7 +74,7 @@ class NotesView extends Component {
             .then(async results => {
                 if(results.rows.length > 0) {
                     let labels = [];
-                    for(let i = 0; i<results.rows.length; i++ ) {
+                    for(let i = 0; i < results.rows.length; i++ ) {
                         labels.push(results.rows.item(i))
                     }
                     await this.setState({
@@ -86,6 +85,21 @@ class NotesView extends Component {
             })
             .catch(error => console.log(error))
         })
+    }
+
+    loadData = async (addIndex) => {
+        for(let i = 0; i < addIndex; i++) {
+            let loadingIndex = this.state.index
+            this.state.notes.push(this.state.results[loadingIndex])
+            loadingIndex ++
+            this.state.index ++
+            if(this.state.index == this.state.results.length) {
+                await this.setState({
+                    index: 0,
+                    endReached: false
+                })
+            }
+        }
     }
 
     handleDetailsToUpdateSQLite = (noteKey, Title, Notes, isDeleted, isArchived, Labels) => {
@@ -119,36 +133,46 @@ class NotesView extends Component {
     }
 
     render() {
+        this.key ++
         return (
             <ImageBackground source = {require('../../assets/backgroundIcon.png')}
                 style = {(this.state.orientation == 'portrait') 
                     ? {height: 510, width: 350, alignSelf: 'center'} 
                     : {height: 750, width: 530, alignSelf: 'center'}}>
 
-                <ScrollView>
-                    <View style = {NoteViewStyles.list_Style}>
-                        {this.state.notes.length > 0 ?
-                        this.state.notes.map(val => (
-                            <React.Fragment key = {val.NoteKey}>
-                                {(val.isDeleted == this.props.deletedStatus && val.isArchived == this.props.archivedStatus) ? (
+                {this.state.results.length > 0 ? 
+                    <FlatList
+                        numColumns = {this.props.changeLayout ? 2 : 1}
+                        keyExtractor = {(item, index) => JSON.stringify(index)}
+                        key = {this.props.changeLayout ? 2 : 1}
+                        data = {this.state.notes}
+                        onEndReached = {() => {
+                            if (!this.state.endReached && this.state.results.length > 5) {
+                                this.loadData(5)
+                            }
+                        }}
+
+                        renderItem = {({ item }) => (  
+                            <React.Fragment key = {this.key}>
+                                {
                                     <Card
                                         style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
                                         onPress = {() => {
-                                            (val.isDeleted) 
-                                            ? this.handleDeletedNotesToUpdate(val.NoteKey, val.Title, val.Notes, val.isDeleted, val.isArchived, val.Labels) 
-                                            : this.handleDetailsToUpdateSQLite(val.NoteKey, val.Title, val.Notes, val.isDeleted, val.isArchived, val.Labels)}
+                                            (item.isDeleted) 
+                                            ? this.handleDeletedNotesToUpdate(item.NoteKey, item.Title, item.Notes, item.isDeleted, item.isArchived, item.Labels) 
+                                            : this.handleDetailsToUpdateSQLite(item.NoteKey, item.Title, item.Notes, item.isDeleted, item.isArchived, item.Labels)}
                                         }>
                                         <Card.Content>
                                             <Title>
-                                                {val.Title}
+                                                {item.Title}
                                             </Title>
                                             <Paragraph>
-                                                {val.Notes}
+                                                {item.Notes}
                                             </Paragraph>
                                             <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
-                                                {(val.Labels.length > 0) ?
+                                                {(item.Labels.length > 0) ?
                                                     this.state.labels.map(labels => (
-                                                        val.Labels.includes(labels.lebelKey) ?
+                                                        item.Labels.includes(labels.lebelKey) ?
                                                             <React.Fragment key = {labels.lebelKey}>
                                                                 <View style = {NoteViewStyles.Label_Button_Style}>
                                                                     <Text>{labels.labelName}</Text>
@@ -161,19 +185,15 @@ class NotesView extends Component {
                                                 null}
                                             </View>
                                         </Card.Content>  
-                                    </Card>)
-                                : null}
-                            </React.Fragment>
-                        ))
-                        : null}
-                    </View>  
-
-                    {(this.state.isEmpty) ? (
-                    <View>
+                                    </Card>
+                                }
+                            </React.Fragment> 
+                        )}>
+                    </FlatList>
+                : ( <View>
                         <Image style = {DashBoardScreenStyles.bulb_Style} source = {require('../../assets/bulb.png')}/>
                         <Text style = {DashBoardScreenStyles.Appear_Text_Style}>{strings.YourNoteswillApperHere}</Text>
-                    </View>) : null }
-                </ScrollView>
+                </View>) }                
             </ImageBackground>
         )
     }

@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">30% </span>
+                <span class="strong">37.21% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/50</span>
+                <span class='fraction'>16/43</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/20</span>
+                <span class='fraction'>4/9</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">20.59% </span>
+                <span class="strong">26.67% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/34</span>
+                <span class='fraction'>8/30</span>
             </div>
         
             
@@ -107,27 +107,19 @@
 <a name='L48'></a><a href='#L48'>48</a>
 <a name='L49'></a><a href='#L49'>49</a>
 <a name='L50'></a><a href='#L50'>50</a>
-<a name='L51'></a><a href='#L51'>51</a>
-<a name='L52'></a><a href='#L52'>52</a>
-<a name='L53'></a><a href='#L53'>53</a>
-<a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a>
-<a name='L57'></a><a href='#L57'>57</a>
-<a name='L58'></a><a href='#L58'>58</a>
-<a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">2x</span>
+<a name='L51'></a><a href='#L51'>51</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -161,48 +153,39 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import SQLiteStorageServices from "./SQLiteStorageServices";
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">import SQLiteLabelServices from "./SQLiteLabelServices";
+import SQLiteStorageServices from "./SQLiteStorageServices";
 import UserNoteServices from "./UserNoteServices";<span class="cstat-no" title="statement not covered" ><span class="missing-if-branch" title="if path not taken" >I</span><span class="branch-1 cbranch-no" title="branch not covered" ></span></span>
 &nbsp;
 class NoteDataController {
 &nbsp;
-    addNote <span class="fstat-no" title="function not covered" >= </span>(title, note, deletedStatus) =&gt; {
-<span class="cstat-no" title="statement not covered" >        return new Promise(async<span class="fstat-no" title="function not covered" > (resolv</span>e, reject) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span></span></span>
-            var noteKey = await this.generateRan<span class="cstat-no" title="statement not covered" >domKey();</span>
-            SQ<span class="cstat-no" title="statement not covered" >LiteStorageServices.storeDetailsInSQLiteDataBase(noteKey, title, note, deletedStatus)</span>
+    addNote <span class="fstat-no" title="function not covered" >= </span>(noteKey, notes) =&gt; {
+<span class="cstat-no" title="statement not covered" >        return new Promise(async<span class="fstat-no" title="function not covered" > (resolv</span>e, reject) =&gt; {<span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" ></span></span></span></span></span>
+            SQ<span class="cstat-no" title="statement not covered" >LiteStorageServices.storeDetailsInSQLiteDataBase(noteKey, notes)</span>
             .then((<span class="fstat-no" title="function not covered" >re</span>sults) =&gt; {
-<span class="cstat-no" title="statement not covered" >                UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus)</span>
-                .then<span class="fstat-no" title="function not covered" >((</span>) =&gt; consol<span class="cstat-no" title="statement not covered" >e.log('Uploaded to Firabase'))</span>
+<span class="cstat-no" title="statement not covered" >                this.addNoteKeyToTheLabels(noteKey, notes.labels)</span>
+<span class="cstat-no" title="statement not covered" >                UserNoteServices.addNoteToFirebase(noteKey, notes)</span>
+                .then(console.log('success'))
                 .catch<span class="fstat-no" title="function not covered" >((</span>error) =&gt; consol<span class="cstat-no" title="statement not covered" >e.log(error))</span>
-<span class="cstat-no" title="statement not covered" >                resolve(results)</span>
+<span class="cstat-no" title="statement not covered" >                resolve('success')</span>
             })
             .catch(e<span class="fstat-no" title="function not covered" >rr</span>or =&gt; reject(err<span class="cstat-no" title="statement not covered" >or)) <span class="cstat-no" title="statement not covered" ></span></span>
         })
     } 
 &nbsp;
-    updateNote <span class="fstat-no" title="function not covered" >= </span>(noteKey, title, note, deletedStatus) =&gt; {
+    updateNote <span class="fstat-no" title="function not covered" >= </span>(noteKey, notes) =&gt; {
 <span class="cstat-no" title="statement not covered" >        return new Prom<span class="fstat-no" title="function not covered" >is</span>e((resolve, reject) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >            SQLiteStorageServices.updateDetailsInSQLiteDataBase(noteKey, title, note, deletedStatus)</span>
+<span class="cstat-no" title="statement not covered" >            SQLiteStorageServices.updateDetailsInSQLiteDataBase(noteKey, notes)</span>
 <span class="fstat-no" title="function not covered" >            .</span>then((results) =&gt; <span class="cstat-no" title="statement not covered" >resolve(results))</span>
 <span class="fstat-no" title="function not covered" >            .c</span>atch(error =&gt; re<span class="cstat-no" title="statement not covered" >ject(error))</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            UserNoteServices.addNoteToFirebase(noteKey, title, note, deletedStatus)</span>
-            .then(console.log('Updated in Firebase'))
-<span class="fstat-no" title="function not covered" >            .c</span>atch((error) =&gt; <span class="cstat-no" title="statement not covered" >console.log(error))</span>
+<span class="cstat-no" title="statement not covered" >            UserNoteServices.addNoteToFirebase(noteKey, notes)</span>
+            .then()
+<span class="fstat-no" title="function not covered" >            .c</span>atch((error) =&gt; <span class="cstat-no" title="statement not covered" >console.log(error))        </span>
         })
     }
 &nbsp;
@@ -216,21 +199,11 @@ class NoteDataController {
         .c<span class="fstat-no" title="function not covered" >at</span>ch((error) =&gt; co<span class="cstat-no" title="statement not covered" >nsole.log(error))</span>
     }
 &nbsp;
-    generateRandomKey <span class="fstat-no" title="function not covered" >= </span>() =&gt; {
-        const alphaNemuricCh<span class="cstat-no" title="statement not covered" >ars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456</span>7890'
-        var toda<span class="cstat-no" title="statement not covered" >y = new Dat</span>e()
-        var noteKe<span class="cstat-no" title="statement not covered" >y =</span> ''
-<span class="cstat-no" title="statement not covered" >        noteKey = today.getFullYear() </span>
-                    + String((today.getMonth() + 1) &lt; 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
-                    + String(today.getDate() &lt; 10 ? (0 + String(today.getDate())) : today.getDate()) 
-                    + String(today.getHours() &lt; 10 ? '0' + today.getHours() : today.getHours())
-                    + String(today.getMinutes() &lt; 10 ? '0' + today.getMinutes() : today.getMinutes()) 
-                    + String(today.getSeconds() &lt; 10 ? '0' + today.getSeconds() : today.getSeconds())
-&nbsp;
-<span class="cstat-no" title="statement not covered" >        for(let i<span class="cstat-no" title="statement not covered" > =</span> 0; i &lt; 6; i++) {</span>
-<span class="cstat-no" title="statement not covered" >            noteKey += alphaNemuricChars.charAt(Math.floor(Math.random() * alphaNemuricChars.leng</span>th))
-        }
-<span class="cstat-no" title="statement not covered" >        return noteK</span>ey
+    addNoteKeyToTheLabels <span class="fstat-no" title="function not covered" >= </span>(noteKey, labels) =&gt; {
+<span class="cstat-no" title="statement not covered" >        labels.<span class="fstat-no" title="function not covered" >ma</span>p(label =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >            SQLiteLabelServices.addNoteKeysToTheLabelsInSQLite(label, noteKey)</span>
+<span class="cstat-no" title="statement not covered" >            UserNoteServices.addNoteKeysToTheLabelsInFirebase(label, noteKey)</span>
+        })
     }
 }
 &nbsp;
@@ -241,7 +214,7 @@ export default new NoteDataController</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Sun Jan 03 2021 20:18:39 GMT+0530 (India Standard Time)
+                at Sun Jan 10 2021 08:50:45 GMT+0530 (India Standard Time)
             </div>
         </div>
         <script src="../prettify.js"></script>

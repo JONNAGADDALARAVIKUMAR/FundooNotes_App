@@ -19,11 +19,7 @@ const NoteViewStyles = StyleSheet.create({
         width : '45%',
         elevation: 0,
         marginLeft: '2.5%',
-        marginBottom: '3%'
-    },
-    list_Style : {
-        flexDirection: 'row', 
-        flexWrap: 'wrap'
+        marginBottom: '3%',
     },
     Label_Button_Style : {
         padding: 5,

@@ -41,7 +41,7 @@ class SQLiteStorageServices {
         })
     }
 
-    getDetailsFromSQLiteDatabase = () => {
+    getDetailsFromSQLiteDatabase = (deletedStatus, archivedStatus) => {
         return new Promise(async (resolve, reject) => {
             let user = await KeyChain.getGenericPassword();
             let userDetails = JSON.parse(user.password);
@@ -52,7 +52,7 @@ class SQLiteStorageServices {
                 })
             })
             db.transaction((tx) => {
-                tx.executeSql(`SELECT * FROM ${UserID}`, [], (tx, results) => {
+                tx.executeSql(`SELECT * FROM ${UserID} where isDeleted = ? and isArchived = ?`, [deletedStatus, archivedStatus], (tx, results) => {
                     resolve(results)
                 }, error => console.log(error))
             })

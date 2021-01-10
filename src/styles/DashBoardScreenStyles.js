@@ -51,7 +51,7 @@ const DashBoardScreenStyles = StyleSheet.create({
         elevation: 9,
     }, 
     bulb_Style: {
-       alignSelf: 'center',
+        alignSelf: 'center',
         marginTop: '20%',
         marginBottom: '5%'
     },

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, ScrollView} from 'react-native';
+import {View} from 'react-native';
 import ToolBar from './ToolBar';
 import BottomBar from './BottomBar';
 import ViewNotes from './NotesView';
@@ -111,13 +111,12 @@ export default class Dashboard extends Component {
                     handleProfile = {this.handleProfile}
                     photoURL = {this.state.photoURL}/>
 
-                <ScrollView>   
-                    <ViewNotes 
-                        navigation = {this.props.navigation} 
-                        changeLayout = {this.state.listView} 
-                        deletedStatus = {false}
-                        archivedStatus = {false}/>
-                </ScrollView>
+               
+                <ViewNotes 
+                    navigation = {this.props.navigation} 
+                    changeLayout = {this.state.listView} 
+                    deletedStatus = {false}
+                    archivedStatus = {false}/>
 
                 <BottomBar 
                     navigation = {this.props.navigation}/>
