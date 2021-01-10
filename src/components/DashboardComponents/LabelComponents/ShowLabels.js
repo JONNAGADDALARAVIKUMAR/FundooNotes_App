@@ -18,7 +18,8 @@ class showLabel extends Component {
             errorMsg : false,
             noteKeys: [],
             showDailog: false,
-            labels: []
+            labels: [],
+            autoFocus: true
         }
     }
 
@@ -65,7 +66,6 @@ class showLabel extends Component {
             })
             .catch(error => console.log(error))
             
-        
         let temp = []
         if(this.state.labels.length > 0) {
             this.state.labels.map(label => {

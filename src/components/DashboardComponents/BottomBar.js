@@ -25,10 +25,6 @@ class Bottombar extends Component {
         this.props.navigation.push('AddNewNotes')
         //onPress();
     }
-
-    navigateViewFragment = () => {
-        this.props.navigation.push('ViewFragment')
-    }
     
     render() {
         return(
@@ -51,7 +47,6 @@ class Bottombar extends Component {
                 <Appbar.Action
                     style = {{margin: '5%'}}
                     icon = "panorama"
-                    onPress={this.navigateViewFragment}
                 />
                 <Appbar.Content/>
                 <Appbar.Action

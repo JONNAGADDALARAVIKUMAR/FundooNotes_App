@@ -84,7 +84,6 @@ class AddNewNotes extends Component {
                 .then(() => {this.navigateToSelectedScreen()})
                 .catch(error => console.log(error))
             }
-            
         } else {
             this.props.navigation.push('Home', { screen: 'Notes',   params : {isEmptyNote : true}})
         }

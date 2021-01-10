@@ -55,21 +55,13 @@ addNoteToFirebase = async (noteKey, notes) => {
         })
     }
 
-    addLabelToTheFirebase = (userId, labelName) => {
+    addLabelToTheFirebase = (userId, labelName, labelKey) => {
         return new Promise((resolve, reject) => {
-            var today = new Date()
-            var labelNoteKey = ''
-            labelNoteKey = today.getFullYear() 
-                    + String((today.getMonth() + 1) < 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
-                    + String(today.getDate() < 10 ? (0 + String(today.getDate())) : today.getDate()) 
-                    + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
-                    + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
-                    + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
-
             const label = {
                 labelName: labelName,
+                noteKeys: JSON.stringify([])
             }        
-            Firebase.database().ref('Labels/' + userId + '/' + labelNoteKey).set({
+            Firebase.database().ref('Labels/' + userId + '/' + labelKey).set({
                 label: label
             })
             resolve('success')
@@ -89,12 +81,19 @@ addNoteToFirebase = async (noteKey, notes) => {
         })
     }
 
-    updateLabelInFirebase = (userId, labelNoteKey, labelName) => {
-        return new Promise((resolve, reject) => {
+    updateLabelInFirebase = (userId, labelKey, labelName, noteKeys) => {
+        return new Promise(async (resolve, reject) => {
+            if(noteKeys == undefined) {
+                await this.getLabelsFromFirebase()
+                .then(async results => {
+                    noteKeys = await JSON.parse(results[labelKey].label.noteKeys)
+                })
+            }
             const label = {
                 labelName: labelName,
+                noteKeys: JSON.stringify(noteKeys)
             } 
-            Firebase.database().ref('Labels/' + userId  + '/' + labelNoteKey).set({
+            Firebase.database().ref('Labels/' + userId  + '/' + labelKey).set({
                 label: label
             })
             .then(() => resolve('success'))
@@ -121,6 +120,20 @@ addNoteToFirebase = async (noteKey, notes) => {
         }
         Firebase.database().ref('LabelNotes/' + userDetails.user.uid + '/' + labelKey + '/' + noteKey).set({
             notes : notes
+        })
+    }
+
+    addNoteKeysToTheLabelsInFirebase = (labelKey, noteKey) => {
+        this.getLabelsFromFirebase()
+        .then(async results => {
+            const user = await KeyChain.getGenericPassword();
+            const userDetails = JSON.parse(user.password);
+
+            let tempNoteKeys = JSON.parse(results[labelKey].label.noteKeys)
+            if(!tempNoteKeys.includes(noteKey)) {
+                tempNoteKeys.push(noteKey)
+            }
+            this.updateLabelInFirebase(userDetails.user.uid, labelKey, results[labelKey].label.labelName, tempNoteKeys)
         })
     }
 }

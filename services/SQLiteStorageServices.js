@@ -1,6 +1,5 @@
 import { openDatabase } from 'react-native-sqlite-storage';
 import KeyChain from 'react-native-keychain';
-import UserNoteServices from './UserNoteServices';
 
 var db = openDatabase({ name: 'SQLiteStorage.db', createFromLocation: 1 });
 

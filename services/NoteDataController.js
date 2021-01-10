@@ -1,3 +1,4 @@
+import SQLiteLabelServices from "./SQLiteLabelServices";
 import SQLiteStorageServices from "./SQLiteStorageServices";
 import UserNoteServices from "./UserNoteServices";
 
@@ -7,6 +8,7 @@ class NoteDataController {
         return new Promise(async (resolve, reject) => {
             SQLiteStorageServices.storeDetailsInSQLiteDataBase(noteKey, notes)
             .then((results) => {
+                this.addNoteKeyToTheLabels(noteKey, notes.labels)
                 UserNoteServices.addNoteToFirebase(noteKey, notes)
                 .then(console.log('success'))
                 .catch((error) => console.log(error))
@@ -36,6 +38,13 @@ class NoteDataController {
         UserNoteServices.deleteNoteForever(noteKey)
         .then(() => console.log('deleted Note in Firebase'))
         .catch((error) => console.log(error))
+    }
+
+    addNoteKeyToTheLabels = (noteKey, labels) => {
+        labels.map(label => {
+            SQLiteLabelServices.addNoteKeysToTheLabelsInSQLite(label, noteKey)
+            UserNoteServices.addNoteKeysToTheLabelsInFirebase(label, noteKey)
+        })
     }
 }
 

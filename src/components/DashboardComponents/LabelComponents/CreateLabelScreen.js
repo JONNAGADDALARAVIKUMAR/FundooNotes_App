@@ -93,10 +93,11 @@ class CreateLabelScreen extends Component {
 
     createLabel = async () => {
         if(this.state.enteredLabel != '' && !this.state.labelExistErrorMessage) {
-            await SQLiteLabelServices.storeLabelinSQliteStorage(this.props.userId, this.state.enteredLabel)
+            let labelKey = this.generateRandomLabelKey()
+            await SQLiteLabelServices.storeLabelinSQliteStorage(this.props.userId, this.state.enteredLabel, labelKey)
             .then(async (results) => {
                 this.updateLabels()
-                await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel)})
+                await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel, labelKey)})
             .catch(error => console.log(error))
         }
         this.setState({
@@ -113,6 +114,19 @@ class CreateLabelScreen extends Component {
         await UserNoteServices.deleteLabelInFirebase(this.props.userId, this.props.deleteLabelKey)
         this.props.storeDailogStatus(false)
         this.updateLabels()
+    }
+
+    generateRandomLabelKey = () => {
+        var today = new Date()
+        var labelNoteKey = ''
+        labelNoteKey = today.getFullYear() 
+                + String((today.getMonth() + 1) < 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
+                + String(today.getDate() < 10 ? (0 + String(today.getDate())) : today.getDate()) 
+                + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
+                + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
+                + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
+        
+        return labelNoteKey
     }
 
     render() {

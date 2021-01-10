@@ -1,21 +1,21 @@
 import { openDatabase } from 'react-native-sqlite-storage';
+import KeyChain from 'react-native-keychain';
 
 var db = openDatabase({ name: 'SQLiteStorage.db', createFromLocation: 1 });
 
 class SQLiteLabelServices {
 
-    storeLabelinSQliteStorage = (userId, labelName) => {
+    storeLabelinSQliteStorage = (userId, labelName, lebelKey) => {
         return new Promise(async (resolve, reject) => {
-            let lebelKey = await this.generateRandomLabelKey()
             db.transaction(tx => {
                 tx.executeSql(
-                    `CREATE TABLE IF NOT EXISTS ${userId}Label (lebelKey TEXT PRIMARY KEY, labelName TEXT)`,
+                    `CREATE TABLE IF NOT EXISTS ${userId}Label (lebelKey TEXT PRIMARY KEY, labelName TEXT, noteKeys TEXT)`,
                     [],(tx, results) => {},
                     error => console.log(error)
                 )
                 tx.executeSql(
-                    `INSERT INTO '${userId}Label' (lebelKey, labelName) VALUES (?,?)`,
-                    [lebelKey, labelName],
+                    `INSERT INTO '${userId}Label' (lebelKey, labelName, noteKeys) VALUES (?,?,?)`,
+                    [lebelKey, labelName, JSON.stringify([])],
                     (tx, results) => resolve(results),
                     error => reject(error)
                 );
@@ -44,8 +44,11 @@ class SQLiteLabelServices {
     getLabelsFromSQliteStorage = (userId) => {
         return new Promise((resolve, reject) => {
             db.transaction(tx => {
+                // db.transaction((tx) => {
+                //     tx.executeSql(`DROP TABLE ${userId}Label`)
+                // })
                 tx.executeSql(
-                    `CREATE TABLE IF NOT EXISTS ${userId}Label (lebelKey TEXT PRIMARY KEY, labelName TEXT)`,
+                    `CREATE TABLE IF NOT EXISTS ${userId}Label (lebelKey TEXT PRIMARY KEY, labelName TEXT, noteKeys TEXT)`,
                     [],
                     (tx, results) => {},
                     error => console.log(error)
@@ -56,24 +59,35 @@ class SQLiteLabelServices {
                     (tx, results) => resolve(results),
                     error => reject(error)
                 );
-                // db.transaction((tx) => {
-                //     tx.executeSql(`DROP TABLE ${userId}Label`)
-                // })
             });
         })
     }
 
-    generateRandomLabelKey = () => {
-        var today = new Date()
-        var labelNoteKey = ''
-        labelNoteKey = today.getFullYear() 
-                + String((today.getMonth() + 1) < 10 ? (0 + String(today.getMonth() + 1)) : today.getMonth) 
-                + String(today.getDate() < 10 ? (0 + String(today.getDate())) : today.getDate()) 
-                + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
-                + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
-                + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
-        
-        return labelNoteKey
+    addNoteKeysToTheLabelsInSQLite = async (labelKey, noteKey) => {
+        let user = await KeyChain.getGenericPassword();
+        let userDetails = JSON.parse(user.password);
+        let userId = userDetails.user.uid
+        let tempNoteKeys = []
+
+        db.transaction(tx => {
+            tx.executeSql(
+                `SELECT * FROM ${userId}Label WHERE lebelKey = ?`,
+                [labelKey],
+                (tx, results) => {     
+                    tempNoteKeys = JSON.parse(results.rows.item(0).noteKeys)
+                    if(!tempNoteKeys.includes(noteKey)) {
+                        tempNoteKeys.push(noteKey)
+                    }
+                },
+                error => console.log(error)
+            );
+            tx.executeSql(
+                `UPDATE ${userId}Label set noteKeys = ? where lebelKey = ?`,
+                [JSON.stringify(tempNoteKeys), labelKey],
+                (tx, results) => {},
+                error => console.log(error)
+            )
+        });
     }
 }
 
