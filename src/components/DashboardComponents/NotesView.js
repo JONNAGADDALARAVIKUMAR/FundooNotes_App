@@ -31,8 +31,8 @@ class NotesView extends Component {
             notes: [],
             results: [],
             labels: [],
-            endReached: false,
-            index: 0
+            index: 0,
+            endReached: false
         };
         let key = -1
     
@@ -89,16 +89,15 @@ class NotesView extends Component {
 
     loadData = async (addIndex) => {
         for(let i = 0; i < addIndex; i++) {
+            if(this.state.index == this.state.results.length) {
+                await this.setState({
+                    index: 0,
+                })
+            }
             let loadingIndex = this.state.index
             this.state.notes.push(this.state.results[loadingIndex])
             loadingIndex ++
             this.state.index ++
-            if(this.state.index == this.state.results.length) {
-                await this.setState({
-                    index: 0,
-                    endReached: false
-                })
-            }
         }
     }
 
@@ -146,9 +145,18 @@ class NotesView extends Component {
                         keyExtractor = {(item, index) => JSON.stringify(index)}
                         key = {this.props.changeLayout ? 2 : 1}
                         data = {this.state.notes}
+                        onEndReachedThreshold = {0.1}
                         onEndReached = {() => {
-                            if (!this.state.endReached && this.state.results.length > 5) {
+                            this.setState({
+                                endReached: true
+                            })
+                        }}
+                        onScroll = {() => {
+                            if (!this.state.endReached) {
                                 this.loadData(5)
+                                this.setState({
+                                    endReached: false
+                                })
                             }
                         }}
 

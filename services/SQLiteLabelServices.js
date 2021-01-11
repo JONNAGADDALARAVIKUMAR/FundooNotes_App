@@ -29,16 +29,48 @@ class SQLiteLabelServices {
                 tx.executeSql(
                     `UPDATE ${userId}Label set labelName = ? where lebelKey = ?`,
                     [labelName, labelKey],
-            )})
+                )
+            })
         })
     }
 
     deleteLabel = (userId, labelKey) => {
         db.transaction(tx => {
+            console.log('transact');
+            tx.executeSql(
+                `SELECT noteKeys FROM ${userId}Label where lebelKey = ?`,
+                [labelKey],(tx, results) => {
+                    let tempNoteKeys = JSON.parse(results.rows.item(0).noteKeys);
+                    tempNoteKeys.map(noteKey => {
+                        tx.executeSql(
+                            `SELECT Labels from ${userId} where NoteKey = ?`,
+                                [noteKey],
+                                (tx, results) => {
+                                    let tempLabelKeys = JSON.parse(results.rows.item(0).Labels)
+                                    for(let i = 0; i < tempLabelKeys.length; i++) {
+                                        if(tempLabelKeys[i] == labelKey) {
+                                            tempLabelKeys.splice(i, 1)
+                                        }
+                                    }
+                                    tx.executeSql(
+                                        `UPDATE ${userId} set Labels = ?  where NoteKey = ?`,
+                                        [JSON.stringify(tempLabelKeys), noteKey],
+                                        async (tx, results) => {},
+                                        error => console.log(error)
+                                    )
+                                },
+                            error => console.log(error)    
+                        )
+                    })
+                },
+                error => console.log(error)
+            )
             tx.executeSql(
                 `DELETE FROM ${userId}Label WHERE lebelKey = ?`,
-                [labelKey],
-        )})
+                [labelKey], (tx, results) => {},
+                error => console.log(error)
+            )
+        })
     }
 
     getLabelsFromSQliteStorage = (userId) => {
@@ -68,23 +100,22 @@ class SQLiteLabelServices {
         let userDetails = JSON.parse(user.password);
         let userId = userDetails.user.uid
         let tempNoteKeys = []
-
         db.transaction(tx => {
             tx.executeSql(
-                `SELECT * FROM ${userId}Label WHERE lebelKey = ?`,
+                `SELECT * FROM '${userId}Label' WHERE lebelKey = ?`,
                 [labelKey],
-                (tx, results) => {     
+                (tx, results) => {    
                     tempNoteKeys = JSON.parse(results.rows.item(0).noteKeys)
                     if(!tempNoteKeys.includes(noteKey)) {
                         tempNoteKeys.push(noteKey)
                     }
+                    tx.executeSql(
+                        `UPDATE ${userId}Label set noteKeys = ? where lebelKey = ?`,
+                        [JSON.stringify(tempNoteKeys), labelKey],
+                        (tx, results) => {'update results',console.log(results)},
+                        error => console.log(error)
+                    )
                 },
-                error => console.log(error)
-            );
-            tx.executeSql(
-                `UPDATE ${userId}Label set noteKeys = ? where lebelKey = ?`,
-                [JSON.stringify(tempNoteKeys), labelKey],
-                (tx, results) => {},
                 error => console.log(error)
             )
         });

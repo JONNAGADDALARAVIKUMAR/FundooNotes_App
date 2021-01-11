@@ -10,7 +10,7 @@ class NoteDataController {
             .then((results) => {
                 this.addNoteKeyToTheLabels(noteKey, notes.labels)
                 UserNoteServices.addNoteToFirebase(noteKey, notes)
-                .then(console.log('success'))
+                .then()
                 .catch((error) => console.log(error))
                 resolve('success')
             })
