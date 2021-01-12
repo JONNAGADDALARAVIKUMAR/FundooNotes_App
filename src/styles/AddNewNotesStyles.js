@@ -24,6 +24,7 @@ const AddNewNotesScreenStyles = StyleSheet.create({
         borderColor: '#f58cd0', 
         fontSize: 12, 
         marginLeft: 30,
+        marginTop: 5,
         textAlign: 'center',
         textAlignVertical: 'center'
     },
@@ -32,6 +33,12 @@ const AddNewNotesScreenStyles = StyleSheet.create({
         backgroundColor: 'transparent',
         borderWidth: 1,
         borderColor: 'black'
+    },
+    Remainder_Faded_Button_Style: {
+        marginLeft: 30,
+        backgroundColor: '#f5848c',
+        borderWidth: 1,
+        borderColor: 'red'
     },
     modal_container_style : {
         backgroundColor: 'white', 

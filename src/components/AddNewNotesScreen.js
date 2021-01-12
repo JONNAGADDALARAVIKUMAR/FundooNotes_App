@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, TextInput, View, Text} from 'react-native';
+import { ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import {Appbar, Menu, Snackbar, Provider, Portal, Modal, Chip } from 'react-native-paper';
 import { strings } from '../Languages/strings';
 import RBSheet from 'react-native-raw-bottom-sheet';
@@ -25,7 +25,7 @@ class AddNewNotes extends Component {
             labels: this.props.editNotesDetails.labels,
             noteLabels: [],
             showRemainderModel: false,
-            remainderTime: null
+            remainderTime: this.props.editNotesDetails.remainderTime
         }
     }
 
@@ -183,6 +183,7 @@ class AddNewNotes extends Component {
     }
 
     setTime = (selectedRemainderTime) => {
+        selectedRemainderTime.setSeconds(0)
         this.setState({
             remainderTime: selectedRemainderTime,
             showRemainderModel: false
@@ -230,14 +231,16 @@ class AddNewNotes extends Component {
                     />
                     <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
                         {
-                            this.state.remainderTime != null ?
-                            <Chip
-                                style = {AddNewNotesStyles.Remainder_Button_Style}
-                                textStyle = {{fontSize : 12}}
-                                icon = 'alarm'>
-                                    {moment(this.state.remainderTime).format('D MMM, h.mm a')}
-                            </Chip>
-                                :null
+                            (this.state.remainderTime != null) ?
+                            (<TouchableOpacity onPress = {this.handleRemainder}>
+                                <Chip
+                                    style = {(new Date() < new Date(this.state.remainderTime)) ? AddNewNotesStyles.Remainder_Button_Style : AddNewNotesStyles.Remainder_Faded_Button_Style }
+                                    textStyle = {{fontSize : 12}}
+                                    icon = 'alarm'>
+                                        {moment(this.state.remainderTime).format('D MMM, h.mm a')}
+                                </Chip>
+                            </TouchableOpacity>)
+                            :null
                         }
                         {(this.state.noteLabels.length > 0 ? 
                         this.state.noteLabels.map((label, index) => (
@@ -310,8 +313,7 @@ class AddNewNotes extends Component {
                             <ShowDateAndTimePicker
                                 dismissModal = {this.handleRemainder}
                                 setTime = {this.setTime}
-                                //changeDate = {this.handleDateChange}
-                                //saveReminder = {this.handleSaveButton}
+                                remainderTime = {this.state.remainderTime}
                             />
                         </Modal>
                     </Portal>

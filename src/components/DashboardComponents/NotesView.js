@@ -13,7 +13,8 @@ import {storeUserID,
 import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
 import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
-import moment from 'moment'
+import moment from 'moment';
+import MasonryList from 'react-native-masonry-list'
 
 class NotesView extends Component {
     constructor() {
@@ -102,13 +103,14 @@ class NotesView extends Component {
         }
     }
 
-    handleDetailsToUpdateSQLite = (noteKey, Title, Notes, isDeleted, isArchived, Labels) => {
+    handleDetailsToUpdateSQLite = (noteKey, Title, Notes, isDeleted, isArchived, Labels, remainderTime) => {
         const notes = {
             title: Title,
             note: Notes,
             labels: Labels,
             isArchived: isArchived,
-            isDeleted: isDeleted
+            isDeleted: isDeleted,
+            remainderTime: JSON.parse(remainderTime)
         }
         this.props.storeEditNotesDetails(notes)
         this.props.storeNoteKeyToUpdateNotes(noteKey)
@@ -123,7 +125,8 @@ class NotesView extends Component {
             note: Notes,
             labels: Labels,
             isArchived: isArchived,
-            isDeleted: isDeleted
+            isDeleted: isDeleted,
+            remainderTime: remainderTime
         }
         this.props.storeEditNotesDetails(notes)
         this.props.storeNoteKeyToUpdateNotes(noteKey)
@@ -172,8 +175,8 @@ class NotesView extends Component {
                                         style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
                                         onPress = {() => {
                                             (item.isDeleted) 
-                                            ? this.handleDeletedNotesToUpdate(item.NoteKey, item.Title, item.Notes, item.isDeleted, item.isArchived, item.Labels) 
-                                            : this.handleDetailsToUpdateSQLite(item.NoteKey, item.Title, item.Notes, item.isDeleted, item.isArchived, item.Labels)}
+                                            ? this.handleDeletedNotesToUpdate(item.NoteKey, item.Title, item.Notes, item.isDeleted, item.isArchived, item.Labels, item.remainderTime) 
+                                            : this.handleDetailsToUpdateSQLite(item.NoteKey, item.Title, item.Notes, item.isDeleted, item.isArchived, item.Labels, item.remainderTime)}
                                         }>
                                         <Card.Content>
                                             <Title>
@@ -186,7 +189,7 @@ class NotesView extends Component {
                                                 {
                                                     JSON.parse(item.remainderTime) != null ?
                                                     <Chip
-                                                        style = {NoteViewStyles.remainder_Styles}
+                                                        style = {(new Date() < new Date(JSON.parse(item.remainderTime))) ? NoteViewStyles.remainder_Styles : NoteViewStyles.remainder_Faded_Styles}
                                                         textStyle = {{fontSize : 12}}
                                                         icon = 'alarm'>
                                                         {moment(JSON.parse(item.remainderTime)).format('D MMM, h.mm a')}
@@ -197,9 +200,9 @@ class NotesView extends Component {
                                                     this.state.labels.map(labels => (
                                                         item.Labels.includes(labels.lebelKey) ?
                                                             <React.Fragment key = {labels.lebelKey}>
-                                                                <View style = {NoteViewStyles.Label_Button_Style}>
-                                                                    <Text>{labels.labelName}</Text>
-                                                                </View>
+                                                                <Chip style = {NoteViewStyles.Label_Button_Style}>
+                                                                    {labels.labelName}
+                                                                </Chip>
                                                             </React.Fragment>
                                                         :
                                                         null

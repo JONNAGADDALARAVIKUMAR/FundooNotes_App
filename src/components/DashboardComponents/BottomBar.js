@@ -12,7 +12,8 @@ class Bottombar extends Component {
             note: '',
             labels: [],
             isArchived: false,
-            isDeleted: false
+            isDeleted: false,
+            remainderTime: null
         }
 
         if(this.props.labelAndKey != undefined) 

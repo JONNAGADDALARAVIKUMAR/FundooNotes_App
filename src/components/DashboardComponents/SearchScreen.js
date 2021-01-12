@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {TextInput, Text, View, ScrollView} from 'react-native';
-import { Appbar } from 'react-native-paper';
+import { Appbar, Chip } from 'react-native-paper';
 import SearchScreenStyles from '../../styles/SearchScreenStyles';
 import { Card, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
@@ -12,6 +12,7 @@ import {storeEditNotesDetails,
     storelabelsAndLabelKeys} from '../../redux/actions/CreateNewLabelAction';
 import { connect } from 'react-redux';
 import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
+import moment from 'moment';
 
 class SearchScreen extends Component {
     constructor(props) {
@@ -27,7 +28,7 @@ class SearchScreen extends Component {
 
     componentDidMount = async () => {
         
-        await SQLiteStorageServices.getDetailsFromSQLiteDatabase()
+        await SQLiteStorageServices.getDetailsFromSQLiteDatabase(false, false)
         .then(async (results) => {
             var temp = []
             if(results.rows.length != 0) {
@@ -126,13 +127,23 @@ class SearchScreen extends Component {
                                                     textToHighlight = {val.Notes}/>
                                             </Paragraph>
                                             <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
+                                            {
+                                                    JSON.parse(val.remainderTime) != null ?
+                                                    <Chip
+                                                        style = {(new Date() < new Date(JSON.parse(val.remainderTime))) ? NoteViewStyles.remainder_Styles : NoteViewStyles.remainder_Faded_Styles}
+                                                        textStyle = {{fontSize : 12}}
+                                                        icon = 'alarm'>
+                                                        {moment(JSON.parse(val.remainderTime)).format('D MMM, h.mm a')}
+                                                    </Chip>
+                                                    :null
+                                                }
                                                 {(val.Labels.length > 0) ?
                                                     this.state.labels.map(labels => (
                                                         val.Labels.includes(labels.lebelKey) ?
                                                             <React.Fragment key = {labels.lebelKey}>
-                                                                <View style = {NoteViewStyles.Label_Button_Style}>
-                                                                    <Text>{labels.labelName}</Text>
-                                                                </View>
+                                                                <Chip style = {NoteViewStyles.Label_Button_Style}>
+                                                                    {labels.labelName}
+                                                                </Chip>
                                                             </React.Fragment>
                                                         :
                                                         null

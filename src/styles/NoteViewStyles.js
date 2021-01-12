@@ -16,25 +16,33 @@ const NoteViewStyles = StyleSheet.create({
         borderRadius : 10, 
         backgroundColor: 'transparent',
         borderColor : "#f58cd0",
-        width : '45%',
+        width : '47%',
         elevation: 0,
-        marginLeft: '2.5%',
+        marginLeft: '2%',
         marginBottom: '3%',
     },
     Label_Button_Style : {
-        padding: 5,
         margin: 5,
         borderWidth: 1, 
         borderRadius: 30, 
+        backgroundColor: 'transparent',
         borderColor: '#912c4c', 
         fontSize: 5, 
         textAlign: 'center',
     },
     remainder_Styles: {
         margin: 5,
+        alignSelf: 'center',
         backgroundColor: 'transparent',
         borderWidth: 1,
         borderColor: 'black'
+    },
+    remainder_Faded_Styles: {
+        alignContent: 'center',
+        margin: 3,
+        backgroundColor: '#f5848c',
+        borderWidth: 1,
+        borderColor: 'red'
     }
 })
 export default NoteViewStyles;
