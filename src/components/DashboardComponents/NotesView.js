@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {View, Text, ImageBackground, Dimensions, FlatList, Image} from 'react-native';
+import {View, Text, ImageBackground, Dimensions, FlatList, Image, ActivityIndicator} from 'react-native';
 import {strings} from '../../Languages/strings';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
-import { Card, Paragraph, Title } from 'react-native-paper';
+import { Card, Chip, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import SQLiteStorageServices from '../../../services/SQLiteStorageServices';
 import {storeUserID, 
@@ -13,6 +13,7 @@ import {storeUserID,
 import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
 import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
+import moment from 'moment'
 
 class NotesView extends Component {
     constructor() {
@@ -146,13 +147,17 @@ class NotesView extends Component {
                         key = {this.props.changeLayout ? 2 : 1}
                         data = {this.state.notes}
                         onEndReachedThreshold = {0.1}
+                        ListFooterComponent = {() => 
+                            (this.state.endReached) ? 
+                                <ActivityIndicator size="large" color="grey" /> : 
+                                null}
                         onEndReached = {() => {
                             this.setState({
                                 endReached: true
                             })
                         }}
                         onScroll = {() => {
-                            if (!this.state.endReached) {
+                            if (this.state.endReached) {
                                 this.loadData(5)
                                 this.setState({
                                     endReached: false
@@ -178,6 +183,16 @@ class NotesView extends Component {
                                                 {item.Notes}
                                             </Paragraph>
                                             <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
+                                                {
+                                                    JSON.parse(item.remainderTime) != null ?
+                                                    <Chip
+                                                        style = {NoteViewStyles.remainder_Styles}
+                                                        textStyle = {{fontSize : 12}}
+                                                        icon = 'alarm'>
+                                                        {moment(JSON.parse(item.remainderTime)).format('D MMM, h.mm a')}
+                                                    </Chip>
+                                                    :null
+                                                }
                                                 {(item.Labels.length > 0) ?
                                                     this.state.labels.map(labels => (
                                                         item.Labels.includes(labels.lebelKey) ?

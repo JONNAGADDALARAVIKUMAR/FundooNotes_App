@@ -3,7 +3,6 @@ import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-
 import SignUpStyles from '../styles/SignUpStyles';
 import UserServices from '../../services/UserServices';
 import {strings} from '../Languages/strings';
-import SQLiteStorageServices from '../../services/SQLiteStorageServices'
 
 export default class LogInScreen extends Component {
     constructor(props) {

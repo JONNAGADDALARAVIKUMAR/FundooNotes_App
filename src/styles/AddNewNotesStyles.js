@@ -22,10 +22,23 @@ const AddNewNotesScreenStyles = StyleSheet.create({
         borderWidth: 1, 
         borderRadius: 50, 
         borderColor: '#f58cd0', 
-        fontSize: 10, 
+        fontSize: 12, 
         marginLeft: 30,
-        textAlign: 'center'
+        textAlign: 'center',
+        textAlignVertical: 'center'
     },
+    Remainder_Button_Style : {
+        marginLeft: 30,
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: 'black'
+    },
+    modal_container_style : {
+        backgroundColor: 'white', 
+        padding: 25,
+        width : 280,
+        alignSelf : 'center',
+    }
 })
 export default AddNewNotesScreenStyles;
 

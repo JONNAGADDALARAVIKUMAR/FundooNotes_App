@@ -112,7 +112,7 @@ class SQLiteLabelServices {
                     tx.executeSql(
                         `UPDATE ${userId}Label set noteKeys = ? where lebelKey = ?`,
                         [JSON.stringify(tempNoteKeys), labelKey],
-                        (tx, results) => {'update results',console.log(results)},
+                        (tx, results) => {'update results'},
                         error => console.log(error)
                     )
                 },

@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { ScrollView, TextInput, View, Text } from 'react-native';
-import {Appbar, Menu, Snackbar} from 'react-native-paper';
+import { ScrollView, TextInput, View, Text} from 'react-native';
+import {Appbar, Menu, Snackbar, Provider, Portal, Modal, Chip } from 'react-native-paper';
 import { strings } from '../Languages/strings';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/Ionicons';
 import NoteDataController from '../../services/NoteDataController';
 import {connect} from 'react-redux';
 import {storeNotesArchivedStatus, storelabelScreen} from '../redux/actions/CreateNewLabelAction';
-import AddNewNotesStyles from '../styles/AddNewNotesStyles'
+import AddNewNotesStyles from '../styles/AddNewNotesStyles';
+import ShowDateAndTimePicker from './ShowDateAndTimePicker';
+import moment from 'moment'
 
 class AddNewNotes extends Component {
     constructor(props) {
@@ -21,7 +23,9 @@ class AddNewNotes extends Component {
             archived: this.props.editNotesDetails.isArchived,
             editNotesDetails: this.props.editNotesDetails,
             labels: this.props.editNotesDetails.labels,
-            noteLabels: []
+            noteLabels: [],
+            showRemainderModel: false,
+            remainderTime: null
         }
     }
 
@@ -67,7 +71,8 @@ class AddNewNotes extends Component {
             note: this.state.note,
             labels: this.props.selectedLabelKeys,
             isArchived: this.state.archived,
-            isDeleted: false
+            isDeleted: false,
+            remainderTime: JSON.stringify(this.state.remainderTime)
         }
         
         if(this.state.title != '' || this.state.note != '') {
@@ -154,7 +159,6 @@ class AddNewNotes extends Component {
                     + String(today.getHours() < 10 ? '0' + today.getHours() : today.getHours())
                     + String(today.getMinutes() < 10 ? '0' + today.getMinutes() : today.getMinutes()) 
                     + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
-
         for(let i = 0; i < 6; i++) {
             noteKey += alphaNemuricChars.charAt(Math.floor(Math.random() * alphaNemuricChars.length))
         }
@@ -167,13 +171,27 @@ class AddNewNotes extends Component {
         })
     }
 
+    handleRemainder = () => {
+        this.setState({
+            showRemainderModel: !this.state.showRemainderModel
+        })
+    }
+
     handleLabelsIcon = () => {
         this.RBSheet.close()
         this.props.navigation.push('ChooseLabel')
     }
 
+    setTime = (selectedRemainderTime) => {
+        this.setState({
+            remainderTime: selectedRemainderTime,
+            showRemainderModel: false
+        })
+    }
+ 
     render() {
         return(
+            <Provider>
             <View style = {{backgroundColor: '#f5dcef', height: '100%'}}>
                 <View>
                 <Appbar style = {{backgroundColor: 'transparent'}}>
@@ -187,6 +205,7 @@ class AddNewNotes extends Component {
                     />
                     <Appbar.Action 
                         icon = "bell-plus-outline"
+                        onPress = {this.handleRemainder}
                     />
                     <Appbar.Action 
                         onPress = {this.handleArchiveIcon}
@@ -210,7 +229,17 @@ class AddNewNotes extends Component {
                         onChangeText = {this.handleNote}
                     />
                     <View style = {{flexWrap: 'wrap', flexDirection: 'row'}}>
-                    {(this.state.noteLabels.length > 0 ? 
+                        {
+                            this.state.remainderTime != null ?
+                            <Chip
+                                style = {AddNewNotesStyles.Remainder_Button_Style}
+                                textStyle = {{fontSize : 12}}
+                                icon = 'alarm'>
+                                    {moment(this.state.remainderTime).format('D MMM, h.mm a')}
+                            </Chip>
+                                :null
+                        }
+                        {(this.state.noteLabels.length > 0 ? 
                         this.state.noteLabels.map((label, index) => (
                             <React.Fragment key = {index}>
                                 <Text style = {AddNewNotesStyles.Label_Button_Style} onPress = {this.handleLabelsIcon}>
@@ -265,7 +294,6 @@ class AddNewNotes extends Component {
                         <Menu.Item icon = "label-outline" title = "Labels" onPress = {this.handleLabelsIcon}/>    
                     </View>
                 </RBSheet>
-
                 <Snackbar
                     style = {{marginBottom : 100}}
                     visible = {this.state.isNoteNotAddedDeleted}
@@ -273,7 +301,22 @@ class AddNewNotes extends Component {
                     duration = {3000}>
                     Empty Notes can't be deleted
                 </Snackbar>
+                
+                <Portal>
+                    <Modal 
+                        visible={this.state.showRemainderModel} 
+                        onDismiss = {this.handleRemainder} 
+                        contentContainerStyle = {AddNewNotesStyles.modal_container_style}>
+                            <ShowDateAndTimePicker
+                                dismissModal = {this.handleRemainder}
+                                setTime = {this.setTime}
+                                //changeDate = {this.handleDateChange}
+                                //saveReminder = {this.handleSaveButton}
+                            />
+                        </Modal>
+                    </Portal>
             </View>
+            </Provider>
         )
     }
 }

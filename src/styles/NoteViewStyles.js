@@ -30,5 +30,11 @@ const NoteViewStyles = StyleSheet.create({
         fontSize: 5, 
         textAlign: 'center',
     },
+    remainder_Styles: {
+        margin: 5,
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: 'black'
+    }
 })
 export default NoteViewStyles;

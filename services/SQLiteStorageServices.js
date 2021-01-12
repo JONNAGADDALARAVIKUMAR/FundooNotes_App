@@ -13,8 +13,8 @@ class SQLiteStorageServices {
 
             db.transaction((tx) => {
                 tx.executeSql(
-                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted, isArchived, Labels) VALUES (?,?,?,?,?,?)`,
-                    [noteKey, notes.title, notes.note, notes.isDeleted, notes.isArchived, JSON.stringify(notes.labels)],
+                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted, isArchived, Labels, remainderTime) VALUES (?,?,?,?,?,?,?)`,
+                    [noteKey, notes.title, notes.note, notes.isDeleted, notes.isArchived, JSON.stringify(notes.labels), notes.remainderTime],
                     async (tx, results) => {
                         resolve(results)
                     },
@@ -32,8 +32,8 @@ class SQLiteStorageServices {
 
             db.transaction(async (tx) => {
                 tx.executeSql(
-                    `UPDATE ${UserID} set Title = ?, Notes = ?, isDeleted = ? , isArchived = ?, Labels = ?  where NoteKey = ?`,
-                    [notes.title, notes.note, notes.isDeleted, notes.isArchived, JSON.stringify(notes.labels), noteKey],
+                    `UPDATE ${UserID} set Title = ?, Notes = ?, isDeleted = ? , isArchived = ?, Labels = ?, remainderTime = ?  where NoteKey = ?`,
+                    [notes.title, notes.note, notes.isDeleted, notes.isArchived, JSON.stringify(notes.labels), notes.remainderTime, noteKey],
                     async (tx, results) => {resolve(results)},
                     error => reject(error)
                 )
@@ -48,7 +48,7 @@ class SQLiteStorageServices {
             let UserID = userDetails.user.uid
 
             db.transaction((tx) => {
-                tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, "isArchived" INTEGER, "Labels" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
+                tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, "isArchived" INTEGER, "Labels" TEXT, "remainderTime" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                 })
             })
             db.transaction((tx) => {
@@ -69,11 +69,11 @@ class SQLiteStorageServices {
             let UserID = userDetails.user.uid
 
             db.transaction((tx) => {
-                tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, "isArchived" INTEGER, "Labels" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
+                tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, "isArchived" INTEGER, "Labels" TEXT, "remainderTime" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                 })
                 tx.executeSql(
-                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted, isArchived, Labels) VALUES (?,?,?,?,?,?)`,
-                    [noteKey, notes.notes.title, notes.notes.note, notes.notes.isDeleted, notes.notes.isArchived, JSON.stringify(notes.notes.labels)],
+                    `INSERT INTO ${UserID} (NoteKey, Title, Notes, isDeleted, isArchived, Labels, remainderTime) VALUES (?,?,?,?,?,?,?)`,
+                    [noteKey, notes.notes.title, notes.notes.note, notes.notes.isDeleted, notes.notes.isArchived, JSON.stringify(notes.notes.labels), notes.notes.remainderTime],
                     async (tx, results) => {resolve(results)},
                     error => reject(error)
                 );
