@@ -183,7 +183,9 @@ class AddNewNotes extends Component {
     }
 
     setTime = (selectedRemainderTime) => {
-        selectedRemainderTime.setSeconds(0)
+        if(selectedRemainderTime != null)
+            selectedRemainderTime.setSeconds(0)
+        
         this.setState({
             remainderTime: selectedRemainderTime,
             showRemainderModel: false

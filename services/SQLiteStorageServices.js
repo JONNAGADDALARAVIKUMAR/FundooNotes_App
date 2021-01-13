@@ -51,11 +51,19 @@ class SQLiteStorageServices {
                 tx.executeSql(`CREATE TABLE IF NOT EXISTS ${UserID} ("NoteKey"	TEXT, "Title" TEXT, "Notes"	TEXT, "isDeleted" INTEGER, "isArchived" INTEGER, "Labels" TEXT, "remainderTime" TEXT, PRIMARY KEY("NoteKey"))`, [], (tx, results) => {
                 })
             })
-            db.transaction((tx) => {
-                tx.executeSql(`SELECT * FROM ${UserID} where isDeleted = ? and isArchived = ?`, [deletedStatus, archivedStatus], (tx, results) => {
-                    resolve(results)
-                }, error => console.log(error))
-            })
+            if(deletedStatus == undefined, archivedStatus == undefined) {
+                db.transaction((tx) => {
+                    tx.executeSql(`SELECT * FROM ${UserID}`, [], (tx, results) => {
+                        resolve(results)
+                    }, error => console.log(error))
+                })
+            } else {
+                db.transaction((tx) => {
+                    tx.executeSql(`SELECT * FROM ${UserID} where isDeleted = ? and isArchived = ?`, [deletedStatus, archivedStatus], (tx, results) => {
+                        resolve(results)
+                    }, error => console.log(error))
+                })
+            }
             // db.transaction((tx) => {
             //     tx.executeSql(`DROP TABLE ${UserID}`)
             // })

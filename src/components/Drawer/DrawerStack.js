@@ -5,6 +5,7 @@ import DrawerContent from './DrawerContent';
 import DeletedNotesScreen from '../DashboardComponents/DeletedNotesScreen';
 import ArchivedNotesScreen from '../DashboardComponents/ArchivedNotesScreen';
 import LabelScreen from '../DashboardComponents/LabelScreen';
+import RemainderScreen from '../DashboardComponents/RemainderScreen'
 
 const Drawer = createDrawerNavigator();
 
@@ -15,6 +16,7 @@ const DrawerNavigator = () => {
             <Drawer.Screen name = "Deleted" component = {DeletedNotesScreen}/>
             <Drawer.Screen name = "Archived" component = {ArchivedNotesScreen}/>
             <Drawer.Screen name = "Label" component = {LabelScreen}/>
+            <Drawer.Screen name = "Remainder" component = {RemainderScreen}/>
         </Drawer.Navigator>
     )
 }

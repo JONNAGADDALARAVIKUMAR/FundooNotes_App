@@ -14,7 +14,9 @@ import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
 import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
 import moment from 'moment';
-import MasonryList from 'react-native-masonry-list'
+import MasonryList from 'react-native-masonry-list';
+import Firebase from '../../../config/Firebase';
+import {AsyncStorage} from '@react-native-async-storage/async-storage'
 
 class NotesView extends Component {
     constructor() {
@@ -34,7 +36,8 @@ class NotesView extends Component {
             results: [],
             labels: [],
             index: 0,
-            endReached: false
+            endReached: false,
+            SQLiteResults: []
         };
         let key = -1
     
@@ -47,32 +50,41 @@ class NotesView extends Component {
 
     componentDidMount = async () => {
 
+        //this.checkPermission()
         const credential = await KeyChain.getGenericPassword();
         const UserCredential = JSON.parse(credential.password);
         await this.props.storeUserId(UserCredential.user.uid)
 
-        await SQLiteStorageServices.getDetailsFromSQLiteDatabase(this.props.deletedStatus, this.props.archivedStatus)
-        .then(async (results) => {
-            var temp = []
-            if(results.rows.length != 0) {
-                for (let index = 0; index < results.rows.length; ++index) {
-                    temp.push(results.rows.item(index));
+        if(this.props.remainderStatus) {
+            await SQLiteStorageServices.getDetailsFromSQLiteDatabase()
+            .then(async (results) => {
+                let temp = [] 
+                if(results.rows.length > 0) {
+                    for(let i = 0; i < results.rows.length; i++) {
+                        if(JSON.parse(results.rows.item(i).remainderTime) != null) {
+                            temp.push(results.rows.item(i))
+                        }
+                    }
+                    this.setState({
+                        SQLiteResults: temp
+                    })
                 }
-                await this.setState({
-                    results : temp
-                })
-                let tempNotes = []
-                let loadingIndex
-                for(loadingIndex = 0; loadingIndex < 10 && loadingIndex < this.state.results.length ; loadingIndex++) {
-                    tempNotes.push(this.state.results[loadingIndex])
+            })
+        } else {
+            await SQLiteStorageServices.getDetailsFromSQLiteDatabase(this.props.deletedStatus, this.props.archivedStatus)
+            .then(async (results) => {
+                let temp = [] 
+                if(results.rows.length > 0) {
+                    for(let i = 0; i < results.rows.length; i++) {
+                        temp.push(results.rows.item(i))
+                    }
+                    this.setState({
+                        SQLiteResults: temp
+                    })
                 }
-                await this.setState({
-                    notes: tempNotes,
-                    index: loadingIndex
-                })
-            }
-
-            SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
+            })
+        }
+        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
             .then(async results => {
                 if(results.rows.length > 0) {
                     let labels = [];
@@ -86,7 +98,60 @@ class NotesView extends Component {
                 }
             })
             .catch(error => console.log(error))
-        })
+
+        var temp = []
+        if(this.state.SQLiteResults.length != 0) {
+            for (let index = this.state.SQLiteResults.length -1 ; index >= 0; --index) {
+                temp.push(this.state.SQLiteResults[index]);
+            }
+            await this.setState({
+                results : temp
+            })
+            let tempNotes = []
+            let loadingIndex
+            for(loadingIndex = 0; loadingIndex < 10 && loadingIndex < this.state.results.length ; loadingIndex++) {
+                tempNotes.push(this.state.results[loadingIndex])
+            }
+            await this.setState({
+                notes: tempNotes,
+                index: loadingIndex
+            })
+        }
+    }
+
+    async checkPermission() {
+        const enabled = await Firebase.messaging().hasPermission();
+        console.log('permission enabled', enabled);
+        if (enabled) {
+            this.getToken();
+        } else {
+            this.requestPermission();
+        }
+    }
+      
+        //3
+    async getToken() {
+        let fcmToken = await AsyncStorage.getItem('fcmToken');
+        if (!fcmToken) {
+            fcmToken = await Firebase.messaging().getToken();
+            console.log('Token', fcmToken);
+            if (fcmToken) {
+                // user has a device token
+                await AsyncStorage.setItem('fcmToken', fcmToken);
+            }
+        }
+    }
+      
+        //2
+    async requestPermission() {
+        try {
+            await Firebase.messaging().requestPermission();
+            // User has authorised
+            this.getToken();
+        } catch (error) {
+            // User has rejected permissions
+            console.log('permission rejected');
+        }
     }
 
     loadData = async (addIndex) => {

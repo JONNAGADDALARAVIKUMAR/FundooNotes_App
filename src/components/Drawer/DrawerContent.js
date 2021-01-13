@@ -5,7 +5,7 @@ import { DrawerContentScrollView } from '@react-navigation/drawer';
 import DrawContentStyles from '../../styles/DrawContentStyle';
 import {strings} from '../../Languages/strings'
 import { connect } from 'react-redux';
-import {storelabelAndKey} from '../../redux/actions/CreateNewLabelAction'
+import {storelabelAndKey} from '../../redux/actions/CreateNewLabelAction';
 
 class DrawerContent extends Component {
     constructor(props) {
@@ -53,13 +53,18 @@ class DrawerContent extends Component {
         this.props.props.navigation.push('Home', { screen: 'Label'})
     }
 
+    navigateToRemainderScreen = () => {
+        this.props.props.navigation.closeDrawer()
+        this.props.props.navigation.push('Home', { screen: 'Remainder'})
+    }
+
     render() {
     return(
         <View style = {{flex: 1}}>
             <Text style = {DrawContentStyles.AppName_Style}>{strings.AppName}</Text>
             <DrawerContentScrollView>
                     <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {this.navigateToHome}/>
-                    <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style}/>
+                    <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style} onPress = {this.navigateToRemainderScreen}/>
                     {this.props.labelsAndLabelKeys.map((labelAndKey) => (
                         <Drawer.Item key = {labelAndKey.lebelKey} icon = 'label-outline' label = {labelAndKey.labelName} onPress = {() => this.navigateLabelScreen(labelAndKey)}/>
                     ))}
