@@ -5,18 +5,15 @@ import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import { Card, Chip, Paragraph, Title } from 'react-native-paper';
 import NoteViewStyles from '../../styles/NoteViewStyles';
 import SQLiteStorageServices from '../../../services/SQLiteStorageServices';
-import {storeUserID, 
+import { storeUserID, 
         storeEditNotesDetails, 
         storeNoteKeyToUpdateNotes, 
         storeSelectedLabelKeys,
-        storelabelsAndLabelKeys} from '../../redux/actions/CreateNewLabelAction';
+        storelabelsAndLabelKeys } from '../../redux/actions/CreateNewLabelAction';
 import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
 import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
 import moment from 'moment';
-import MasonryList from 'react-native-masonry-list';
-import Firebase from '../../../config/Firebase';
-import {AsyncStorage} from '@react-native-async-storage/async-storage'
 
 class NotesView extends Component {
     constructor() {
@@ -49,8 +46,6 @@ class NotesView extends Component {
     }
 
     componentDidMount = async () => {
-
-        //this.checkPermission()
         const credential = await KeyChain.getGenericPassword();
         const UserCredential = JSON.parse(credential.password);
         await this.props.storeUserId(UserCredential.user.uid)
@@ -116,41 +111,6 @@ class NotesView extends Component {
                 notes: tempNotes,
                 index: loadingIndex
             })
-        }
-    }
-
-    async checkPermission() {
-        const enabled = await Firebase.messaging().hasPermission();
-        console.log('permission enabled', enabled);
-        if (enabled) {
-            this.getToken();
-        } else {
-            this.requestPermission();
-        }
-    }
-      
-        //3
-    async getToken() {
-        let fcmToken = await AsyncStorage.getItem('fcmToken');
-        if (!fcmToken) {
-            fcmToken = await Firebase.messaging().getToken();
-            console.log('Token', fcmToken);
-            if (fcmToken) {
-                // user has a device token
-                await AsyncStorage.setItem('fcmToken', fcmToken);
-            }
-        }
-    }
-      
-        //2
-    async requestPermission() {
-        try {
-            await Firebase.messaging().requestPermission();
-            // User has authorised
-            this.getToken();
-        } catch (error) {
-            // User has rejected permissions
-            console.log('permission rejected');
         }
     }
 

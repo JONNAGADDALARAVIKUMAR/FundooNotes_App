@@ -1,5 +1,6 @@
 package com.fundoonotes;
 
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;  // <--- Import Package
 import com.facebook.FacebookSdk;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.facebook.CallbackManager;
