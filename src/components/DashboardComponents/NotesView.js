@@ -70,8 +70,14 @@ class NotesView extends Component {
             .then(async (results) => {
                 let temp = [] 
                 if(results.rows.length > 0) {
-                    for(let i = 0; i < results.rows.length; i++) {
-                        temp.push(results.rows.item(i))
+                    for (let i = 0; i < results.rows.length; ++i) {
+                        if(this.props.labelAndKey != undefined) {
+                            if(JSON.parse(results.rows.item(i).Labels).includes(this.props.labelAndKey.lebelKey)) {
+                                temp.push(results.rows.item(i));
+                            }
+                        } else {
+                            temp.push(results.rows.item(i));
+                        }
                     }
                     this.setState({
                         SQLiteResults: temp

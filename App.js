@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import ApplicationStack from './src/route/ApplicationStack';
 import {Provider} from 'react-redux';
 import store from './src/redux/store';
-import NotificationServices from './services/NotificationServices';
+import NotificationServices from './services/NotificationServices/NotificationServices';
 import PushNotification from "react-native-push-notification";
+import { AppRegistry } from 'react-native';
 
-class App extends Component{
+const NotificationTask = async (data) => {
+  console.log('Ravi');
+}
+AppRegistry.registerHeadlessTask('NotificationTask', () => NotificationTask);
+
+
+class App extends Component {
 
 componentDidMount = () => {
   NotificationServices.checkPermission()
@@ -15,7 +22,7 @@ componentDidMount = () => {
     },
     onNotification: function (notification) {
       console.log("NOTIFICATION:", notification);
-      alert(notification.message)
+      alert(notification.data.title + '\n' + notification.data.body)
     },
     onAction: function (notification) {
       console.log("ACTION:", notification.action);

@@ -19,6 +19,10 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+// import android.os.Bundle;
+// import android.content.Intent;
+// import com.facebook.react.HeadlessJsTaskService;
+
 public class MainApplication extends Application implements ReactApplication {
 
   private static CallbackManager mCallbackManager = CallbackManager.Factory.create();
