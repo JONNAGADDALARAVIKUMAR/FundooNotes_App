@@ -14,6 +14,7 @@ import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
 import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
 import moment from 'moment';
+import UserNoteServices from '../../../services/UserNoteServices';
 
 class NotesView extends Component {
     constructor() {

@@ -9,8 +9,9 @@ class NoteDataController {
             SQLiteStorageServices.storeDetailsInSQLiteDataBase(noteKey, notes)
             .then((results) => {
                 this.addNoteKeyToTheLabels(noteKey, notes.labels)
-                UserNoteServices.addNoteToFirebase(noteKey, notes)
-                .then()
+                //UserNoteServices.addNoteToFirebase(noteKey, notes)
+                UserNoteServices.storeNoteinDatabaseAPI(noteKey, notes)
+                .then(msg => console.log(msg))
                 .catch((error) => console.log(error))
                 resolve('success')
             })
