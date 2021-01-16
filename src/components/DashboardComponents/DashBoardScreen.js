@@ -7,6 +7,7 @@ import {Snackbar, Provider, Portal, Modal} from 'react-native-paper';
 import UserNoteServices from '../../../services/UserNoteServices';
 import Profile from './Profile';
 import UserServices from '../../../services/UserServices';
+import NoteDataController from '../../../services/NoteDataController';
 
 export default class Dashboard extends Component {
     constructor(props){
@@ -34,6 +35,12 @@ export default class Dashboard extends Component {
                 })
             }
         }
+    }
+
+    componentWillUnmount() {
+        this.setState = (state,callback) => {
+            return;
+        };
     }
 
     getProfileImage = async () => {
@@ -87,7 +94,15 @@ export default class Dashboard extends Component {
 
     restoreNotes = () => {
         const {onPress} = this.props
-        UserNoteServices.restoreNoteInFirebase(this.props.route.params.title, this.props.route.params.note, this.props.route.params.noteKey, this.props.route.params.archivedStatus, this.props.route.params.labelNoteKeys)
+        const notes = {
+            title: this.props.route.params.note.title,
+            note: this.props.route.params.note.note,
+            labels: this.props.route.params.note.labels,
+            isArchived: this.props.route.params.note.isArchived,
+            isDeleted: false,
+            remainderTime: this.props.route.params.note.remainderTime
+        }
+        NoteDataController.updateNote(this.props.route.params.noteKey, notes)
             .then(() => this.props.navigation.push('Home', {screen : 'Notes'}))
             .catch(error => console.log(error))
         //onPress()
@@ -111,7 +126,6 @@ export default class Dashboard extends Component {
                     handleProfile = {this.handleProfile}
                     photoURL = {this.state.photoURL}/>
 
-               
                 <ViewNotes 
                     navigation = {this.props.navigation} 
                     changeLayout = {this.state.listView} 

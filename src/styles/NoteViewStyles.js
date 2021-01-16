@@ -4,22 +4,33 @@ import {StyleSheet} from 'react-native'
 const NoteViewStyles = StyleSheet.create({
     list_Container: {
         backgroundColor: 'transparent',
-        borderWidth: 2,
-        elevation: 0,
-        borderColor : "#f58cd0",
-        width : '90%',
-        marginLeft: '5%',
-        marginBottom: '3%'
-    },
-    list_grid_Container: {
-        borderWidth : 2, 
-        borderRadius : 10, 
-        backgroundColor: 'transparent',
-        borderColor : "#f58cd0",
-        width : '47%',
-        elevation: 0,
+        width : '96%',
         marginLeft: '2%',
         marginBottom: '3%',
+
+        shadowColor: "#000",
+        shadowOffset: {
+	        width: 0,
+	        height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    list_grid_Container: {
+        backgroundColor: 'transparent',
+        width : '48%',
+        marginLeft: '1%',
+        marginBottom: '3%',
+
+        shadowColor: "#000",
+        shadowOffset: {
+	        width: 0,
+	        height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
     },
     Label_Button_Style : {
         margin: 5,

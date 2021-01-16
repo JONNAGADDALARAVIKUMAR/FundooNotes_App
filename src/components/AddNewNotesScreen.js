@@ -34,6 +34,7 @@ class AddNewNotes extends Component {
         if(this.state.labels.length > 0 || this.props.selectedLabelKeys.length > 0) {
             let labelKeys = []
             if(this.state.labels > 0) {
+                console.log(this.state.labels);
                 labelKeys = JSON.parse(this.state.labels)
             }
             this.props.selectedLabelKeys.map(label => {
@@ -135,11 +136,12 @@ class AddNewNotes extends Component {
                 note: this.state.note,
                 labels: this.props.selectedLabelKeys,
                 isArchived: this.props.notesArchived,
-                isDeleted: true
+                isDeleted: true,
+                remainderTime: JSON.stringify(this.state.remainderTime)
             }
             NoteDataController.updateNote(this.state.noteKey, notes)
             .then(() => {
-                this.props.navigation.push('Home', {screen: 'Notes'})
+                this.props.navigation.push('Home', {screen: 'Notes', params: {isNoteDeleted: true, note: notes, noteKey: this.state.noteKey}})
             })
             .catch(error => console.log(error))
         } else {

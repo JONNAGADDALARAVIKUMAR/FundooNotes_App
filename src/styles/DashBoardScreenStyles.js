@@ -9,6 +9,7 @@ const DashBoardScreenStyles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         borderColor: 'gray',
+        
         shadowColor: "#ccc6c9",
         shadowOffset: {
 	        width: 5,

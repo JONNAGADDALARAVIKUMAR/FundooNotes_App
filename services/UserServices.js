@@ -4,6 +4,7 @@ import { AccessToken, LoginManager } from 'react-native-fbsdk';
 import KeyChain from 'react-native-keychain';
 import UserNoteServices from './UserNoteServices';
 import SQLiteStorageServices from './SQLiteStorageServices';
+import SQLiteLabelServices from './SQLiteLabelServices';
 
 class UserServices {
 
@@ -28,8 +29,10 @@ class UserServices {
     logIn = (email, password) => {
         return new Promise((resolve, reject) => {
             Firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(user => {
+            .then(async user => {
+                await KeyChain.setGenericPassword('UserDetails', JSON.stringify(user))
                 this.fillSQLiteDatabaseWithMissingNotesByFetchingFromFirebase()
+                this.fillSQLiteDatabaseWithMissingLabelsByFetchingFromFirebase()
                 resolve(user)
             })
             .catch((error) => {
@@ -132,10 +135,37 @@ class UserServices {
                 for(let i = 0; i < SQLiteNotes.rows.length; i++) {
                     NoteKeys.push(SQLiteNotes.rows.item(i).NoteKey)
                 }
-                let keys = Object.keys(firebaseNotes);
-                keys.map(key => {
-                    if(!NoteKeys.includes(key)){
-                        SQLiteStorageServices.addDetailsInSQLiteDataBaseFromFirebase(key, firebaseNotes[key])
+                if(firebaseNotes != null) {
+                    let keys = Object.keys(firebaseNotes);
+                    keys.map(key => {
+                        if(!NoteKeys.includes(key)){
+                            SQLiteStorageServices.addDetailsInSQLiteDataBaseFromFirebase(key, firebaseNotes[key])
+                        }
+                    })
+                }
+            })
+        })
+    }
+    fillSQLiteDatabaseWithMissingLabelsByFetchingFromFirebase = () => {
+        UserNoteServices.getLabelsFromFirebase()
+        .then(async results => {
+            const user = await KeyChain.getGenericPassword();
+            const Details = JSON.parse(user.password);
+            let labelKeys = Object.keys(results)
+
+            SQLiteLabelServices.getLabelsFromSQliteStorage(Details.user.uid)
+            .then(sqLiteLabelResults => {
+                let sqLitelabelKeys = []
+                for(let i = 0; i < sqLiteLabelResults.rows.length; i++) {
+                    sqLitelabelKeys.push(sqLiteLabelResults.rows.item(i).lebelKey)
+                }
+                labelKeys.map(labelKey => {
+                    if(!sqLitelabelKeys.includes(labelKey)) {
+                        SQLiteLabelServices.storeLabelinSQliteStorage(Details.user.uid, results[labelKey].label.labelName, labelKey)
+                        let noteKeys = JSON.parse(results[labelKey].label.noteKeys)
+                        noteKeys.map(noteKey => {
+                            SQLiteLabelServices.addNoteKeysToTheLabelsInSQLite(labelKey, noteKey)
+                        })
                     }
                 })
             })

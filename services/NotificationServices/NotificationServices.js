@@ -1,6 +1,8 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging from '@react-native-firebase/messaging';
 import SQLiteStorageServices from '../SQLiteStorageServices';
+import PushNotification from "react-native-push-notification";
+import moment from 'moment';
 
 class NotificationServices {
     async checkPermission() {
@@ -37,7 +39,8 @@ class NotificationServices {
       .then(results => {
         for(let i = 0; i < results.rows.length; i++) {
           let remainderTime = results.rows.item(i).remainderTime
-          if(new Date() > new Date(JSON.parse(remainderTime)) && JSON.parse(remainderTime) != null) {
+          if(moment(JSON.parse(results.rows.item(i).remainderTime)).format('D MMM, h.mm a') == moment(new Date()).format('D MMM, h.mm a')) {
+            //this.sendLoaclNotification(results.rows.item(i).Title, results.rows.item(i).Notes)
             this.sendPushNotification(results.rows.item(i).Title, results.rows.item(i).Notes)
           }
         }
@@ -75,6 +78,13 @@ class NotificationServices {
           body: JSON.stringify(message),
         })
         //response = await response.json()
+      }
+
+      sendLoaclNotification = (title, notes) => {
+        PushNotification.localNotification({
+          title : title,
+          message : notes
+        });
       }
 }
 

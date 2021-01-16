@@ -15,6 +15,7 @@ class DeletedNoteViewScreen extends Component {
             isDeleted: this.props.editNotesDetails.isDeleted,
             archived: this.props.editNotesDetails.isArchived,
             labels: this.props.editNotesDetails.labels,
+            remainderTime: this.props.editNotesDetails.remainderTime,
             showCantEditSnackbar: false,
             showDailog: false,
             editNotesDetails: this.props.editNotesDetails,
@@ -28,7 +29,8 @@ class DeletedNoteViewScreen extends Component {
             note: this.state.note,
             labels: JSON.parse(this.state.labels),
             isArchived: this.state.archived,
-            isDeleted: false
+            isDeleted: false,
+            remainderTime: this.state.remainderTime
         }
         NoteDataController.updateNote(this.state.noteKey, notes)
         this.props.navigation.push('Home', {screen: 'Notes'})

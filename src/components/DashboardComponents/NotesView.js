@@ -95,7 +95,7 @@ class NotesView extends Component {
                     await this.setState({
                         labels: labels
                     })
-                    this.props.storelabelsAndLabelKeys(labels)
+                    this.props.storelabelsAndLabelKeys(this.state.labels)
                 }
             })
             .catch(error => console.log(error))
@@ -118,6 +118,12 @@ class NotesView extends Component {
                 index: loadingIndex
             })
         }
+    }
+
+    componentWillUnmount() {
+        this.setState = (state,callback) => {
+            return;
+        };
     }
 
     loadData = async (addIndex) => {
@@ -150,7 +156,7 @@ class NotesView extends Component {
         this.props.navigation.push('AddNewNotes')
     }
 
-    handleDeletedNotesToUpdate = (noteKey, Title, Notes, isDeleted, isArchived, Labels) => {
+    handleDeletedNotesToUpdate = (noteKey, Title, Notes, isDeleted, isArchived, Labels, remainderTime) => {
         const notes = {
             title: Title,
             note: Notes,
@@ -227,7 +233,7 @@ class NotesView extends Component {
                                                     </Chip>
                                                     :null
                                                 }
-                                                {(item.Labels.length > 0) ?
+                                                {(item.Labels != null && item.Labels.length > 0) ?
                                                     this.state.labels.map(labels => (
                                                         item.Labels.includes(labels.lebelKey) ?
                                                             <React.Fragment key = {labels.lebelKey}>

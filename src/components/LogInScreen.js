@@ -71,7 +71,7 @@ export default class LogInScreen extends Component {
         if(this.state.email != '' && this.state.password != '') {
             await UserServices.logIn(this.state.email, this.state.password)
             .then( async (user) => {
-                this.storeIteminAsyncStorage(user)
+                await this.storeIteminAsyncStorage(user)
                 await KeyChain.setGenericPassword('UserDetails', JSON.stringify(user))
                 this.props.navigation.navigate('Home')
             })

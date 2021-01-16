@@ -37,6 +37,12 @@ export default class ToolBar extends Component {
         })
     }
 
+    componentWillUnmount() {
+        this.setState = (state,callback) => {
+            return;
+        };
+    }
+
     changeLayout = () => {
         const {onPress} = this.props
         if(this.state.changeLayout) {

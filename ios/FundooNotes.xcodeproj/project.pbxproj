@@ -32,6 +32,7 @@
 		4DFD6D13C4C14EA49F6FA2FE /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 947C1BD0F6DB4D1B9E272D0B /* Octicons.ttf */; };
 		87E361CEA00F4FBBBF56021D /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 72B57342A47D4081AB5584A6 /* SimpleLineIcons.ttf */; };
 		6B4498FB8C484047B628A136 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7A27D50405F64CE7ADF96EE9 /* Zocial.ttf */; };
+		5921F68B4053460BAE96E669 /* libRNBackgroundJob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 073DFA0843FA45A9B868EA03 /* libRNBackgroundJob.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,8 @@
 		947C1BD0F6DB4D1B9E272D0B /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		72B57342A47D4081AB5584A6 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		7A27D50405F64CE7ADF96EE9 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		94CFB4DC9E9F459A928E7D7E /* RNBackgroundJob.xcodeproj */ = {isa = PBXFileReference; name = "RNBackgroundJob.xcodeproj"; path = "../node_modules/react-native-background-job/ios/RNBackgroundJob.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		073DFA0843FA45A9B868EA03 /* libRNBackgroundJob.a */ = {isa = PBXFileReference; name = "libRNBackgroundJob.a"; path = "libRNBackgroundJob.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5921F68B4053460BAE96E669 /* libRNBackgroundJob.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +164,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
+				94CFB4DC9E9F459A928E7D7E /* RNBackgroundJob.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -527,6 +532,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FundooNotes.app/FundooNotes";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/..",
+				);
 			};
 			name = Debug;
 		};
@@ -546,6 +559,14 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FundooNotes.app/FundooNotes";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/..",
+				);
 			};
 			name = Release;
 		};
@@ -568,6 +589,10 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/..",
+				);
 			};
 			name = Debug;
 		};
@@ -588,6 +613,10 @@
 				PRODUCT_NAME = FundooNotes;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/..",
+				);
 			};
 			name = Release;
 		};
@@ -615,6 +644,14 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/..",
+				);
 			};
 			name = Debug;
 		};
@@ -642,6 +679,14 @@
 				SDKROOT = appletvos;
 				TARGETED_DEVICE_FAMILY = 3;
 				TVOS_DEPLOYMENT_TARGET = 10.0;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/..",
+				);
 			};
 			name = Release;
 		};
@@ -668,6 +713,14 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FundooNotes-tvOS.app/FundooNotes-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/..",
+				);
 			};
 			name = Debug;
 		};
@@ -694,6 +747,14 @@
 				SDKROOT = appletvos;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FundooNotes-tvOS.app/FundooNotes-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+				);
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/..",
+				);
 			};
 			name = Release;
 		};
