@@ -26,7 +26,6 @@ const initialState = {
     labelsAndLabelKeys: [],
     labelAndKey: {},
     labelScreen: null
-
 }
 
 const CreateNewLabelReducer = (state = initialState, action) => {

@@ -4,7 +4,6 @@ import ToolBar from './ToolBar';
 import BottomBar from './BottomBar';
 import ViewNotes from './NotesView';
 import {Snackbar, Provider, Portal, Modal} from 'react-native-paper';
-import UserNoteServices from '../../../services/UserNoteServices';
 import Profile from './Profile';
 import UserServices from '../../../services/UserServices';
 import NoteDataController from '../../../services/NoteDataController';
@@ -71,7 +70,7 @@ export default class Dashboard extends Component {
         this.setState({
             listView: !this.state.listView
         })
-        //onPress();
+        onPress();
     }
 
     emptyNoteSnackbarHandler = async () => {
@@ -80,7 +79,7 @@ export default class Dashboard extends Component {
             showEmptyNoteSnackbar : false
         })
         this.props.navigation.setParams({isEmptyNote : false})
-        //onDismiss()
+        onDismiss()
     }
 
     deletedNoteSnackbarHandler = async () => {
@@ -89,7 +88,7 @@ export default class Dashboard extends Component {
             showDeletedNoteSnackbar : false
         })
         this.props.navigation.setParams({isNoteDeleted : false})
-        //onDismiss()
+        onDismiss()
     }
 
     restoreNotes = () => {
@@ -105,7 +104,7 @@ export default class Dashboard extends Component {
         NoteDataController.updateNote(this.props.route.params.noteKey, notes)
             .then(() => this.props.navigation.push('Home', {screen : 'Notes'}))
             .catch(error => console.log(error))
-        //onPress()
+        onPress()
     }
 
     handleProfile = async () => {

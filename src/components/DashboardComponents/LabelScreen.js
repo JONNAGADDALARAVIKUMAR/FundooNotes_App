@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {View, ScrollView, Text} from 'react-native';
+import {View, Text} from 'react-native';
 import { Appbar } from 'react-native-paper';
 import {connect} from 'react-redux';
 import LabelScreenStyles from '../../styles/LabelScreenStyles';
@@ -16,7 +16,7 @@ class LabelScreen extends Component {
     }
 
     componentDidMount = () => {
-        this.props.storelabelScreen(this.props.labelAndKey.lebelKey)
+        this.props.storelabelScreen(this.props.state.createLabelReducer.labelAndKey.lebelKey)
     } 
 
     openDrawer = () => {
@@ -43,7 +43,7 @@ class LabelScreen extends Component {
                         onPress = {this.openDrawer}
                     />
                     <Text style = {LabelScreenStyles.label_Name_Style}>
-                        {this.props.labelAndKey.labelName}
+                        {this.props.state.createLabelReducer.labelAndKey.labelName}
                     </Text>
                     <Appbar.Action
                         icon = "magnify"
@@ -64,19 +64,17 @@ class LabelScreen extends Component {
                     changeLayout = {this.state.listView} 
                     deletedStatus = {false}
                     archivedStatus = {false}
-                    labelAndKey = {this.props.labelAndKey}/>
+                    labelAndKey = {this.props.state.createLabelReducer.labelAndKey}/>
                 <BottomBar 
                     navigation = {this.props.navigation}
-                    labelAndKey = {this.props.labelAndKey}/>
+                    labelAndKey = {this.props.state.createLabelReducer.labelAndKey}/>
             </View>
         )
     }
 }
 
 const mapStateToProps = state => {
-    return {
-        labelAndKey: state.createLabelReducer.labelAndKey
-    }
+    return {state}
 }
 
 const mapDispatchToProps = dispatch => {

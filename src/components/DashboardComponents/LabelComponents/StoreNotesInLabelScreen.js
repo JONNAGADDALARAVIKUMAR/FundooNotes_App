@@ -10,14 +10,14 @@ class SelectLabelToNotesScreen extends Component {
         super(props)
         this.state = {
             search : '',
-            labelsAndLabelKeysAfterSearch : this.props.labelsAndLabelKeys,
-            labelsAndLabelKeys: this.props.labelsAndLabelKeys
+            labelsAndLabelKeysAfterSearch : this.props.state.createLabelReducer.labelsAndLabelKeys,
+            labelsAndLabelKeys: this.props.state.createLabelReducer.labelsAndLabelKeys
         }
     }
 
     componentDidMount = async () => {
         let tempLabelKeys = []
-        await this.props.labelsAndLabelKeys.map(labelNameAndLabelKey => {
+        await this.props.state.createLabelReducer.labelsAndLabelKeys.map(labelNameAndLabelKey => {
             tempLabelKeys.push(labelNameAndLabelKey.lebelKey)
         }, this.setState({
             noteKeysAfterSearch: tempLabelKeys
@@ -44,7 +44,7 @@ class SelectLabelToNotesScreen extends Component {
             })
         } else {
             await this.setState({
-                labelsAndLabelKeysAfterSearch : this.props.labelsAndLabelKeys,
+                labelsAndLabelKeysAfterSearch : this.props.state.createLabelReducer.labelsAndLabelKeys,
             })
         }
     }
@@ -88,12 +88,7 @@ class SelectLabelToNotesScreen extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        userId : state.createLabelReducer.userId,
-        labelContent : state.createLabelReducer.labelContent,
-        labelNoteKeys : state.createLabelReducer.labelNoteKeys,
-        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
-    }
+    return {state}
 }
 
 export default connect(mapStateToProps)(SelectLabelToNotesScreen)

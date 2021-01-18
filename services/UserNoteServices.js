@@ -1,8 +1,8 @@
 import Firebase from '../config/Firebase';
 import KeyChain from 'react-native-keychain';
+import FirebaseAPIServices from './FirebaseAPIServices';
 
 class UserNoteServices {
-
     getDetailsFromFirebase = () => {
         return new Promise(async (resolve, reject) => {
             const user = await KeyChain.getGenericPassword();
@@ -13,18 +13,6 @@ class UserNoteServices {
             .catch(error => reject(error))
         })
     }
-    
-    addNoteToFirebase = async (noteKey, notes) => {
-        return new Promise(async (resolve, reject) => {
-                const user = await KeyChain.getGenericPassword();
-                const userDetails = JSON.parse(user.password);
-                Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + noteKey).set({
-                    notes : notes
-                })
-                .then(() => resolve('success'))
-                .catch(error => reject(error))
-            })
-        }
 
     restoreNoteInFirebase = async (title, note, notekey, archivedStatus, labelNoteKeys) => {
         return new Promise(async (resolve, reject) => {
@@ -71,11 +59,7 @@ class UserNoteServices {
                     }
                 })
             })
-
-            // Firebase.database().ref('notes/' + userDetails.user.uid  + '/' + noteKey).remove()
-            // .then(resolve('success'))
-            // .catch((error) => reject(error))
-            this.removeNoteinDatabaseThroughAPI(noteKey)
+            FirebaseAPIServices.removeNoteinDatabaseThroughAPI(noteKey)
         })
     }
 
@@ -172,36 +156,6 @@ class UserNoteServices {
                 tempNoteKeys.push(noteKey)
             }
             this.updateLabelInFirebase(userDetails.user.uid, labelKey, results[labelKey].label.labelName, tempNoteKeys)
-        })
-    }
-
-    storeNoteinDatabaseAPI = (noteKey, notes) => {
-        return new Promise(async (resolve, reject) => {
-            const user = await KeyChain.getGenericPassword();
-            const userDetails = JSON.parse(user.password);
-            fetch(`https://fundonotes-d4273-default-rtdb.firebaseio.com/notes/${userDetails.user.uid}/${noteKey}.json`,{
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                   notes : notes
-                })
-            })
-            .then(() => resolve('success')) 
-        })
-    }
-    
-    removeNoteinDatabaseThroughAPI = (notekey) => {
-        return new Promise(async (resolve, reject) => {
-            const user = await KeyChain.getGenericPassword();
-            const userDetails = JSON.parse(user.password);
-
-            fetch(`https://fundonotes-d4273-default-rtdb.firebaseio.com/notes/${userDetails.user.uid}/${notekey}.json`,{
-                method: 'DELETE'
-            })
-            .then(() => resolve('success'))
-            .catch(error => reject(error))
         })
     }
 }

@@ -13,7 +13,7 @@ class DrawerContent extends Component {
     }
 
     componentDidMount = async () => {
-        let templabelsAndLabelKeys = this.props.labelsAndLabelKeys
+        let templabelsAndLabelKeys = this.props.state.createLabelReducer.labelsAndLabelKeys
         let labelNoteKeys = []
         for(let i = 0; i < templabelsAndLabelKeys.length; i++) {
             labelNoteKeys.push(templabelsAndLabelKeys[i].lebelKey)
@@ -65,7 +65,7 @@ class DrawerContent extends Component {
             <DrawerContentScrollView>
                     <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {this.navigateToHome}/>
                     <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style} onPress = {this.navigateToRemainderScreen}/>
-                    {this.props.labelsAndLabelKeys.map((labelAndKey) => (
+                    {this.props.state.createLabelReducer.labelsAndLabelKeys.map((labelAndKey) => (
                         <Drawer.Item key = {labelAndKey.lebelKey} icon = 'label-outline' label = {labelAndKey.labelName} onPress = {() => this.navigateLabelScreen(labelAndKey)}/>
                     ))}
                     <Drawer.Item icon = 'plus' label = {strings.Createnewlabel} onPress = {this.navigateToCreateNewLabel} style = {DrawContentStyles.drawer_Section_style}/>
@@ -80,9 +80,7 @@ class DrawerContent extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
-    }
+    return {state}
 }
 
 const mapDispatchToProps = dispatch => {

@@ -63,7 +63,7 @@ export default class LogInScreen extends Component {
                 passwordSecurity: true
             })
         }
-        //(this.props == undefined ) ? null : onPress();
+        (this.props == undefined ) ? null : onPress();
     }
 
     handleLogInButton = async () => {
@@ -104,7 +104,7 @@ export default class LogInScreen extends Component {
                 })
             }
         }
-        //onPress();
+        onPress();
     }
 
     storeIteminAsyncStorage = async (User) => {
@@ -121,13 +121,13 @@ export default class LogInScreen extends Component {
     navigateToSignUpScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('SignUp')
-        //onPress();
+        onPress();
     }
 
     navigateToForgotPasswordScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('ForgotPassword')
-        //onPress();
+        onPress();
     }
 
     loginWithFacebook = async () => {

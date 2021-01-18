@@ -8,12 +8,12 @@ class SelectLabelAppbar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectedLabelKeys: this.props.selectedLabelKeys
+            selectedLabelKeys: this.props.state.createLabelReducer.selectedLabelKeys
         }
     }
 
     handleCheckbox = async (noteKey) => {
-        let selectedLabels = this.props.selectedLabelKeys
+        let selectedLabels = this.props.state.createLabelReducer.selectedLabelKeys
         if(selectedLabels.includes(noteKey)) {
             let index = selectedLabels.indexOf(noteKey)
             selectedLabels.splice(index, 1)
@@ -56,12 +56,7 @@ class SelectLabelAppbar extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        userId : state.createLabelReducer.userId,
-        labelContent : state.createLabelReducer.labelContent,
-        selectedLabelKeys : state.createLabelReducer.selectedLabelKeys,
-        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
-    }
+    return {state}
 }
 const mapDispatchToProps = dispatch => {
     return {

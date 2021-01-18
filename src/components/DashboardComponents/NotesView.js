@@ -14,7 +14,6 @@ import { connect } from 'react-redux';
 import KeyChain from 'react-native-keychain';
 import SQLiteLabelServices from '../../../services/SQLiteLabelServices';
 import moment from 'moment';
-import UserNoteServices from '../../../services/UserNoteServices';
 
 class NotesView extends Component {
     constructor() {
@@ -86,7 +85,8 @@ class NotesView extends Component {
                 }
             })
         }
-        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
+
+        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.state.createLabelReducer.userId)
             .then(async results => {
                 if(results.rows.length > 0) {
                     let labels = [];
@@ -264,10 +264,7 @@ class NotesView extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        userId : state.createLabelReducer.userId,
-        labelContent : state.createLabelReducer.labelContent,
-    }
+    return {state}
 }
 
 const mapDispatchToProps = dispatch => {

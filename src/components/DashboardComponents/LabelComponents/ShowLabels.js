@@ -27,8 +27,8 @@ class showLabel extends Component {
         if(!this.state.errorMsg && !this.state.emptyMsg) {
             this.props.selectActiveLabel('')
             if(!this.state.emptyMsg && !this.state.errorMsg)
-            SQLiteLabelServices.updateLabelinSQliteStorage(this.props.userId, this.state.editTextInput, this.props.labelKey)
-            UserNoteServices.updateLabelInFirebase(this.props.userId, this.props.labelKey, this.state.editTextInput)
+            SQLiteLabelServices.updateLabelinSQliteStorage(this.props.state.createLabelReducer.userId, this.state.editTextInput, this.props.labelKey)
+            UserNoteServices.updateLabelInFirebase(this.props.state.createLabelReducer.userId, this.props.labelKey, this.state.editTextInput)
                 .then(() => {
                     UserNoteServices.getLabelsFromFirebase()
                     .then(async data => {
@@ -52,7 +52,7 @@ class showLabel extends Component {
     }
 
     handleEditTextInput = async (editText) => {
-        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
+        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.state.createLabelReducer.userId)
             .then(async results => {
                 let labels = [];
                 if(results.rows.length > 0) {
@@ -185,10 +185,7 @@ class showLabel extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        userId : state.createLabelReducer.userId,
-        labelContent : state.createLabelReducer.labelContent,
-    }
+    return {state}
 }
 
 const mapDispatchToProps = dispatch => {

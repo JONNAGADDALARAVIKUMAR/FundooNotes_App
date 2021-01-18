@@ -9,16 +9,16 @@ class DeletedNoteViewScreen extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            title: this.props.editNotesDetails.title,
-            note: this.props.editNotesDetails.note,
-            noteKey: this.props.noteKeyToUpdateNotes,
-            isDeleted: this.props.editNotesDetails.isDeleted,
-            archived: this.props.editNotesDetails.isArchived,
-            labels: this.props.editNotesDetails.labels,
-            remainderTime: this.props.editNotesDetails.remainderTime,
+            title: this.props.state.createLabelReducer.editNotesDetails.title,
+            note: this.props.state.createLabelReducer.editNotesDetails.note,
+            noteKey: this.props.state.createLabelReducer.noteKeyToUpdateNotes,
+            isDeleted: this.props.state.createLabelReducer.editNotesDetails.isDeleted,
+            archived: this.props.state.createLabelReducer.editNotesDetails.isArchived,
+            labels: this.props.state.createLabelReducer.editNotesDetails.labels,
+            remainderTime: this.props.state.createLabelReducer.editNotesDetails.remainderTime,
             showCantEditSnackbar: false,
             showDailog: false,
-            editNotesDetails: this.props.editNotesDetails,
+            editNotesDetails: this.props.state.createLabelReducer.editNotesDetails,
         }
     }
 
@@ -161,11 +161,7 @@ class DeletedNoteViewScreen extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        selectedLabelKey : state.createLabelReducer.selectedLabelKey,
-        editNotesDetails : state.createLabelReducer.editNotesDetails,
-        noteKeyToUpdateNotes : state.createLabelReducer.noteKeyToUpdateNotes
-    }
+    return {state}
 }
 
 export default connect(mapStateToProps)(DeletedNoteViewScreen)

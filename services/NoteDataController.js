@@ -1,6 +1,7 @@
 import SQLiteLabelServices from "./SQLiteLabelServices";
 import SQLiteStorageServices from "./SQLiteStorageServices";
 import UserNoteServices from "./UserNoteServices";
+import FirebaseAPIServices from './FirebaseAPIServices'
 
 class NoteDataController {
 
@@ -9,8 +10,7 @@ class NoteDataController {
             SQLiteStorageServices.storeDetailsInSQLiteDataBase(noteKey, notes)
             .then((results) => {
                 this.addNoteKeyToTheLabels(noteKey, notes.labels)
-                //UserNoteServices.addNoteToFirebase(noteKey, notes)
-                UserNoteServices.storeNoteinDatabaseAPI(noteKey, notes)
+                FirebaseAPIServices.storeNoteinDatabaseThroughAPI(noteKey, notes)
                 .then(msg => console.log(msg))
                 .catch((error) => console.log(error))
                 resolve('success')
@@ -24,9 +24,7 @@ class NoteDataController {
             SQLiteStorageServices.updateDetailsInSQLiteDataBase(noteKey, notes)
             .then((results) => resolve(results))
             .catch(error => reject(error))
-
-            UserNoteServices.addNoteToFirebase(noteKey, notes)
-            .then()
+            FirebaseAPIServices.storeNoteinDatabaseThroughAPI(noteKey, notes)
             .catch((error) => console.log(error))        
         })
     }

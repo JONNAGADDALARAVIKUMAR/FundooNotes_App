@@ -15,11 +15,6 @@ const fs = FetchBlob.fs
 window.XMLHttpRequest = FetchBlob.polyfill.XMLHttpRequest
 window.Blob = Blob
 const Fetch = FetchBlob.polyfill.Fetch
-
-// const Blob = RNFetchBlob.polyfill.Blob;
-// const fs = RNFetchBlob.fs;
-// window.XMLHttpRequest = RNFetchBlob.polyfill.XMLHttpRequest;
-// window.Blob = Blob;
   
 export default class App extends Component {  
     constructor(props) {

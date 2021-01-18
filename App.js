@@ -47,7 +47,6 @@ class App extends Component {
 
     componentWillUnmount() {
         AppState.removeEventListener("change", this.handleAppStateChange);
-        startService(new Intent(this, NotificationService.class));
     }
 
     handleAppStateChange = async nextAppState => {

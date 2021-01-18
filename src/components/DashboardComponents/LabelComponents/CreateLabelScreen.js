@@ -18,7 +18,7 @@ class CreateLabelScreen extends Component {
             activeLabel: '',
             enteredLabel: '',
             labelExistErrorMessage: false,
-            labels: this.props.labelsAndLabelKeys
+            labels: this.props.state.createLabelReducer.labelsAndLabelKeys
         }
     }
 
@@ -27,7 +27,7 @@ class CreateLabelScreen extends Component {
     }
 
     updateLabels = () => {
-        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
+        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.state.createLabelReducer.userId)
             .then(async results => {
                 let labels = [];
                 if(results.rows.length > 0) {
@@ -94,10 +94,10 @@ class CreateLabelScreen extends Component {
     createLabel = async () => {
         if(this.state.enteredLabel != '' && !this.state.labelExistErrorMessage) {
             let labelKey = this.generateRandomLabelKey()
-            await SQLiteLabelServices.storeLabelinSQliteStorage(this.props.userId, this.state.enteredLabel, labelKey)
+            await SQLiteLabelServices.storeLabelinSQliteStorage(this.props.state.createLabelReducer.userId, this.state.enteredLabel, labelKey)
             .then(async (results) => {
                 this.updateLabels()
-                await UserNoteServices.addLabelToTheFirebase(this.props.userId, this.state.enteredLabel, labelKey)})
+                await UserNoteServices.addLabelToTheFirebase(this.props.state.createLabelReducer.userId, this.state.enteredLabel, labelKey)})
             .catch(error => console.log(error))
         }
         this.setState({
@@ -110,8 +110,8 @@ class CreateLabelScreen extends Component {
     }
 
     handleDeleteButton = async () => {
-        await SQLiteLabelServices.deleteLabel(this.props.userId, this.props.deleteLabelKey)
-        await UserNoteServices.deleteLabelInFirebase(this.props.userId, this.props.deleteLabelKey)
+        await SQLiteLabelServices.deleteLabel(this.props.state.createLabelReducer.userId, this.props.state.createLabelReducer.deleteLabelKey)
+        await UserNoteServices.deleteLabelInFirebase(this.props.state.createLabelReducer.userId, this.props.state.createLabelReducer.deleteLabelKey)
         this.props.storeDailogStatus(false)
         this.updateLabels()
     }
@@ -196,7 +196,7 @@ class CreateLabelScreen extends Component {
                     </View>
                     </ScrollView>
                     <Portal>
-                    <Dialog style = {{height: 100}} visible = {this.props.showDailog}>
+                    <Dialog style = {{height: 100}} visible = {this.props.state.createLabelReducer.showDailog}>
                         <Dialog.Content>
                             <Paragraph>
                                 Delete this Label forever ?
@@ -219,12 +219,7 @@ class CreateLabelScreen extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        userId : state.createLabelReducer.userId,
-        showDailog: state.createLabelReducer.showDailog,
-        deleteLabelKey: state.createLabelReducer.deleteLabelKey,
-        labelsAndLabelKeys: state.createLabelReducer.labelsAndLabelKeys
-    }
+    return {state}
 }
 
 const mapDispatchToProps = dispatch => {

@@ -93,7 +93,7 @@ class AddNewNotes extends Component {
         } else {
             this.props.navigation.push('Home', { screen: 'Notes',   params : {isEmptyNote : true}})
         }
-        //onPress();
+        onPress();
     }
 
     handleBackIcon = () => {
@@ -118,7 +118,7 @@ class AddNewNotes extends Component {
     handleDotIconButton = () => {
         const {onPress} = this.props
         this.RBSheet.open()
-        //onPress()
+        onPress()
     }
 
     handleArchiveIcon = async () => {

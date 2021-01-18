@@ -40,7 +40,7 @@ class SearchScreen extends Component {
             } 
         })
 
-        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.userId)
+        SQLiteLabelServices.getLabelsFromSQliteStorage(this.props.state.createLabelReducer.userId)
             .then(async results => {
                 if(results.rows.length > 0) {
                     let labels = [];
@@ -164,10 +164,7 @@ class SearchScreen extends Component {
 }
 
 const mapStateToProps = state => {
-    return {
-        userId : state.createLabelReducer.userId,
-        labelContent : state.createLabelReducer.labelContent,
-    }
+    return {state}
 }
 
 const mapDispatchToProps = dispatch => {

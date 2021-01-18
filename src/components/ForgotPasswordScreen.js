@@ -52,7 +52,7 @@ export default class ForgotPasswordScreen extends Component {
                 isEmailFieldEmpty: true
             })
         }
-        //(this.props == undefined ) ? null : onPress();
+        (this.props == undefined ) ? null : onPress();
     }
 
     render() {
