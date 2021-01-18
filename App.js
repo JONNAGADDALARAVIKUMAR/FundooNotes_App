@@ -5,23 +5,23 @@ import store from './src/redux/store';
 import NotificationServices from './services/NotificationServices/NotificationServices';
 import PushNotification from "react-native-push-notification";
 import { AppState } from "react-native";
+import BackgroundTimer from 'react-native-background-timer';
 
 class App extends Component {
     state = {
         appState: AppState.currentState
     }
 
-    componentDidMount = () => {
-        AppState.addEventListener("change", this.handleAppStateChange);
+    componentDidMount = async () => {
+        await AppState.addEventListener("change", this.handleAppStateChange);
         NotificationServices.checkPermission()
-        //NotificationServices.checkRemaindersSendPushNotification()
         PushNotification.configure({
             onRegister: function (token) {
                 console.log("TOKEN:", token);
             },
             onNotification: function (notification) {
               console.log("NOTIFICATION:", notification);
-              alert(notification.data.title + '\n' + notification.data.body)
+              alert(notification.title + '\n' + notification.message)
               //alert(notification.message)
             },
             onAction: function (notification) {
@@ -40,21 +40,23 @@ class App extends Component {
             requestPermissions: true,
         });
 
-        setInterval(() => {
+        BackgroundTimer.setInterval(() => {
             NotificationServices.checkRemaindersSendPushNotification()
         }, 60000)
     }
 
     componentWillUnmount() {
         AppState.removeEventListener("change", this.handleAppStateChange);
+        startService(new Intent(this, NotificationService.class));
     }
 
-    handleAppStateChange = nextAppState => {
+    handleAppStateChange = async nextAppState => {
         if(this.state.appState.match(/inactive|background/) &&
             nextAppState === "active") {
               console.log("App has come to the foreground!");
         }
-        this.setState({ appState: nextAppState });
+        await this.setState({ appState: nextAppState });
+        console.log(this.state.appState);
     };
 
     render() {
