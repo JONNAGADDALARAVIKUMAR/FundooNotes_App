@@ -25,13 +25,13 @@ const store = mockStore(initialState)
 
 describe('test ArchivedNotesScreen Class', () => {
     it('test when render should match to snapshot', async () => {
-        const component = shallow(<ArchivedNotesScreen store = {store}/>)
-        expect(component).toMatchSnapshot();
+        const wrapper = shallow(<ArchivedNotesScreen store = {store}/>).dive();
+        expect(wrapper).toMatchSnapshot();
     })
     it('test openDrawer on press should open drawer', async () => {
         const onPressEvent = jest.fn();
         const navigation = {openDrawer: jest.fn() }
-        const component = shallow(<ArchivedNotesScreen onPress = {onPressEvent} navigation = {navigation} store = {store}/>)
+        const component = shallow(<ArchivedNotesScreen onPress = {onPressEvent} navigation = {navigation} store = {store}/>).dive()
 
         await component.instance().openDrawer()
         expect(onPressEvent).toHaveBeenCalled();
@@ -40,7 +40,7 @@ describe('test ArchivedNotesScreen Class', () => {
 
     it('test selectView on press should open drawer', async () => {
         const onPressEvent = jest.fn();
-        const component = shallow(<ArchivedNotesScreen onPress = {onPressEvent} store = {store}/>)
+        const component = shallow(<ArchivedNotesScreen onPress = {onPressEvent} store = {store}/>).dive()
         const instance = component.instance();
         expect(instance.state.listView).toBe(false);
 

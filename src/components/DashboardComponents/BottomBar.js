@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Appbar} from 'react-native-paper';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import {connect} from 'react-redux';
-import {storeEditNotesDetails, storeNoteKeyToUpdateNotes, storeSelectedLabelKeys, storelabelScreen} from '../../redux/actions/CreateNewLabelAction';
+import {storeEditNotesDetails, storeNoteKeyToUpdateNotes, storeSelectedLabelKeys} from '../../redux/actions/CreateNewLabelAction';
 
 class Bottombar extends Component {
     handlePlusButton = () => {
@@ -65,7 +65,6 @@ const mapDispatchToProps = dispatch => {
         storeEditNotesDetails : (notes) => dispatch(storeEditNotesDetails(notes)),
         storeNoteKeyToUpdateNotes : (noteKeyToUpdateNotes) => dispatch(storeNoteKeyToUpdateNotes(noteKeyToUpdateNotes)),
         storeSelectedLabelKeys : (selectedLabelKeys) => dispatch(storeSelectedLabelKeys(selectedLabelKeys)),
-        storelabelScreen : (labelScreen) => dispatch(storelabelScreen(labelScreen)),
     }
 }
 

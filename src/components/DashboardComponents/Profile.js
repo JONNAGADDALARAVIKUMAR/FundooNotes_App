@@ -36,22 +36,20 @@ export default class App extends Component {
     }
 
     handleProfileOnPress = async () => {
+        const {onPress} = this.props
         await this.setState({
             isImagePressed: !this.state.isImagePressed
         })
         this.state.isImagePressed ? this.RBSheet.open() : this.RBSheet.close();
+        onPress()
     }
 
     navigateToLogInScreen = async () => {
         const {onPress} = this.props
-        try {
-            await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
-            UserServices.logOutFromFirebase()
-        } catch (e) {
-            console.log(e);
-        }
+        await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
+        UserServices.logOutFromFirebase()
         this.props.navigation.navigate('LogIn')
-        //onPress()
+        onPress()
     }
 
     takePhoto = () => {

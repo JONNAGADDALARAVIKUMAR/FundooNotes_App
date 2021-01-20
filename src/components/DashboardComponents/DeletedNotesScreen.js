@@ -9,12 +9,18 @@ export default class DeletedNotesSreen extends Component {
         super(props)
     }
 
+    openDrawer = () => {
+        const {onPress} = this.props
+        this.props.navigation.openDrawer()
+        onPress();
+    }
+
     render() {
         return(
             <View style = {DeletedNotesScreenStyles.Screen_Style}>
                 <DeletedNotesScreenTopbar 
                     navigation = {this.props.navigation} 
-                    onPress = {() => this.props.navigation.openDrawer()}
+                    onPress = {this.openDrawer}
                 />
                 <NotesView  
                     navigation = {this.props.navigation}  

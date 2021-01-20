@@ -7,23 +7,12 @@ import DeletedNotesScreenStyles from '../../styles/DeletedNotesScreenStyles';
 export default class DeletedNotesScreenTopbar extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            listView: true
-        }
     }
 
-    changeLayout = async () => {
+    openDrawer = () => {
         const {onPress} = this.props
-        if(this.state.changeLayout) {
-            await this.setState({
-                listView: false
-            })
-        } else {
-            await this.setState({
-                listView: true
-            })
-        }
-        //onPress()
+        this.props.navigation.openDrawer()
+        onPress();
     }
 
     render() {
@@ -32,13 +21,12 @@ export default class DeletedNotesScreenTopbar extends Component {
                 <Appbar style = {DeletedNotesScreenStyles.App_Bar_Style}>
                     <Appbar.Action
                         icon="menu"
-                        onPress = {() => this.props.navigation.openDrawer()}
+                        onPress = {this.openDrawer}
                     />
                     <Text style = {DeletedNotesScreenStyles.Deleted_Text_Style}>{strings.Deleted}</Text>
                     <Appbar.Content/>
                     <Appbar.Action 
                         icon = "dots-vertical"
-                        onPress = {() => console.log('pressed Three dots')}
                     />
                 </Appbar>
             </View>

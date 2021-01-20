@@ -26,12 +26,12 @@ const store = mockStore(initialState)
 
 describe('test DrawerContent', () => {
     it('should match to snapshot', () => {
-        const component = shallow(<DrawerContent store = {store}/>)
-        expect(component).toMatchSnapshot();
+        const wrapper = shallow(<DrawerContent store = {store}/>).dive()
+        expect(wrapper).toMatchSnapshot();
     })
 
     it('test all icons from Drawer Navigation', () => {
-        const component = shallow(<DrawerContent store = {store}/>)
+        const component = shallow(<DrawerContent store = {store}/>).dive()
         expect(component.find(Drawer.Item).at(0).props().icon).toEqual('lightbulb-outline')
         expect(component.find(Drawer.Item).at(1).props().icon).toEqual('bell-outline')
         expect(component.find(Drawer.Item).at(2).props().icon).toEqual('plus')
@@ -44,7 +44,7 @@ describe('test DrawerContent', () => {
     it('test onPress event of notes icon button it will navigate to notes screen', async () => {
         const navigation = { push : jest.fn() }
         const onPressEvent = jest.fn();
-        const component = shallow(<DrawerContent store = {store} onPress = {onPressEvent} navigation = {navigation}/>)
+        const component = shallow(<DrawerContent store = {store} onPress = {onPressEvent} navigation = {navigation}/>).dive()
         const instance = component.instance();
         instance.navigateToHome();
         expect(onPressEvent).toHaveBeenCalled();
@@ -54,7 +54,7 @@ describe('test DrawerContent', () => {
     it('test onPress event of deleted icon button it will navigate to deleted screen', async () => {
         const navigation = { push : jest.fn() }
         const onPressEvent = jest.fn();
-        const component = shallow(<DrawerContent store = {store} onPress = {onPressEvent} navigation = {navigation}/>)
+        const component = shallow(<DrawerContent store = {store} onPress = {onPressEvent} navigation = {navigation}/>).dive()
         const instance = component.instance();
         await instance.handleDeletedIconButton();
         expect(onPressEvent).toHaveBeenCalled();

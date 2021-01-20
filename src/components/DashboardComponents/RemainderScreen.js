@@ -16,7 +16,7 @@ export default class RemainderScreen extends Component {
     openDrawer = () => {
         const {onPress} = this.props
         this.props.navigation.openDrawer()
-        //onPress();
+        onPress();
     }
 
     selectView = () => {
@@ -24,7 +24,7 @@ export default class RemainderScreen extends Component {
         this.setState({
             listView: !this.state.listView
         })
-        //onPress();
+        onPress();
     }
 
     render() {
@@ -41,7 +41,7 @@ export default class RemainderScreen extends Component {
                     <Appbar.Content/>
                     <Appbar.Action 
                         icon = {'magnify'}
-                        onPress = { () => console.log('search')}
+                        //onPress = { () => console.log('search')}
                     />
                     <Appbar.Action 
                         icon = {(this.state.listView) ? 'view-agenda-outline' : 'view-grid-outline'}

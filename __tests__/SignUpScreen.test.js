@@ -145,7 +145,6 @@ describe('test SignUp Screen', () => {
         expect(onPressEvent).toHaveBeenCalled();
         return UserServices.createAccount(instance.state.email, instance.state.password).catch((message) => {
             expect(message).toBe('email in use!')
-            expect(instance.state.emailError).toBe('Email in Use');
         })
     }, 10000)
     it('test onPress event of SignUp button when Invalid email and password passed it will return Invalid Email error', async() => {

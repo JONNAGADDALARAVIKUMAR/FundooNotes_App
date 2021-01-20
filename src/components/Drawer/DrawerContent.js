@@ -24,57 +24,89 @@ class DrawerContent extends Component {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('Home', { screen: 'Notes' })
-        //onPress();
+        onPress();
     }
 
     handleDeletedIconButton = () => {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('Home', { screen: 'Deleted' })
-        //onPress();
+        onPress();
     }
 
     navigateToCreateNewLabel = () => {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('CreateLabel')
-        //onPress();
+        onPress();
     }
 
     navigateToArchiveScreen = () => {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('Home', { screen: 'Archived'})
-        //onPress();
+        onPress();
     } 
 
     navigateLabelScreen = (labelAndKey) => {
+        const {onPress} = this.props
         this.props.storelabelAndKey(labelAndKey)
         this.props.props.navigation.push('Home', { screen: 'Label'})
+        onPress();
     }
 
     navigateToRemainderScreen = () => {
+        const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('Home', { screen: 'Remainder'})
+        onPress();
     }
 
     render() {
-    return(
-        <View style = {{flex: 1}}>
-            <Text style = {DrawContentStyles.AppName_Style}>{strings.AppName}</Text>
-            <DrawerContentScrollView>
-                    <Drawer.Item icon = 'lightbulb-outline' label = {strings.Notes} onPress = {this.navigateToHome}/>
-                    <Drawer.Item icon = 'bell-outline' label = {strings.Reminders}  style = {DrawContentStyles.drawer_Section_style} onPress = {this.navigateToRemainderScreen}/>
-                    {this.props.state.createLabelReducer.labelsAndLabelKeys.map((labelAndKey) => (
-                        <Drawer.Item key = {labelAndKey.lebelKey} icon = 'label-outline' label = {labelAndKey.labelName} onPress = {() => this.navigateLabelScreen(labelAndKey)}/>
-                    ))}
-                    <Drawer.Item icon = 'plus' label = {strings.Createnewlabel} onPress = {this.navigateToCreateNewLabel} style = {DrawContentStyles.drawer_Section_style}/>
-                    <Drawer.Item icon = 'archive-arrow-down-outline' label = {strings.Archive} onPress = {this.navigateToArchiveScreen}/>
-                    <Drawer.Item icon = 'delete' label = {strings.Deleted} style = {DrawContentStyles.drawer_Section_style} onPress = {this.handleDeletedIconButton}/>
-                    <Drawer.Item icon = 'cog-outline' label = {strings.Settings}/>
-                    <Drawer.Item icon = 'help' label = {strings.HelpfeedBack}/>
-            </DrawerContentScrollView>
-        </View>
+        return(
+            <View style = {{flex: 1}}>
+                <Text style = {DrawContentStyles.AppName_Style}>{strings.AppName}</Text>
+                <DrawerContentScrollView>
+                    <Drawer.Item 
+                        icon = 'lightbulb-outline' 
+                        label = {strings.Notes} 
+                        onPress = {this.navigateToHome}/>
+                    
+                    <Drawer.Item 
+                        icon = 'bell-outline' 
+                        label = {strings.Reminders} 
+                        style = {DrawContentStyles.drawer_Section_style} 
+                        onPress = {this.navigateToRemainderScreen}/>
+                        {this.props.state.createLabelReducer.labelsAndLabelKeys.map((labelAndKey) => (
+                            <Drawer.Item 
+                                key = {labelAndKey.lebelKey} 
+                                icon = 'label-outline' 
+                                label = {labelAndKey.labelName} 
+                                onPress = {() => this.navigateLabelScreen(labelAndKey)}/>
+                            ))
+                        }
+                    <Drawer.Item 
+                        icon = 'plus' 
+                        label = {strings.Createnewlabel} 
+                        onPress = {this.navigateToCreateNewLabel} 
+                        style = {DrawContentStyles.drawer_Section_style}/>
+                    <Drawer.Item 
+                        icon = 'archive-arrow-down-outline' 
+                        label = {strings.Archive} 
+                        onPress = {this.navigateToArchiveScreen}/>
+                    <Drawer.Item 
+                        icon = 'delete' 
+                        label = {strings.Deleted} 
+                        style = {DrawContentStyles.drawer_Section_style} 
+                        onPress = {this.handleDeletedIconButton}/>
+                    <Drawer.Item 
+                        icon = 'cog-outline' 
+                        label = {strings.Settings}/>
+                    <Drawer.Item 
+                        icon = 'help' 
+                        label = {strings.HelpfeedBack}/>
+                </DrawerContentScrollView>
+            </View>
         )
     }
 }

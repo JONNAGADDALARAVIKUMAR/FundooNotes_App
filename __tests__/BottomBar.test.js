@@ -26,11 +26,11 @@ const store = mockStore(initialState)
 
 describe('test BottomBar Screen', () => {
     it('test when render should match to snapshot', async () => {
-        const component = shallow(<BottomBar store = {store}/>)
+        const component = shallow(<BottomBar store = {store}/>).dive()
         expect(component).toMatchSnapshot();
     })
     it('test appbar action in bottom bar component should have length 5', () => {
-        const component = shallow(<BottomBar store = {store}/>)
+        const component = shallow(<BottomBar store = {store}/>).dive()
         expect(component.find(Appbar.Action)).toHaveLength(5)
         expect(component.find(Appbar.Action).at(0).props().icon).toEqual('check-box-outline')
         expect(component.find(Appbar.Action).at(1).props().icon).toEqual('brush')
@@ -41,10 +41,10 @@ describe('test BottomBar Screen', () => {
     it('test onPress event of handlePlusButton it should navigate to AddNewNotes Screen', async() => {
         const navigation = { push : jest.fn() }
         const onPressEvent = jest.fn();
-        const component = shallow(<BottomBar store = {store} onPress = {onPressEvent} navigation = {navigation} />)
+        const component = shallow(<BottomBar store = {store} onPress = {onPressEvent} navigation = {navigation} />).dive()
         const instance = component.instance();
         await instance.handlePlusButton();
         expect(onPressEvent).toHaveBeenCalled();
-        expect(navigation.push).toBeCalledWith('AddNewNotes', {"note": "", "noteKey": undefined, "title": ""})
+        expect(navigation.push).toBeCalledWith('AddNewNotes')
     })
 })

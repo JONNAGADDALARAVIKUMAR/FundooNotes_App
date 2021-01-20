@@ -209,7 +209,7 @@ class NotesView extends Component {
                         renderItem = {({ item }) => (  
                             <React.Fragment key = {this.key}>
                                 {
-                                    <Card
+                                    <Card 
                                         style = {this.props.changeLayout ? NoteViewStyles.list_grid_Container: NoteViewStyles.list_Container}
                                         onPress = {() => {
                                             (item.isDeleted) 
