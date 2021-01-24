@@ -15,7 +15,7 @@ class FirebaseAPIServices {
                 })
             })
             .then((responce) => resolve('success')) 
-            .catch(error => console.log(error))
+            .catch(error => reject(error))
         })
     }
     

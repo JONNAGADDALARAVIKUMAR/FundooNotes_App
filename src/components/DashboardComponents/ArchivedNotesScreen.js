@@ -21,7 +21,7 @@ class ArchivedScreen extends Component {
     openDrawer = () => {
         const {onPress} = this.props
         this.props.navigation.openDrawer()
-        onPress();
+        //onPress();
     }
 
     selectView = () => {
@@ -29,7 +29,7 @@ class ArchivedScreen extends Component {
         this.setState({
             listView: !this.state.listView
         })
-        onPress();
+        //onPress();
     }
 
     render() {

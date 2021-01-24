@@ -24,7 +24,7 @@ class Bottombar extends Component {
         this.props.storeEditNotesDetails(notes)
         this.props.storeNoteKeyToUpdateNotes(undefined)
         this.props.navigation.push('AddNewNotes')
-        onPress();
+        //onPress();
     }
     
     render() {

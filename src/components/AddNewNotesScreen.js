@@ -25,7 +25,9 @@ class AddNewNotes extends Component {
             labels: this.props.editNotesDetails.labels,
             noteLabels: [],
             showRemainderModel: false,
-            remainderTime: this.props.editNotesDetails.remainderTime
+            remainderTime: this.props.editNotesDetails.remainderTime,
+            errorMessage: '',
+            showErrorSnackbar: false
         }
     }
 
@@ -83,17 +85,27 @@ class AddNewNotes extends Component {
                 .then(() => { 
                     this.navigateToSelectedScreen()
                 })
-                .catch((error) => console.log(error))
+                .catch((error) => {
+                    this.setState({
+                        errorMessage: error.message,
+                        showErrorSnackbar: true
+                    })
+                })
 
             } else if(this.state.noteKey != undefined) {
                 NoteDataController.updateNote(this.state.noteKey, notes)
                 .then(() => {this.navigateToSelectedScreen()})
-                .catch(error => console.log(error))
+                .catch(error => {
+                    this.setState({
+                        errorMessage: error.message,
+                        showErrorSnackbar: true
+                    })
+                })
             }
         } else {
             this.props.navigation.push('Home', { screen: 'Notes',   params : {isEmptyNote : true}})
         }
-        onPress();
+        //onPress();
     }
 
     handleBackIcon = () => {
@@ -118,7 +130,7 @@ class AddNewNotes extends Component {
     handleDotIconButton = () => {
         const {onPress} = this.props
         this.RBSheet.open()
-        onPress()
+        //onPress()
     }
 
     handleArchiveIcon = async () => {
@@ -143,7 +155,12 @@ class AddNewNotes extends Component {
             .then(() => {
                 this.props.navigation.push('Home', {screen: 'Notes', params: {isNoteDeleted: true, note: notes, noteKey: this.state.noteKey}})
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                this.setState({
+                    errorMessage: error.message,
+                    showErrorSnackbar: true
+                })
+            })
         } else {
             this.setState({
                 isNoteNotAddedDeleted: true
@@ -191,6 +208,12 @@ class AddNewNotes extends Component {
         this.setState({
             remainderTime: selectedRemainderTime,
             showRemainderModel: false
+        })
+    }
+
+    onDismissErrorSnackBar = () => {
+        this.setState({
+            showErrorSnackbar: false
         })
     }
  
@@ -307,6 +330,13 @@ class AddNewNotes extends Component {
                     onDismiss = {this.emptyNotesDeleteHandler}
                     duration = {3000}>
                     Empty Notes can't be deleted
+                </Snackbar>
+
+                <Snackbar
+                    visible = {this.state.showErrorSnackbar}
+                    duration = {5000}
+                    onDismiss = {this.onDismissErrorSnackBar}>
+                    {this.state.errorMessage}
                 </Snackbar>
                 
                 <Portal>

@@ -55,13 +55,13 @@ class SQLiteStorageServices {
                 db.transaction((tx) => {
                     tx.executeSql(`SELECT * FROM ${UserID}`, [], (tx, results) => {
                         resolve(results)
-                    }, error => console.log(error))
+                    }, error => reject(error))
                 })
             } else {
                 db.transaction((tx) => {
                     tx.executeSql(`SELECT * FROM ${UserID} where isDeleted = ? and isArchived = ?`, [deletedStatus, archivedStatus], (tx, results) => {
                         resolve(results)
-                    }, error => console.log(error))
+                    }, error => reject(error))
                 })
             }
             // db.transaction((tx) => {

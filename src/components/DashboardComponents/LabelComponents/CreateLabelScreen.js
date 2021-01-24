@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {Text, View, TouchableOpacity, TextInput} from 'react-native';
-import {Appbar, Provider, Portal, Dialog, Paragraph, Button} from 'react-native-paper';
+import {Appbar, Provider, Portal, Dialog, Paragraph, Button, Snackbar} from 'react-native-paper';
 import CreateNewLabelStyles from '../../../styles/CreateNewLabelStyles';
 import UserNoteServices from '../../../../services/UserNoteServices';
 import { connect } from 'react-redux';
@@ -18,7 +18,9 @@ class CreateLabelScreen extends Component {
             activeLabel: '',
             enteredLabel: '',
             labelExistErrorMessage: false,
-            labels: this.props.state.createLabelReducer.labelsAndLabelKeys
+            labels: this.props.state.createLabelReducer.labelsAndLabelKeys,
+            errorMessage: '',
+            showErrorSnackbar: false
         }
     }
 
@@ -44,7 +46,12 @@ class CreateLabelScreen extends Component {
                 }
                 this.props.storelabelsAndLabelKeys(labels)
             })
-            .catch(error => console.log(error))
+            .catch((error) => {
+                this.setState({
+                    errorMessage: error.message,
+                    showErrorSnackbar: true
+                })
+            })
     }
 
     selectActiveLabel = (labelKey) => {
@@ -55,12 +62,12 @@ class CreateLabelScreen extends Component {
     }
 
     navigateToPreviousScreen = () => {
-        this.props.navigation.goBack()//push('Home', {screen: 'Notes'})
+        this.props.navigation.goBack()
     }
 
     handleText = async (text) => {
         let labels = []
-        this.props.labelsAndLabelKeys.map(label => {
+        this.props.state.createLabelReducer.labelsAndLabelKeys.map(label => {
             labels.push(label.labelName.toLowerCase())
         })
         if(labels.includes(text.toLowerCase())) {
@@ -98,7 +105,12 @@ class CreateLabelScreen extends Component {
             .then(async (results) => {
                 this.updateLabels()
                 await UserNoteServices.addLabelToTheFirebase(this.props.state.createLabelReducer.userId, this.state.enteredLabel, labelKey)})
-            .catch(error => console.log(error))
+            .catch((error) => {
+                this.setState({
+                    errorMessage: error.message,
+                    showErrorSnackbar: true
+                })
+            })
         }
         this.setState({
             createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive,
@@ -127,6 +139,12 @@ class CreateLabelScreen extends Component {
                 + String(today.getSeconds() < 10 ? '0' + today.getSeconds() : today.getSeconds())
         
         return labelNoteKey
+    }
+
+    onDismissErrorSnackBar = () => {
+        this.setState({
+            showErrorSnackbar: false
+        })
     }
 
     render() {
@@ -212,6 +230,12 @@ class CreateLabelScreen extends Component {
                         </Dialog.Content>
                     </Dialog>
                 </Portal>
+                <Snackbar
+                    visible = {this.state.showErrorSnackbar}
+                    duration = {5000}
+                    onDismiss = {this.onDismissErrorSnackBar}>
+                    {this.state.errorMessage}
+                </Snackbar>
             </View>
             </Provider>
         )

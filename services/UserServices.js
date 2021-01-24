@@ -102,10 +102,10 @@ class UserServices {
         return new Promise(async (resolve) => {
             const user = await KeyChain.getGenericPassword();
             const userDetails = JSON.parse(user.password);
-            Firebase.database().ref('users/' +userDetails.user.uid).once('value').then(async snapShot => { 
+            Firebase.database().ref('users/' + userDetails.user.uid).once('value').then(async snapShot => { 
                 resolve(snapShot.val())
             })
-            .catch(error => console.log(error))
+            .catch(error => reject(error))
         })
     }
 

@@ -12,7 +12,7 @@ export default class DeletedNotesScreenTopbar extends Component {
     openDrawer = () => {
         const {onPress} = this.props
         this.props.navigation.openDrawer()
-        onPress();
+        //onPress();
     }
 
     render() {

@@ -3,6 +3,7 @@ import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-
 import SignUpStyles from '../styles/SignUpStyles';
 import UserServices from '../../services/UserServices';
 import {strings} from '../Languages/strings';
+import {Snackbar} from 'react-native-paper'
 
 export default class LogInScreen extends Component {
     constructor(props) {
@@ -27,6 +28,8 @@ export default class LogInScreen extends Component {
             isConfirmPasswordFieldEmpty: false,
             passwordSecurity: true,
             confirmPasswordSecurity: true,
+            errorMessage: '',
+            showErrorSnackbar: false
         }
     }
          
@@ -121,7 +124,7 @@ export default class LogInScreen extends Component {
                 passwordSecurity: true
             })
         }
-        (this.props == undefined ) ? null : onPress();
+        //(this.props == undefined ) ? null : onPress();
     }
 
     confirmPasswordSecurityHandler = async () => {
@@ -137,7 +140,7 @@ export default class LogInScreen extends Component {
                 confirmPasswordSecurity: true
             })
         }
-        (this.props == undefined ) ? null : onPress();
+        //(this.props == undefined ) ? null : onPress();
     }
 
     handleSignUpButton = async () => {
@@ -162,9 +165,14 @@ export default class LogInScreen extends Component {
                             emailError: strings.EmailInUse
                         })
                     }
-                    if (error === 'invalid email!') {
+                    else if (error === 'invalid email!') {
                         this.setState({
                             emailError: strings.InvalidEmail
+                        })
+                    } else {
+                        this.setState({
+                            errorMessage: error.message,
+                            showErrorSnackbar: true
                         })
                     }
                 });
@@ -195,13 +203,19 @@ export default class LogInScreen extends Component {
                     })
                 } 
             }
-            (this.props == undefined ) ? null : onPress();
+            //(this.props == undefined ) ? null : onPress();
     }
 
     navigateToLogScreenHandler = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('LogIn')
-        onPress();
+        //onPress();
+    }
+
+    onDismissErrorSnackBar = () => {
+        this.setState({
+            showErrorSnackbar: false
+        })
     }
 
     render() {
@@ -344,6 +358,12 @@ export default class LogInScreen extends Component {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
+                <Snackbar
+                        visible = {this.state.showErrorSnackbar}
+                        duration = {5000}
+                        onDismiss = {this.onDismissErrorSnackBar}>
+                        {this.state.errorMessage}
+                </Snackbar>
             </View>
         )
     }

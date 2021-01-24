@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import {Image, ScrollView, TextInput, View, Text, TouchableOpacity, Dimensions} from 'react-native';
+import {Image, ScrollView, TextInput, View, Text, TouchableOpacity} from 'react-native';
 import LogInScreenStyles from '../styles/LogInPageStyles';
 import UserServices from '../../services/UserServices';
-import {Button} from 'react-native-paper';
+import {Button,Snackbar} from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {strings} from '../Languages/strings';
 import KeyChain from 'react-native-keychain';
@@ -18,20 +18,24 @@ export default class LogInScreen extends Component {
             passwordError: '',
             emailField: false,
             passwordField: false,
-            isLoggedIn: false   
+            isLoggedIn: false,
+            errorMessage: '',
+            showErrorSnackbar: false
         }
     }
     
-    async componentDidMount(){
+    async componentDidMount() {
         try {
-            const isLoggedIn = JSON.parse(await AsyncStorage.getItem('isLoggedIn'))
-            if(isLoggedIn) {
-              this.props.navigation.navigate("Home")
+            if(JSON.parse(await AsyncStorage.getItem('isLoggedIn')) != null) {
+                const isLoggedIn = JSON.parse(await AsyncStorage.getItem('isLoggedIn'))
+                if(isLoggedIn) {
+                    this.props.navigation.navigate("Home")
+                }
             }
-          }
-          catch(e) {
+        }
+        catch(e) {
             console.log(e)
-          }
+        }
     }
 
     emailHandler = async (enteredEmail) => {
@@ -63,7 +67,7 @@ export default class LogInScreen extends Component {
                 passwordSecurity: true
             })
         }
-        (this.props == undefined ) ? null : onPress();
+        //(this.props == undefined ) ? null : onPress();
     }
 
     handleLogInButton = async () => {
@@ -89,6 +93,11 @@ export default class LogInScreen extends Component {
                     this.setState({
                         passwordError: (strings.InvalidPassword)
                     })
+                } else {
+                    this.setState({
+                        errorMessage: error.message,
+                        showErrorSnackbar: true
+                    })
                 }
             })
         } 
@@ -104,7 +113,7 @@ export default class LogInScreen extends Component {
                 })
             }
         }
-        onPress();
+        //onPress();
     }
 
     storeIteminAsyncStorage = async (User) => {
@@ -121,13 +130,13 @@ export default class LogInScreen extends Component {
     navigateToSignUpScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('SignUp')
-        onPress();
+        //onPress();
     }
 
     navigateToForgotPasswordScreen = () => {
         const {onPress} = this.props
         this.props.navigation.navigate('ForgotPassword')
-        onPress();
+        //onPress();
     }
 
     loginWithFacebook = async () => {
@@ -140,8 +149,17 @@ export default class LogInScreen extends Component {
                                                         user.user.uid)            
             this.props.navigation.navigate('Home')
         })
-        .catch((error) => {
-            console.log(error);
+        .catch(error => {
+            this.setState({
+                errorMessage: error.message,
+                showErrorSnackbar: true
+            })
+        })
+    }
+
+    onDismissErrorSnackBar = () => {
+        this.setState({
+            showErrorSnackbar: false
         })
     }
 
@@ -221,6 +239,12 @@ export default class LogInScreen extends Component {
                             <Text style = {{color: '#dbced2'}}>{strings.LogInWithFacebook}</Text>
                         </Button>
                 </ScrollView>
+                <Snackbar
+                        visible = {this.state.showErrorSnackbar}
+                        duration = {5000}
+                        onDismiss = {this.onDismissErrorSnackBar}>
+                        {this.state.errorMessage}
+                </Snackbar>
             </View>
         )
     }

@@ -11,7 +11,7 @@ class SQLiteLabelServices {
                 tx.executeSql(
                     `CREATE TABLE IF NOT EXISTS ${userId}Label (lebelKey TEXT PRIMARY KEY, labelName TEXT, noteKeys TEXT)`,
                     [],(tx, results) => {},
-                    error => console.log(error)
+                    error => reject(error)
                 )
                 tx.executeSql(
                     `INSERT INTO '${userId}Label' (lebelKey, labelName, noteKeys) VALUES (?,?,?)`,
@@ -59,16 +59,16 @@ class SQLiteLabelServices {
                                         error => console.log(error)
                                     )
                                 },
-                            error => console.log(error)    
+                            error => reject(error)  
                         )
                     })
                 },
-                error => console.log(error)
+                error => reject(error)
             )
             tx.executeSql(
                 `DELETE FROM ${userId}Label WHERE lebelKey = ?`,
                 [labelKey], (tx, results) => {},
-                error => console.log(error)
+                error => reject(error)
             )
         })
     }
@@ -116,7 +116,7 @@ class SQLiteLabelServices {
                         error => console.log(error)
                     )
                 },
-                error => console.log(error)
+                error => reject(error)
             )
         });
     }

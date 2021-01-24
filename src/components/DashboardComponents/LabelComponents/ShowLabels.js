@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {TextInput, Text, TouchableWithoutFeedback, View, TouchableOpacity} from 'react-native';
+import {TextInput, Text, TouchableWithoutFeedback, View} from 'react-native';
 import LabelAppBarStyle from '../../../styles/LabelAppbarStyle';
-import {Appbar} from 'react-native-paper';
+import {Appbar, Snackbar} from 'react-native-paper';
 import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeDeleteKey} from '../../../redux/actions/CreateNewLabelAction'
 import { connect } from 'react-redux';
 import UserNoteServices from '../../../../services/UserNoteServices';
@@ -19,7 +19,9 @@ class showLabel extends Component {
             noteKeys: [],
             showDailog: false,
             labels: [],
-            autoFocus: true
+            autoFocus: true,
+            errorMessage: '',
+            showErrorSnackbar: false
         }
     }
 
@@ -43,7 +45,12 @@ class showLabel extends Component {
                         await this.props.storeNoteKeys(this.state.noteKeys)
                     }) 
                 })
-                .catch(error => console.log(error))
+                .catch(error => {
+                    this.setState({
+                        errorMessage: error.message,
+                        showErrorSnackbar: true
+                    })
+                })
         }
     }
 
@@ -64,7 +71,12 @@ class showLabel extends Component {
                     labels: labels
                 })
             })
-            .catch(error => console.log(error))
+            .catch(error => {
+                this.setState({
+                    errorMessage: error.message,
+                    showErrorSnackbar: true
+                })
+            })
             
         let temp = []
         if(this.state.labels.length > 0) {
@@ -109,6 +121,12 @@ class showLabel extends Component {
     hideDialog() {
         this.setState({
             showDailog: false
+        })
+    }
+
+    onDismissErrorSnackBar = () => {
+        this.setState({
+            showErrorSnackbar: false
         })
     }
 
@@ -179,6 +197,12 @@ class showLabel extends Component {
                         />
                     )}
             </Appbar>
+            <Snackbar
+                visible = {this.state.showErrorSnackbar}
+                duration = {5000}
+                onDismiss = {this.onDismissErrorSnackBar}>
+                {this.state.errorMessage}
+            </Snackbar>
         </View>
         )
     }

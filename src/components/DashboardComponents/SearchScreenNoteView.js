@@ -55,13 +55,13 @@ class SearchScreenNoteView extends Component {
         this.props.storeSelectedLabelKeys(JSON.parse(Labels))
 
         this.props.navigation.push('AddNewNotes')
-        onPress()
+        //onPress()
     }
 
     navigateToDashBoard = () => {
         const {onPress} = this.props
         this.props.navigation.push('Home', {screen: 'Notes'})
-        onPress()
+        //onPress()
     }
 
 

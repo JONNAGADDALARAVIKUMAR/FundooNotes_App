@@ -12,7 +12,7 @@ class NoteDataController {
                 this.addNoteKeyToTheLabels(noteKey, notes.labels)
                 FirebaseAPIServices.storeNoteinDatabaseThroughAPI(noteKey, notes)
                 .then(msg => console.log(msg))
-                .catch((error) => console.log(error))
+                .catch((error) => reject(error))
                 resolve('success')
             })
             .catch(error => reject(error)) 
@@ -25,18 +25,18 @@ class NoteDataController {
             .then((results) => resolve(results))
             .catch(error => reject(error))
             FirebaseAPIServices.storeNoteinDatabaseThroughAPI(noteKey, notes)
-            .catch((error) => console.log(error))        
+            .catch((error) => reject(error))        
         })
     }
 
     deletePermanently = (noteKey) => {
         SQLiteStorageServices.deleteNoteForever(noteKey)
-        .then(() => console.log('deleted Note in SQLite Database'))
-        .catch((error) => console.log(error))
+        .then(() => {})
+        .catch((error) => reject(error))
 
         UserNoteServices.deleteNoteForever(noteKey)
         .then(() => console.log('deleted Note in Firebase'))
-        .catch((error) => console.log(error))
+        .catch((error) => reject(error))
     }
 
     addNoteKeyToTheLabels = (noteKey, labels) => {

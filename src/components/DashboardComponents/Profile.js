@@ -41,7 +41,7 @@ export default class App extends Component {
             isImagePressed: !this.state.isImagePressed
         })
         this.state.isImagePressed ? this.RBSheet.open() : this.RBSheet.close();
-        onPress()
+        //onPress()
     }
 
     navigateToLogInScreen = async () => {
@@ -49,7 +49,7 @@ export default class App extends Component {
         await AsyncStorage.setItem('isLoggedIn', JSON.stringify(false));
         UserServices.logOutFromFirebase()
         this.props.navigation.navigate('LogIn')
-        onPress()
+        //onPress()
     }
 
     takePhoto = () => {
@@ -73,7 +73,6 @@ export default class App extends Component {
                             photoURL : ''
                         })
                     }
-                    console.log(error)
                 })
             }
         })
@@ -100,7 +99,6 @@ export default class App extends Component {
                             photoURL : ''
                         })
                     }
-                    console.log(error)
                 })
             }
         })

@@ -33,7 +33,6 @@ export default class ToolBar extends Component {
                     photoURL : ''
                 })
             }
-            console.log(error);
         })
     }
 
@@ -54,13 +53,13 @@ export default class ToolBar extends Component {
                 listView: true
             })
         }
-        onPress()
+        //onPress()
     }
 
     openDrawer = () => {
         const {onPress} = this.props
         this.props.navigation.openDrawer()
-        onPress();
+        //onPress();
     }
 
     navigateToSearchScreen = () => {

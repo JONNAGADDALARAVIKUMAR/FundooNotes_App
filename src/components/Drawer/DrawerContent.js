@@ -24,42 +24,42 @@ class DrawerContent extends Component {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('Home', { screen: 'Notes' })
-        onPress();
+        //onPress();
     }
 
     handleDeletedIconButton = () => {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('Home', { screen: 'Deleted' })
-        onPress();
+        //onPress();
     }
 
     navigateToCreateNewLabel = () => {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('CreateLabel')
-        onPress();
+        //onPress();
     }
 
     navigateToArchiveScreen = () => {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('Home', { screen: 'Archived'})
-        onPress();
+        //onPress();
     } 
 
     navigateLabelScreen = (labelAndKey) => {
         const {onPress} = this.props
         this.props.storelabelAndKey(labelAndKey)
         this.props.props.navigation.push('Home', { screen: 'Label'})
-        onPress();
+        //onPress();
     }
 
     navigateToRemainderScreen = () => {
         const {onPress} = this.props
         this.props.props.navigation.closeDrawer()
         this.props.props.navigation.push('Home', { screen: 'Remainder'})
-        onPress();
+        //onPress();
     }
 
     render() {

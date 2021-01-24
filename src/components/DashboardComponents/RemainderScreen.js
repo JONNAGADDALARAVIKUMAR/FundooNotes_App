@@ -16,7 +16,7 @@ export default class RemainderScreen extends Component {
     openDrawer = () => {
         const {onPress} = this.props
         this.props.navigation.openDrawer()
-        onPress();
+        //onPress();
     }
 
     selectView = () => {
@@ -24,7 +24,7 @@ export default class RemainderScreen extends Component {
         this.setState({
             listView: !this.state.listView
         })
-        onPress();
+        //onPress();
     }
 
     render() {
