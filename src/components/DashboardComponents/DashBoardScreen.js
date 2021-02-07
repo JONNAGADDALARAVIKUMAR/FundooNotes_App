@@ -7,6 +7,7 @@ import {Snackbar, Provider, Portal, Modal} from 'react-native-paper';
 import Profile from './Profile';
 import UserServices from '../../../services/UserServices';
 import NoteDataController from '../../../services/NoteDataController';
+import { strings } from '../../Languages/strings';
 
 export default class Dashboard extends Component {
     constructor(props){
@@ -139,7 +140,7 @@ export default class Dashboard extends Component {
                     visible={this.state.showEmptyNoteSnackbar}
                     onDismiss={this.emptyNoteSnackbarHandler}
                     duration = {3000}>
-                    Empty Note Discarded
+                    {strings.EmptyNoteDiscarded}
                 </Snackbar>
                 <Snackbar
                     style = {{marginBottom : 100}}
@@ -147,10 +148,10 @@ export default class Dashboard extends Component {
                     onDismiss = {this.deletedNoteSnackbarHandler}
                     duration = {5000}
                     action = {{
-                        label : 'Undo',
+                        label : strings.Undo,
                         onPress : this.restoreNotes
                     }}>
-                    Note Moved to Bin
+                    {strings.NoteMovedtoBin}
                 </Snackbar>
                     <Portal>
                         <Modal

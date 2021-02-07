@@ -9,6 +9,7 @@ import {storeEditNotesDetails,
     storeNoteKeyToUpdateNotes, 
     storeSelectedLabelKeys} from '../../redux/actions/CreateNewLabelAction';
 import { connect } from 'react-redux';
+import { strings } from '../../Languages/strings';
 
 class SearchScreenNoteView extends Component {
     constructor(props) {
@@ -75,7 +76,7 @@ class SearchScreenNoteView extends Component {
                     <TextInput 
                         style = {SearchScreenStyles.searchBox_Style} 
                         autoFocus = {true}
-                        placeholder = {'Search Your Notes'}
+                        placeholder = {strings.SearchYourNotes}
                         onChangeText = {this.searchNotes}
                     />
                 </Appbar>

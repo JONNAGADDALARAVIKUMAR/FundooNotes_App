@@ -5,6 +5,7 @@ import ArchivedNotesScreenStyles from '../../styles/ArchivedNotesScreenStyles';
 import NotesView from '../DashboardComponents/NotesView';
 import { connect } from 'react-redux'
 import {storelabelScreen} from '../../redux/actions/CreateNewLabelAction';
+import { strings } from '../../Languages/strings';
 
 class ArchivedScreen extends Component {
     constructor(props) {
@@ -41,7 +42,7 @@ class ArchivedScreen extends Component {
                         onPress = {this.openDrawer}
                     />
                     <Text style = {ArchivedNotesScreenStyles.title_Style}>
-                        Archive
+                        {strings.Archive}
                     </Text>
                     <Appbar.Content/>
                     <Appbar.Action 

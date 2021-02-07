@@ -6,6 +6,7 @@ import {storeLabelContent, storeNoteKeys, storeDailogStatus, storeDeleteKey} fro
 import { connect } from 'react-redux';
 import UserNoteServices from '../../../../services/UserNoteServices';
 import SQLiteLabelServices from '../../../../services/SQLiteLabelServices';
+import { strings } from '../../../Languages/strings';
 
 class showLabel extends Component {
     constructor(props) {
@@ -55,7 +56,7 @@ class showLabel extends Component {
     }
 
     handleEditButton = () => {
-       this.props.selectActiveLabel(this.props.label.labelName)
+       this.props.selectActiveLabel(this.props.label.labelName, this.props.index)
     }
 
     handleEditTextInput = async (editText) => {
@@ -84,7 +85,7 @@ class showLabel extends Component {
                 temp.push(label.labelName.toLowerCase())
             })
         }
-        this.props.selectActiveLabel(editText)
+        this.props.selectActiveLabel(editText, this.props.index)
         await this.setState({
             editTextInput : editText
         })
@@ -133,9 +134,9 @@ class showLabel extends Component {
     render() {
         return(
                 <View>
-                    <Appbar style = {(this.props.activeLabel == this.state.editTextInput) ? LabelAppBarStyle.active_Appbar_Style : LabelAppBarStyle.appbar_Style}>
+                    <Appbar style = {(this.props.activeLabel == this.state.editTextInput && this.props.activeLabelIndex == this.props.index) ? LabelAppBarStyle.active_Appbar_Style : LabelAppBarStyle.appbar_Style}>
                     {
-                    (this.props.activeLabel == this.state.editTextInput) ?
+                    (this.props.activeLabel == this.state.editTextInput && this.props.activeLabelIndex == this.props.index) ?
                     <Appbar.Action 
                         onPress = {this.handelDeleteIcon}
                         icon = 'delete-outline'
@@ -150,7 +151,7 @@ class showLabel extends Component {
                     
                 }
                 {
-                    (this.props.activeLabel == this.state.editTextInput)?
+                    (this.props.activeLabel == this.state.editTextInput && this.props.activeLabelIndex == this.props.index)?
                     <View style = {{flexDirection :'column', 
                                     width : '65%'}}>
                         <TextInput
@@ -163,12 +164,12 @@ class showLabel extends Component {
                         {
                             (this.state.emptyMsg) ?
                                 <Text style = {LabelAppBarStyle.text_error_style}>
-                                    Enter a Label Name
+                                    {strings.EnteraLabelName}
                                 </Text>
                                 :
                                 (this.state.errorMsg) ?
                                     <Text style = {LabelAppBarStyle.text_error_style}>
-                                        Label Already Exist
+                                        {strings.LabelAlreadyexist}
                                     </Text>
                                     :
                                     null
@@ -186,7 +187,7 @@ class showLabel extends Component {
                 }
                 <Appbar.Content/>
                 {
-                    ((this.props.activeLabel == this.state.editTextInput) ?
+                    ((this.props.activeLabel == this.state.editTextInput && this.props.activeLabelIndex == this.props.index) ?
                         <Appbar.Action 
                         onPress = {this.handleCheckButton}
                         icon = 'check'

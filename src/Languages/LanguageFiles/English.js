@@ -42,6 +42,27 @@ const English = {
     HelpfeedBack: "Help & feedBack",
     Deleted: "Deleted",
     YourNoteswillApperHere: "Your Notes will Apper Here",
+    Delete: "Delete",
+    Makeacopy: "Make a copy",
+    Send: "Send",
+    Collaborator: "Collaborator",
+    Labels: "Labels",
+    EmptyNotescantbedeleted: "Empty Notes can't be deleted",
+    SearchYourNotes: "Search Your Notes",
+    EmptyNoteDiscarded: "Empty Note Discarded",
+    NoteMovedtoBin: "Note Moved to Bin",
+    Undo: "Undo",
+    Close: "Close",
+    TakePhoto: "Take Photo",
+    ChooseFromLibrary: "Choose From Library",
+    Cancel: "Cancel",
+    Editlabels: "Edit labels",
+    LabelAlreadyexist: "Label Already exist",
+    CreatenewLabel: "Create new Label",
+    DeletethisLabelforever: "Delete this Label forever ?",
+    EnteraLabelName: "Enter a Label Name",
+    EnterLabelName: "Enter Label Name",
+    NoLabels: "No Labels"
 }
 
 export default English;

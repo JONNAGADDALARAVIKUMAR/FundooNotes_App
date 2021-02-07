@@ -4,6 +4,7 @@ import StoreNotesInLabelScreenStyles from '../../../styles/StoreNotesInLabelScre
 import { connect } from 'react-redux'
 import {Appbar} from 'react-native-paper';
 import SelectLabelToNotesAppbar from './SelectLabelToNotesAppbar';
+import {strings} from '../../../Languages/strings'
 
 class SelectLabelToNotesScreen extends Component {
     constructor(props) {
@@ -60,7 +61,7 @@ class SelectLabelToNotesScreen extends Component {
                             onPress = {this.handleBackIconButton}/>
                         <TextInput    
                             style = {StoreNotesInLabelScreenStyles.textinput_style}
-                            placeholder = 'Enter Label Name'
+                            placeholder = {strings.EnterLabelName}
                             onChangeText = {this.handleSearchTextInput}
                             autoFocus = {false}
                             value = {this.state.search}/>
@@ -73,12 +74,12 @@ class SelectLabelToNotesScreen extends Component {
                                 this.state.labelsAndLabelKeysAfterSearch.map((labelNameAndKey => (
                                     <React.Fragment key = {labelNameAndKey.lebelKey}>
                                         <SelectLabelToNotesAppbar 
-                                                labelKey = {labelNameAndKey.lebelKey} 
-                                                labelName = {labelNameAndKey.labelName}/>
+                                            labelKey = {labelNameAndKey.lebelKey} 
+                                            labelName = {labelNameAndKey.labelName}/>
                                     </React.Fragment>
                                 )))
                             : <Text style = {{alignSelf: 'center', marginTop: 30}}>
-                                No Such Label
+                                {strings.NoLabels}
                             </Text>}
                     </View>
                 </ScrollView>

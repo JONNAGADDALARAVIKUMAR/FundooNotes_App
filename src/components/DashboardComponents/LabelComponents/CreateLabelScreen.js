@@ -8,6 +8,7 @@ import {storeDailogStatus, storelabelsAndLabelKeys} from '../../../redux/actions
 import ShowLabels from './ShowLabels'
 import { ScrollView } from 'react-native-gesture-handler';
 import SQLiteLabelServices from '../../../../services/SQLiteLabelServices';
+import {strings} from '../../../Languages/strings'
 
 
 class CreateLabelScreen extends Component {
@@ -16,6 +17,7 @@ class CreateLabelScreen extends Component {
         this.state = {
             createNewLabelTextboxActive: true,
             activeLabel: '',
+            activeLabelIndex: null,
             enteredLabel: '',
             labelExistErrorMessage: false,
             labels: this.props.state.createLabelReducer.labelsAndLabelKeys,
@@ -54,10 +56,11 @@ class CreateLabelScreen extends Component {
             })
     }
 
-    selectActiveLabel = (labelKey) => {
+    selectActiveLabel = (labelKey, activeLabelIndex) => {
         this.setState({
             activeLabel : labelKey,
-            createNewLabelTextboxActive: false
+            createNewLabelTextboxActive: false,
+            activeLabelIndex: activeLabelIndex
         })
     }
 
@@ -114,6 +117,7 @@ class CreateLabelScreen extends Component {
         }
         this.setState({
             createNewLabelTextboxActive: !this.state.createNewLabelTextboxActive,
+            enteredLabel: ''
         })
     }
 
@@ -157,7 +161,7 @@ class CreateLabelScreen extends Component {
                         onPress= {this.navigateToPreviousScreen}
                     />
                     <Text style = {CreateNewLabelStyles.edit_LabelStyle}>
-                        Edit labels
+                        {strings.Editlabels}
                     </Text>
                 </Appbar>
                 <Appbar style = {(this.state.createNewLabelTextboxActive) ? CreateNewLabelStyles.appbar_Style_Active : CreateNewLabelStyles.appbar_Style}>
@@ -170,7 +174,7 @@ class CreateLabelScreen extends Component {
                     <View style = {{flexDirection :'column', width : '65%'}}>
                     <TextInput
                         style = {{ backgroundColor : 'transparent', paddingBottom : 0,}}
-                        placeholder = {'Create new Label'}
+                        placeholder = {strings.CreatenewLabel}
                         autoFocus = {this.state.createNewLabelTextboxActive}
                         onChangeText = {this.handleText}
                         onEndEditing = {this.createLabel}
@@ -179,7 +183,7 @@ class CreateLabelScreen extends Component {
                             (<Text style = {{ fontSize : 12, 
                                                 color : 'red', 
                                                 paddingLeft : 10}}>
-                                Label Already exist
+                                {strings.LabelAlreadyexist}
                             </Text>)
                             : null}
                         </View>
@@ -188,7 +192,7 @@ class CreateLabelScreen extends Component {
                         style = {{width: '65%'}}>
                             <Text 
                                 style = {{color: 'gray'}}>
-                                    Create new Label
+                                    {strings.CreatenewLabel}
                             </Text>
                     </TouchableOpacity>}
                     <Appbar.Action
@@ -200,14 +204,16 @@ class CreateLabelScreen extends Component {
                     <View>
                         {
                             this.state.labels.length > 0 ?
-                            this.state.labels.map((label) => ( 
+                            this.state.labels.map((label, index) => ( 
                                 <React.Fragment key = {label.lebelKey}>
                                     <ShowLabels 
+                                        index = {index}
                                         label = {label} 
                                         labelKey = {label.lebelKey}
                                         labelName = {label.labelName}
                                         selectActiveLabel = {this.selectActiveLabel}
-                                        activeLabel = {this.state.activeLabel}/>
+                                        activeLabel = {this.state.activeLabel}
+                                        activeLabelIndex = {this.state.activeLabelIndex}/>
                                 </React.Fragment>
                             ))
                         : null}
@@ -217,14 +223,14 @@ class CreateLabelScreen extends Component {
                     <Dialog style = {{height: 100}} visible = {this.props.state.createLabelReducer.showDailog}>
                         <Dialog.Content>
                             <Paragraph>
-                                Delete this Label forever ?
+                                {strings.DeletethisLabelforever}
                             </Paragraph>
                             <View style = {{flexDirection: 'row', justifyContent: 'flex-end'}}>
                                 <Dialog.Actions>
-                                    <Button onPress = {() => this.hideDialog()}>Cancel</Button>
+                                    <Button onPress = {() => this.hideDialog()}>{strings.Cancel}</Button>
                                 </Dialog.Actions>
                                 <Dialog.Actions>
-                                    <Button onPress = {this.handleDeleteButton}>Delete</Button>
+                                    <Button onPress = {this.handleDeleteButton}>{strings.Delete}</Button>
                                 </Dialog.Actions>
                         </View>
                         </Dialog.Content>

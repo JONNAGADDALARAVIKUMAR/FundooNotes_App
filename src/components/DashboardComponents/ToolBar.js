@@ -3,6 +3,7 @@ import {View, TouchableOpacity, Text} from 'react-native';
 import {Appbar, Avatar} from 'react-native-paper';
 import DashBoardScreenStyles from '../../styles/DashBoardScreenStyles';
 import UserServices from '../../../services/UserServices'
+import { strings } from '../../Languages/strings';
 
 export default class ToolBar extends Component {
     constructor(props) {
@@ -76,7 +77,7 @@ export default class ToolBar extends Component {
                     />
                     <TouchableOpacity onPress = {this.navigateToSearchScreen}>
                         <Text style = {DashBoardScreenStyles.Search_Style}>
-                            Search Your Notes
+                            {strings.SearchYourNotes}
                         </Text>
                     </TouchableOpacity>
                     <Appbar.Action 

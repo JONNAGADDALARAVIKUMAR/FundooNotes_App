@@ -9,6 +9,7 @@ import profileStyles from '../../styles/ProfileStyles';
 import FetchBlob from 'react-native-fetch-blob';
 import Firebase from '../../../config/Firebase';
 import KeyChain from 'react-native-keychain';
+import { strings } from '../../Languages/strings';
 
 const Blob = FetchBlob.polyfill.Blob
 const fs = FetchBlob.fs
@@ -156,12 +157,12 @@ export default class App extends Component {
                                     onPress = {() => {
                                         this.props.navigation.push('Home', {screen: 'Notes'})
                                         this.props.handleProfile}}
-                                    >Close
+                                    >{strings.Close}
                                 </Button>
                                 <Button
                                     style = {profileStyles.button_Style}
                                     onPress = {this.navigateToLogInScreen}
-                                    >Log Out
+                                    >{strings.LogOut}
                                 </Button>
                             </View>
                         </View>
@@ -190,7 +191,7 @@ export default class App extends Component {
                                     this.takePhoto()
                                     this.RBSheet.close();
                                 }}
-                            >Take Photo
+                            >{strings.TakePhoto}
                             </Button>
                             <Button
                                 style = {profileStyles.RBSheet_Button_Style}
@@ -198,7 +199,7 @@ export default class App extends Component {
                                     this.choosePhotoFromGallery()
                                     this.RBSheet.close();
                                 }}
-                            >Choose From Library
+                            >{strings.ChooseFromLibrary}
                             </Button>
                             <Button
                                 style = {profileStyles.RBSheet_Button_Style}
@@ -208,7 +209,7 @@ export default class App extends Component {
                                         isImagePressed: !this.state.isImagePressed
                                     })
                                 }}
-                            >Cancel
+                            >{strings.Cancel}
                             </Button>
                         </View>
                     </RBSheet>

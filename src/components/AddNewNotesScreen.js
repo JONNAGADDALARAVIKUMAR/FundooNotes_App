@@ -313,15 +313,15 @@ class AddNewNotes extends Component {
                         },
                     }}>
                     <View>
-                        <Menu.Item icon = "delete-outline" onPress = {this.handleDeleteButton} title = "Delete" />
-                        <Menu.Item icon = "content-copy" title = "Make a copy" />
-                        <Menu.Item icon = "share-variant" title = "Send" />
+                        <Menu.Item icon = "delete-outline" onPress = {this.handleDeleteButton} title = {strings.Delete} />
+                        <Menu.Item icon = "content-copy" title = {strings.Makeacopy} />
+                        <Menu.Item icon = "share-variant" title = {strings.Send} />
                         <Menu.Item 
                             icon = {({ size, color }) => (
                                 <Icon name = "person-add-outline" size = {size} color = {color} />
                                 )} 
-                            title = "Collaborator"/>
-                        <Menu.Item icon = "label-outline" title = "Labels" onPress = {this.handleLabelsIcon}/>    
+                            title = {strings.Collaborator}/>
+                        <Menu.Item icon = "label-outline" title = {strings.Labels} onPress = {this.handleLabelsIcon}/>    
                     </View>
                 </RBSheet>
                 <Snackbar
@@ -329,7 +329,7 @@ class AddNewNotes extends Component {
                     visible = {this.state.isNoteNotAddedDeleted}
                     onDismiss = {this.emptyNotesDeleteHandler}
                     duration = {3000}>
-                    Empty Notes can't be deleted
+                    {strings.EmptyNotescantbedeleted}
                 </Snackbar>
 
                 <Snackbar

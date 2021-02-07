@@ -55,7 +55,7 @@ const profileStyles = StyleSheet.create({
         backgroundColor: '#fccfed', 
         marginTop: '5%', 
         borderRadius: 50,
-        color: 'red'
+        minWidth: 250
    }, 
    button_Style: {
        backgroundColor: '#fa91d7', 
